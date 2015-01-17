@@ -1,0 +1,79 @@
+<p>Explicitly for algorithmic coding; parts apply to Java</p>
+<p class="big">int: -2,147,483,648 &ndash; 2,147,483,647 | long<sup>2</sup>: &pm;9.22 &times; 10<sup>18</sup></p>
+<p><code>typedef</code> takes type first, then alias: <code>typedef long long lli;</code></p>
+<h3>const</h3>
+<p><code>const</code> modifies what's immediately to its left, or if it's leftmost, to its right.
+Read right-to-left.</p>
+<ul>
+	<li><code>const int x = 7;</code> &equiv; <code>int const x = 7;</code> </li>
+	<li><code>int const<sub>1</sub> * const<sub>2</sub> p;</code> = constant<sub>2</sub> pointer to constant<sub>1</sub> int</li>
+	<li>References are always <code>const</code>, so <s><code>int &amp; const x</code></s> is useless; &rarr; <code>int const &amp; x</code>.</li>
+	<li>Methods: <code>const</code> at the end means it can be called on a <code>const</code> object.
+	<ul>
+		<li><code>int const&amp; operator[] (unsigned index) const;</code>
+	</ul>
+	</li>
+</ul>
+<h3>struct: initializer, operator</h3>
+<pre>struct query {
+	query(int l, int r)<em>: left(l), right(r)</em> {}
+	int left;
+	int right;
+	<em>bool operator&lt;(const query&amp; other) const</em> {
+		if (right &lt; other.right) return true;
+		if (right &gt; other.right) return false;
+		return left &lt; other.left;
+	}
+};</pre>
+<h3>qsort</h3>
+<pre>#include &lt;cstdlib&gt;
+int cmp(<em>const void * a, const void * b</em>) {
+	int av = <em>*(int*)</em> a;
+	int bv = <em>*(int*)</em> b;
+	return (av == bv ? 0 : (av &lt; bv ? -1 : 1));
+}
+std::qsort(arr, n, sizeof(int), cmp);
+</pre>
+<table class="padded">
+	<tr><td></td><th colspan="3">C++ Sequence containers</th><th colspan="4">C++ Associative containers</th><th>C++ bitset</th><th colspan="4">Java Collections</th></tr>
+	<tr><td>#include<br/>import</td><th><tt>&lt;vector&gt;</tt></th><th><tt>&lt;deque&gt;</tt></th><th><tt>&lt;list&gt;</tt></th><th colspan="2"><tt>&lt;set&gt;</tt></th><th colspan="2"><tt>&lt;map&gt;</tt></th><th><tt>&lt;bitset&gt;</tt></th><th colspan="4">java.util.*</th></tr>
+	<tr><td>name</td>
+		<th><a href="http://www.cplusplus.com/vector">vector</a></th><th><a href="http://www.cplusplus.com/deque">deque</a></th><th><a href="http://www.cplusplus.com/list">list</a></th><th><a href="http://www.cplusplus.com/set">set</a></th><th><a href="http://www.cplusplus.com/multiset">multiset</a></th><th><a href="http://www.cplusplus.com/map">map</a></th><th><a href="http://www.cplusplus.com/multimap">multimap</a></th><th><a href="http://www.cplusplus.com/bitset">bitset</a></th>
+		<th><a href="http://docs.oracle.com/javase/1.5.0/docs/api/java/util/Collection.html">Collection</a></th><th><a href="http://docs.oracle.com/javase/1.5.0/docs/api/java/util/Set.html">Set</a></th><th><a href="http://docs.oracle.com/javase/1.5.0/docs/api/java/util/List.html">List</a></th><th><a href="http://docs.oracle.com/javase/1.5.0/docs/api/java/util/Queue.html">Queue</a></th></tr>
+	<tr><td rowspan="17">methods</td><td colspan="7" rowspan="2">begin(), end(), rbegin(), rend() (it)</td><td class="empty"></td><td colspan="4">iterator()</td></tr>
+	<tr><!-- 7 --><td class="empty" colspan="3"></td><td>listIterator()</td><td class="empty"></td></tr>
+	<tr><td colspan="12">size() (-)</td></tr>
+	<tr><td colspan="7">empty() (-)</td><td class="empty"></td><td colspan="4">isEmpty() (-)</td></tr>
+	<tr><td colspan="3">resize (+)</td><td colspan="9" class="empty"></td></tr>
+	<tr><td colspan="3">front, back (=)</td><td colspan="8" class="empty"></td><td>element(), peek()</td></tr>
+	<tr><td colspan="2">[], at (=)</td><td colspan="3" class="empty"></td><td>[] (=)</td><td class="empty"></td><td>[] (=)</td><td colspan="2" class="empty"></td><td>get(i)<br/>set(i, E)</td></tr>
+	<tr><td colspan="3">assign(oit1, oit2)<br/>assign(n, val)</td><td colspan="5" class="empty"></td></tr>
+	<tr><td colspan="7">insert(it, elt[, nCopies])<br/>insert(it, oit1, oit2)</td><td colspan="3" class="empty"></td><td>add(i, E)<br/>addAll(i, collection)</td><td class="empty"></td></tr>
+	<tr><td colspan="7">erase(it)<br/>erase(it1, it2)</td><td class="empty"></td><td colspan="4">remove(o)</td></tr>
+	<tr><td colspan="7">swap(same-type container)</td><td class="empty"></td></tr>
+	<tr><td colspan="3" rowspan="2">push_back, pop_back (+)</td><td colspan="5" rowspan="2" class="empty"></td><td colspan="4">add(E)<br/>addAll(collection)</td></tr>
+	<tr><!-- 8 --><td class="empty" colspan="3"></td><td>offer(E)</td></tr>
+	<tr><td class="empty"></td><td colspan="2">push_front, pop_front (+)</td><td colspan="5" class="empty"></td></tr>
+	<tr><td colspan="3" class="empty"></td><td colspan="4">key_comp, value_comp (-)</td></tr>
+	<tr><td colspan="3" class="empty"></td><td colspan="4">find, lower_bound, upper_bound, equal_range (-) (it)<br/>find(elt) &rarr; it or end()</td><td class="empty" colspan="3"></td><td>indexOf(o)<br/>lastIndexOf(o)</td><td class="empty"></td></tr>
+	<tr><td colspan="3" class="empty"></td><td colspan="5">count(E)</td><td colspan="4">contains(o)<br/>containsAll(collection)</td></tr>
+</table>
+<h3>I/O</h3>
+<code>char buf[1008];</code>
+<table>
+	<tr><th>code</th><th>until</th><th>reads it?</th><th>writes it?</th></tr>
+	<tr><td><code>scanf("%1004s", buf);</code></td><td>whitespace</td><td class="cr">no</td><td class="empty"></td></tr>
+	<tr><td><code>fgets(buf, 1004, stdin);</code></td><td>\n</td><td class="cg">yes</td><td class="cg">yes</td></tr>
+	<tr><td><code>cin.get(buf, 1004);</code></td><td>\n</td><td class="cr">no</td><td class="empty"></td></tr>
+	<tr><td><code>cin.getline(buf, 1004);</code></td><td>\n</td><td class="cg">yes</td><td class="cr">no</td></tr>
+</table>
+<table>
+	<tr><td><code>%d</code> OR <code>%i</code></td><td>int</td></tr>
+	<tr><td><code>%c</code></td><td>char (input: may be \n)</td></tr>
+</table>
+<p><em>#include &lt;iostream&gt;</em> and <em>#include &lt;iomanip&gt;</em></p>
+<ul>
+	<li><code>cout.precision(15);</code> OR <code>cout &lt;&lt; setprecision(15);</code> (output more digits)</li>
+	<li><code>cout &lt;&lt; fixed;</code> (prevent scientific notation for big/small numbers)</li>
+	<li>Others that can get <code>&lt;&lt;</code>ed: <code>dec</code>, <code>hex</code>, <code>oct</code>, <code>setw(7)</code>, <code>setfill('a')</code></li>
+</ul>

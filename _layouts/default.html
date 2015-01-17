@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width initial-scale=1" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>{{ page.title }}</title>
+<meta name="description" content="{{ site.description }}" />
+{% if site.github %}<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400italic,700' rel='stylesheet' type='text/css' />{% endif %}
+<style>
+	body {font-family: "Ubuntu Mono", monospace; font-size: 12pt; color: #ccc;}
+	code, pre {
+		font-family: "Ubuntu Mono", monospace;
+		background-color: #030;
+		color: #9f9;
+		border: 1px solid #060;
+		border-radius: 6px;
+		-moz-border-radius: 6px;
+		-webkit-border-radius: 6px;
+		-o-border-radius: 6px;
+		tab-size: 4;
+		-moz-tab-size: 4;
+		-webkit-tab-size: 4;
+		-o-tab-size: 4;
+	}
+	em {color: #f99;}
+	table.fl {float: left;}
+	body {
+		color: #ccc;
+		background-color: #000;
+		margin: 0;
+		padding: 16px;
+	}
+	h1, h2, h3, h4 {
+		margin: 0;
+		display: block;
+		clear: both;
+		text-shadow:
+		#888 0 2px 2px, #444 0 4px 4px;
+	}
+	.big {font-size: 250%;}
+	a:link, a:visited {color: #cdf; text-shadow: #999 1px 1px 1px;}
+	a:hover {color: #0cc;}
+	td {background-color: #333; border: 0;}
+	td.empty {background-color: #222; color: #444; }
+	th {background-color: #555; background-image: linear-gradient(to bottom, #666, #444); font-weight: bold;}
+	.cr, .crow td {background-color: #933;}
+	.cg {background-color: #363;}
+	.cb {background-color: #336;}
+	.padded td {padding: 5px;}
+	.toggle {color: #0cc;}
+	td.outside {background-color: #000;}
+</style>
+<script type="text/javascript">
+function toggle(id) {
+	var s = document.getElementById(id).style;
+	s.display = (s.display == 'none' ? 'block' : 'none');
+}
+function pretoggle() {
+	toggle('generalcont');
+	toggle('pythoncont');
+	toggle('ccont');
+	toggle('webcont');
+	toggle('haskellcont');
+	toggle('gitcont');
+	toggle('asciicont');
+	toggle('keycont');
+}
+</script>
+</head>
+<body>
+{{ content }}
+</body>
+</html>

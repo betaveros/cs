@@ -1,0 +1,88 @@
+<h3>Script</h3>
+<code>if <a href="http://docs.python.org/2/tutorial/modules.html?highlight=__name__#executing-modules-as-scripts">__name__ == "__main__"</a>: ...</code>
+<h3>Future</h3>
+<ul>
+	<li><code>from __future__ import print_function</code></li>
+	<li><code>from __future__ import division</code></li>
+</ul>
+<h3>Unicode</h3>
+<p><a href="https://www.python.org/dev/peps/pep-0263/">PEP 0263</a>. First or second lines:</p>
+<p><code># coding=utf-8</code></p>
+<p><code># -*- coding: utf-8 -*-</code></p>
+<p><code># vim: set fileencoding=utf-8 :</code></p>
+<h3>String (&rarr; <a href="http://docs.python.org/library/stdtypes.html#string-methods">std. methods</a>, <a href="http://docs.python.org/library/string.html">module</a>)</h3>
+<ul>
+	<li><code>"formatstring".format(arg0, arg1, name=value)</code>
+	<ul>
+		<li>Access things: <code>{}{0}{1[0]}{2.name}{name}</code></li>
+		<li>Generic: <code>{access:*&gt;+#255,.3d}</code>
+		<li>shortcut: <code>{:0255}</code></li>
+		<li>space-pad: <code>{&gt;255}</code></li>
+	</ul>
+	</li>
+	<li><code>str.translate(None, "setofchars")</code> deletes characters from set</li>
+	<li><code>str.[lr]strip("setofchars")</code> from left/right/both sides</li>
+	<li><code>str.replace(old, new)</code> exists (not regex)</li>
+</ul>
+<h3>Regex <a href="http://docs.python.org/library/re.html">(&rarr; pydoc)</a></h3>
+<table>
+	<tr><th>Language</th><th>Special regex chars</th></tr>
+	<tr><td>Python</td>
+		<td><code>.^$*+?{}\[]|()</code></td></tr>
+</table>
+<ul>
+	<li><code>re.search(pattern, string[, flags])</code> yields a <code>MatchObject</code> anywhere in string</li>
+	<li><code>re.match(pattern, string[, flags])</code> yields a <code>MatchObject</code> from start or None</li>
+	<li><code>re.split(pattern, string[, maxsplit=0, flags=0])</code> yields a list of strings</li>
+	<li><code>re.findall(pattern, string[, flags])</code> &rarr; a list of strings</li>
+	<li><code>re.finditer</code> &rarr; iterator of <code>MatchObject</code>s</li>
+	<li><code>re.sub(pattern, repl, string[, count, flags])</code> returns a string. <code>repl</code> is string (double-escape chars like '\n', use r'\1' for a backref) or function mapping MatchObject to string</li>
+</ul>
+<p>
+<code>MatchObject.group(n)</code> gets the nth group. n = 0 or omitted means the whole match.
+</p>
+<h3>Sequences <a href="http://docs.python.org/2/library/stdtypes.html#sequence-types-str-unicode-list-tuple-bytearray-buffer-xrange">(&rarr; std. methods)</a> and Dictionaries <a href="http://docs.python.org/2/library/stdtypes.html#mapping-types-dict">(&rarr; pydoc)</a></h3>
+<table>
+	<tr><th>(python) sequences</th><th>&darr;</th></tr>
+	<tr><td>sorted(iterable, key = lambda x: x[1], reverse=True)</td><td>...</td></tr>
+	<tr><td>enumerate('ABCD', start=1)</td><td>(1, 'A'), (2, 'B')...</td></tr>
+	<tr><td>d.keys()</td><td>[k1, k2...]</td></tr>
+	<tr><td>d.values()</td><td>[v1, v2...]</td></tr>
+	<tr><td>d.items()</td><td>[(k1, v1)...]</td></tr>
+</table>
+<p>keys(), values(), items(): prepend 'iter' to name for iterator. Note that iter(d) &equiv; d.iterkeys()</p>
+<h3>os Navigate Filesystem</h3>
+<ul>
+	<li><code>os.chdir(pathstring)</code></li>
+	<li><code>os.listdir(pathstring)</code> (unordered list of entries, no <code>.</code> or <code>..</code>)</li>
+	<li><code>os.getcwd()</code></li>
+	<li><code>os.path.join(*paths)</code> intelligently joins</li>
+	<li><code>os.rename(src, dst)</code> (file or dir)</li>
+	<li><code>os.renames(src, dst)</code> (same, path dirs allowed)</li>
+	<li><code>os.walk(path, topdown=True, (more omitted))</code> is a generator that walks all subdirectories. It yields a 3-tuple <code>(dirpath, dirnames, filenames)</code> for each directory</li>
+</ul>
+<h3>Itertools</h3>
+<table>
+	<tr><th>(python) <a href="http://docs.python.org/library/itertools.html">itertools</a>.</th><th>&darr;</th></tr>
+	<tr><td>islice(_, 9)</td><td>[:9] (hs: take 9)</td></tr>
+	<tr><td>islice(_, 2, 9)</td><td>[2:9] (hs: take 7 . drop 2)</td></tr>
+	<tr><td>islice(_, 2, None)</td><td>[2:] (hs: drop 2)</td></tr>
+	<tr><td>islice(_, 2, 9, 3)</td><td>[2:9:3]</td></tr>
+	<tr><td>count(10)</td><td>10, 11, 12, 13...</td></tr>
+	<tr><td>count(10, 2)</td><td>10, 12, 14, 16...</td></tr>
+	<tr><td>cycle([31, 41, 59])</td><td>31, 41, 59, 31, 41, 59...</td></tr>
+	<tr><td>repeat(42)</td><td>42, 42, 42...</td></tr>
+	<tr><td>repeat(42, 5)</td><td>42, 42, 42, 42, 42</td></tr>
+	<tr><td>product('ABCD', 'PQRS')</td><td>AP, AQ, AR, AS, BP, BQ[...]</td></tr>
+	<tr><td>product('ABCD', repeat=2)</td><td>AA, AB, AC, AD, BA, BB[...]</td></tr>
+	<tr><td>permutations('ABCD')</td><td>ABCD, ABDC[...]</td></tr>
+	<tr><td>permutations('ABCD', 2)</td><td>AB, AC, AD, BA, BC[...]</td></tr>
+	<tr><td>combinations('ABCD', 2)</td><td>AB, AC, AD, BC, BD, CD</td></tr>
+	<tr><td>combinations_with_replacement('ABCD', 2)</td><td>AA, AB, AC, AD, BB[...]</td></tr>
+</table>
+<h3>Password</h3>
+<pre>import getpass
+password = getpass.getpass()</pre>
+<h3>Hax</h3>
+<pre>[t for t in (1).__class__.__bases__[-1].__subclasses__() if t.__name__ == 'file'][0]('/etc/passwd').read()</pre>
+<p>(from <a href="http://eev.ee/blog/2012/03/24/on-principle/"><cite>On principle</cite> (eevee)</a>)</p>

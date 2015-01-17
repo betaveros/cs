@@ -1,0 +1,122 @@
+<h3>Stuff</h3>
+<pre>\includegraphics[width=\textwidth]{grasshopper.jpg}</pre>
+<h3>Packages</h3>
+Some command-line magic: <code>ack usepackage | sed 's/^.*{\(.*\)}.*$/\1/g' | sort | uniq | less</code>. Don't do the search too widely, I think at some point the pipe gets too huge and some programs give up.
+<ul>
+	<li><code>alltt</code>: TODO</li>
+	<li><code>amsfonts</code>: math?</li>
+	<li><code>amsmath</code>: math</li>
+	<li><code>amssymb</code>: math symbols</li>
+	<li><code>color</code>: color</li>
+	<li><code>enumerate</code>: more choices for <code>enumerate</code> item format</li>
+	<li><code>fancyhdr</code>: headers</li>
+	<li><code>fontspec</code>: ?</li>
+	<li><code>framed</code>: framing a paragraph</li>
+	<li><code>fullpage</code>: ?</li>
+	<li><code>geometry</code>: setting margins</li>
+	<li><code>graphicx</code>: graphics</li>
+	<li><code>hyperref</code>: ?</li>
+	<li><code>icomma</code>: remove space after comma in $1,000$</li>
+	<li><code>ifpdf</code>: ?</li>
+	<li><code>inputenc</code>: ?</li>
+	<li><code>lastpage</code>: ?</li>
+	<li><code>longtable</code>: ?</li>
+	<li><code>makeidx</code>: ?</li>
+	<li><code>mla</code>: ?</li>
+	<li><code>multirow</code>: \multirow</li>
+	<li><code>natbib</code>: ?</li>
+	<li><code>paralist</code>: ?</li>
+	<li><code>scrpage</code>: ?</li>
+	<li><code>sectsty</code>: ?</li>
+	<li><code>setspace</code>: double spacing</li>
+	<li><code>soul</code>: ?</li>
+	<li><code>syntonly</code>: ?</li>
+	<li><code>tabularx</code>: m, b paragraph aligning in table cells (?)</li>
+	<li><code>textcase</code>: ?</li>
+	<li><code>textcomp</code>: ?</li>
+	<li><code>theorem</code>: ?</li>
+	<li><code>thumbpdf</code>: ?</li>
+	<li><code>times</code>: Times New Roman</li>
+	<li><code>ulem</code>: ?</li>
+	<li><code>url</code>: ?</li>
+	<li><code>verbatim</code>: ?</li>
+	<li><code>xeCJK</code>: ?</li>
+</ul>
+<h3 id="asymptote">Asymptote</h3>
+<p><code>draw(<em>shape[, pen]</em>);</code></p>
+<p><code>dot(<em>point[, pen]</em>);</code> (dot's dimension doesn't get scaled)</p>
+<p><code>Label(string s="", align align=NoAlign, pen p=nullpen...)</code></p>
+<h4>Programming</h4>
+<p>Very C/C++/Java-like:
+essentially same syntax for declaring and initializing variables, numbers, strings, operators, function declaration,
+control flow (if, while, do, break, continue, for (+ "for each" with <code>for(:)</code>))</p>
+<p><code>^</code> is xor and ternary conditional exists.</p>
+<p><em>Deviations:</em> bitwise functions are (non-infix) AND, OR, XOR, NOT. There's even CLZ and CTZ. Also only pre(inc/dec)rement exists; <em>no post(inc/dec)rement</em> because infix <code>--</code> joins paths.</p>
+<p>Types: <code>string</code>, <code>int</code>, <code>real</code>, <code>pair</code>, <code>path</code>, <code>guide</code>, <code>pen</code>...</p>
+<p>Features <code>var</code>, its type-inferring type declaration (like C++'s <code>auto</code>). It can be used in <code>for(:)</code> loops too.</p>
+<p>Pairs are like <code>(3,7)</code>. Immutable; function as points, vectors, and complex numbers. Access components with <code>.x</code>, <code>.y</code>.
+Unit vector in a direction is <code>expi(<em>deg</em>)</code>.</p>
+<h4>Math</h4>
+<p>Math functions: sin, cos, tan, asin, acos, atan, exp, log, pow10, log10, sinh, cosh, tanh, asinh, acosh, atanh, sqrt, cbrt, fabs, expm1, log1p, Jn(int n, real), Yn(int n, real), gamma, erf, erfc, atan2, hypot, fmod, remainder, degrees(<em>radians_val</em>), radians(<em>degrees_val</em>), abs.</p>
+<p>For convenience, Sin, Cos, Tan, aSin, aCos, aTan use degrees.</p>
+<p>floor, ceil, round return ints.</p>
+<h4>Arrays</h4>
+<p>Arrays are syntactically like Java instead of C/C++. But they're actually mutable-size. <code>T[]</code> is a type and supports <code>.length</code>, <code>push</code>, <code>pop</code>. Weird bonus feature: set an array<code>.cyclic = true</code> to make accessing any index first reduce the index mod the length.</p>
+<p>sequence(n) is [0..n-1], sequence(n, m) is [n..m], reverse(a) returns reversed copy, sort(a) returns sorted copy, min(a) and max(a) return minimum or maximum.</p>
+<p>Arrays can be sliced with Python syntax to create copies; slices can be assigned to, to change the array, too.</p>
+<h4>shape</h4>
+<table>
+	<tr><td>(0,0)--(1,1)</td><td>line</td></tr>
+	<tr><td>(0,0)..(1,1)</td><td>curve</td></tr>
+	<tr><td>(0,0){up}..(1,1)</td><td>force a tangent<br/><code>up</code> is a synonym for the point <code>(0,1)</code></td></tr>
+	<tr><td>(0,0)..{up}(1,1){right}..(2,0)</td><td>force a tangent on two sides</td></tr>
+	<tr><td>(0,0)^^(1,1)</td><td>"reparametrizes so the two are treated as one"</td></tr>
+	<tr><td>(0,0)--(1,1)--(2,2)--cycle</td><td>cycle makes the curve closed</td></tr>
+	<tr><td>circle((0,0), 1)</td><td>circle, center (0,0), radius 1</td></tr>
+	<tr><td>ellipse((0,0), 3, 7)</td><td>ellipse, center (0,0), horiz. diameter 2×3, vert. diameter 2×7</td></tr>
+	<tr><td>box((0,0), (2,3))</td><td>rectangle</td></tr>
+	<tr><td>polygon(7)</td><td>regular 7-gon inscribed in unit circle at (0,0), with bottom edge horizontal; transform to obtain size/position</td></tr>
+	<tr><td>arc((0,0), r=1, angle1=123, angle2=234)</td><td>circular arc, center (0,0), radius 1<br/>angles are polar; counterclockwise if angle1 &lt; angle2, clockwise if angle1 &gt; angle2</td></tr>
+</table>
+<h4>transform</h4>
+<p>Apply to lots of things by <code><em>tf</em> * <em>thing</em></code></p>
+<table>
+	<tr><td>shift((1,2)) or shift(1,2)</td><td>translate</td></tr>
+	<tr><td>xscale(2), yscale(3), scale(4), scale(5, 6)</td><td>scale</td></tr>
+	<tr><td>rotate(90, (1,2))</td><td>90 degrees about center (1,2)</td></tr>
+	<tr><td>reflect((1,2),(3,4))</td><td>reflect about line through points</td></tr>
+</table>
+<h4>pen</h4>
+<p>Pens can be <code>+</code>ed together. The default pen can be set with <code>defaultpen(<em>pen</em>);</code></p>
+<table>
+	<tr><td>red, green, blue, cyan, magenta, yellow, black</td><td>colors</td></tr>
+	<tr><td>rgb(0,0.5,1)</td><td>colors; components are <em>fractions from 0 to 1</em>!</td></tr>
+	<tr><td>cmyk(0,0.1,0.2,0.3)</td><td>cmyk colors</td></tr>
+	<tr><td>rgb("99CCFF")</td><td>hexadecimal</td></tr>
+	<tr><td>rgb(pen), cmyk(pen)</td><td>convert to color space (cmyk(red), cmyk(blue), cmyk(green) are nice)</td></tr>
+	<tr><td>gray(.7)</td><td>gray or rgb(.7,.7.,7)</td></tr>
+	<tr><td>linetype(new real[] {4,3,2,1})</td><td>4 units on, 3 units off, 2 units on, 1 unit off (etc.); repeat<br/>note: "0 units" still draws a dot<br/>space-separated strings can be used?</td></tr>
+	<tr><td>solid</td><td>linetype()</td></tr>
+	<tr><td>dotted</td><td>linetype(new real[] {0,4})</td></tr>
+	<tr><td>dashed</td><td>linetype(new real[] {8,8})</td></tr>
+	<tr><td>longdashed, dashdotted, longdashdotted, Dotted(pen p=currentpen)...</td><td>...</td></tr>
+	<tr><td>linewidth(1)</td><td>default is 0.5<br/>you can also directly <code>+</code> a number to a pen; that operation adds the pen to a linewidth(_)</td></tr>
+	<tr><td>squarecap, roundcap, extendcap</td><td></td></tr>
+	<tr><td>miterjoin, roundjoin, beveljoin</td><td></td></tr>
+	<tr><td>zerowinding, evenodd</td><td></td></tr>
+</table>
+<h4>arrow</h4>
+<p>The type name is <code>arrowbar</code> because arrows and bars are implemented as the same thing.</p>
+<p>ArcArrow is smaller than Arrow, about half the size, and has different angle; it's suitable for curved arrows.</p>
+<table>
+	<tr><td>Arrow()</td><td>filled triangle (DefaultHead)</td></tr>
+	<tr><td>Arrow(SimpleHead)</td><td>two lines</td></tr>
+	<tr><td>Arrow(HookHead)</td><td>curvy quadrilateral</td></tr>
+	<tr><td>Arrow(TexHead)</td><td>tiny like $\rightarrow$</td></tr>
+</table>
+<p><code>Arrow</code> is the same as <code>EndArrow</code>.
+Other arrows: <code>Begin<em>[Arc]</em>Arrow</code>,
+<code>Mid<em>[Arc]</em>Arrow</code>,
+<code><em>[Arc]</em>Arrows</code> (on both ends).
+Or pass <code>position=<em>real</em></code> (e.g. 0.7) as an argument to the <code>Arrow</code> constructor.
+</p>

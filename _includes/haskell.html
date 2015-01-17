@@ -1,0 +1,397 @@
+<h3>Typeclass Syntax</h3>
+<pre>class Foo a where
+foo :: a -&gt; a
+instance Foo Int where
+	foo = (+2)
+class Foo a =&gt; Bar a where
+	bar :: a -&gt; a
+instance Bar Int where
+	bar = subtract 2
+class (Foo a, Bar a) =&gt; Quux a where
+	quux :: a -&gt; a
+instance Quux Int where
+	quux = (*2)</pre>
+<h3>from Functional Python</h3>
+<table>
+	<tr><th>Python</th><th>Haskell</th></tr>
+	<tr><td>[f(v) for v in li]</td><td>[f(v) | v &lt;- li]</td></tr>
+	<tr><td>[f(v) for v in li, w in lj]</td><td>[f(v) | v &lt;- li, w &lt;- lj]</td></tr>
+	<tr><td>[f(v) for v in li if cond]</td><td>[f(v) | v &lt;- li, cond]</td></tr>
+	<tr><td>lambda x, y: x + y</td><td>\x y -&gt; x + y</td></tr>
+</table>
+<h3><a href="https://www.haskell.org/onlinereport/decls.html#prelude-fixities">Precedence</a></h3>
+<table>
+	<tr><th>Prec</th>
+		<th>infixl</th>
+		<th>infix</th>
+		<th>infixr</th></tr>
+	<tr><td>9</td>
+		<td>!! <em>default</em><br/>Map.! Map.\\ Set.\\ Array.! Array.//</td>
+		<td class="empty"></td>
+		<td>.</td>
+	</tr>
+	<tr><td>8</td>
+		<td>Bits.shift Bits.rotate<br/>Lens.^. <em>...</em></td>
+		<td class="empty"></td>
+		<td>^ ^^ **</td>
+	</tr>
+	<tr><td>7</td>
+		<td>* / div mod rem quot<br/>.&amp;.</td>
+		<td class="empty"></td>
+		<td class="empty"></td>
+	</tr>
+	<tr><td>6</td>
+		<td>+ -<br/>xor</td>
+		<td class="empty"></td>
+		<td class="empty"></td>
+	</tr>
+	<tr><th colspan="4">↑ ~ "calculation" / "data flow" ~ ↓</th></tr>
+	<tr><td>5</td>
+		<td>.|. Seq.|&gt;</td>
+		<td class="empty"></td>
+		<td>: ++<br/>&lt;+&gt; Seq.&lt;| Seq.&gt;&lt;</td>
+	</tr>
+	<tr><td>4</td>
+		<td>&lt;$&gt; &lt;*&gt; &lt;* *&gt; &lt;**&gt;</td>
+		<td>== /= &lt; &lt;= &gt; &gt; elem notElem</td>
+		<td>Lens..~ <em>...</em></td>
+	</tr>
+	<tr><th colspan="4">↑ ~ "data flow" / "control flow" ~ ↓</th></tr>
+	<tr><td>3</td>
+		<td>&lt;|&gt;</td>
+		<td class="empty"></td>
+		<td>&amp;&amp;<br/>*** &amp;&amp;&amp;</td>
+	</tr>
+	<tr><td>2</td>
+		<td class="empty"></td>
+		<td class="empty"></td>
+		<td>||<br/>+++ |||</td>
+	</tr>
+	<tr><td>1</td>
+		<td>&gt;&gt; &gt;&gt;=<br/>Lens.&amp;</td>
+		<td class="empty"></td>
+		<td>=&lt;&lt; &gt;=&gt; &lt;=&lt; &gt;&gt;&gt; &lt;&lt;&lt;</td>
+	</tr>
+	<tr><td>0</td>
+		<td class="empty"></td>
+		<td class="empty"></td>
+		<td>$ $! seq<br/>DeepSeq.$!!</td>
+	</tr>
+</table>
+<h3>Functions</h3>
+<h4>Control.Monad</h4>
+<p>m is a monad. * = append _ to return m () instead.</p>
+<ul>
+	<li>(&gt;&gt;=) :: m a &rarr; (a &rarr; mb) &rarr; m b</li>
+	<li>(&gt;&gt;) :: m a &rarr; m b) &rarr; m b</li>
+	<li>(=&lt;&lt;) :: (a &rarr; mb) &rarr; m a &rarr; m b</li>
+	<li>sequence * :: [m a] &rarr; m [a]</li>
+	<li>mapM * :: (a &rarr; m b) &rarr; [a] &rarr; m b</li>
+	<li>forM * :: [a] &rarr; (a &rarr; m b) &rarr; m b</li>
+	<li>forever :: m a &rarr; m b</li>
+	<li>void :: Functor f &rArr; f a &rarr; f ()</li>
+	<li>join :: m (m a) &rarr; m a</li>
+	<li>msum :: MonadPlus p &rArr; [p a] &rarr; p a</li>
+	<li>guard :: MonadPlus p &rArr; Bool &rarr; p ()</li>
+	<li>when :: Bool &rarr; m () &rarr; m ()</li>
+</ul>
+<h4>ST (Control.Monad.ST + Data.STRef)</h4>
+<ul>
+	<li>runST :: (<em>forall</em> s. ST s a) &rarr; a</li>
+	<li>readSTRef :: STRef s a &rarr; ST s a</li>
+	<li>writeSTRef :: STRef s a &rarr; a &rarr; ST s ()</li>
+	<li>modifySTRef<em>'</em> :: STRef s a &rarr; (a &rarr; a) &rarr; ST s ()</li>
+</ul>
+<h5>Arrays in ST</h5>
+<p>(type constraints are elided, a = mutable array, c = immutable ("constant") array)</p>
+<ul>
+	<li>runSTArray :: (<em>forall</em> s. ST s (STArray s i e)) &rarr; Array i e</li>
+	<li>runSTUArray :: (<em>forall</em> s. ST s (STUArray s i e)) &rarr; Array i e</li>
+	<li>newArray :: (i, i) &rarr; e &rarr; m (a i e)</li>
+	<li>readArray :: a i e &rarr; i &rarr; m e</li>
+	<li>writeArray :: a i e &rarr; i &rarr; e &rarr; m e</li>
+	<li>getElems :: a i e &rarr; m e</li>
+	<li>getAssocs :: a i e &rarr; m [(i,e)]</li>
+	<li>freeze :: a i e &rarr; m (c i e)</li>
+	<li>thaw :: c i e &rarr; m (a i e)</li>
+</ul>
+<p>(Variants of freeze and thaw prefixed with unsafe, which don't copy the array, are in Data.Array.Unsafe.)</p>
+<h5>Vectors in ST (Data.Vector.Mutable)</h5>
+<p>
+Import qualified. Obvious functions' type signatures not given. <code>Data.Vector.Unboxed.Mutable</code> has a nearly identical interface.
+Constructors yield <code>PrimMonad m &rArr; m (MVector (PrimState m) a)</code>;
+destructive functions take and manipulate <code>PrimMonad m &rArr; MVector (PrimState m) a</code>.
+These constraints are not shown below for simplicity.
+Note that the slicing functions are pure and yield views through which the original vector can be modified.
+</p>
+<p>
+<em>u*</em> denotes presence of an unsafe variant obtainable by prefixing <code>unsafe</code> and camelCasing.
+Here, unsafe means no bounds checking.
+</p>
+<ul>
+	<li>data MVector s a <em>"vec"</em></li>
+	<li>type IOVector = MVector RealWorld <em>for IO monad</em></li>
+	<li>type STVector s = MVector s <em>for ST monad</em></li>
+	<li>length, null, head, last, init, tail, take, drop, splitAt :: <em>... (also have unsafe variants)</em></li>
+	<li>new :: Int &rarr; m vec</li>
+	<li>replicate :: Int &rarr; a &rarr; m (vec a)</li>
+	<li>replicateM :: Int &rarr; m a &rarr; m (vec a)</li>
+	<li><em>u*</em> read :: vec a &rarr; Int &rarr; m a</li>
+	<li><em>u*</em> write :: vec a &rarr; Int &rarr; a &rarr; m ()</li>
+	<li><em>u*</em> swap :: vec a &rarr; Int &rarr; Int &rarr; m ()</li>
+</ul>
+<p>Interface with pure Vector code (import from Data.Vector; here, unsafe means no whole-array-copying):</p>
+<ul>
+	<li>create :: (<em>forall</em> s. ST s (MVector s a)) &rarr; Vector a</li>
+	<li>modify :: (<em>forall</em> s. MVector s a &rarr; ST s ()) &rarr; Vector a &rarr; Vector a</li>
+	<li><em>u*</em> freeze :: vec a &rarr; m (Vector a)</li>
+	<li><em>u*</em> thaw :: Vector a &rarr; m (vec a)</li>
+	<li><em>u*</em> copy :: vec a &rarr; Vector a &rarr; m ()</li>
+</ul>
+<h4>Data.Array / Data.Vector</h4>
+<p>
+Data.Vector has far more functions and typeclasses, but Data.Array can be multidimensional, can have indices defined arbitrarily, and is currently more portable.
+Its only Array-ish typeclass of interest is <code>Functor</code>.
+</p>
+<ul>
+	<li>array :: Ix i &rArr; (i, i) &rarr; [(i, e)] &rarr; Array i e</li>
+	<li>listArray :: Ix i &rArr; (i, i) &rarr; [e] &rarr; Array i e</li>
+	<li>(!) :: Ix i &rArr; Array i e &rarr; i &rarr; e</li>
+	<li>indices :: Ix a &rArr; Array i e &rarr; [i]</li>
+	<li>elems :: Ix a &rArr; Array i e &rarr; [e]</li>
+	<li>assocs :: Ix a &rArr; Array i e &rarr; [(i, e)]</li>
+	<li>(//) :: Ix i &rArr; Array i e &rarr; [(i, e)] &rarr; Array i e</li>
+</ul>
+<p>
+Data.Vector must be imported qualified.
+Functions already listed in family table or as unsafe interface functions above aren't here. Obvious functions' type signatures not given.
+<code>Data.Vector.Unboxed</code> has a nearly identical interface.
+</p>
+<p>
+<em>u*</em> denotes presence of an unsafe variant obtainable by prefixing <code>unsafe</code> and camelCasing.
+<em>[M]</em> denotes a monadic version (with a different type, working with Kleisli arrows).
+</p>
+<ul>
+	<li>unsafeHead, unsafeLast, unsafeInit, unsafeTail, unsafeTake, unsafeDrop</li>
+	<li>slice :: Int &rarr; Int &rarr; Vector a &rarr; Vector a <em>starting index, length</em></li>
+	<li><em>u*</em> indexM, <em>u*</em> headM, <em>u*</em> lastM :: Monad m &rArr; Vector a &rarr; (Int &rarr;) m a <em>allows forcing strictness</em></li>
+	<li>generate <em>[M]</em> :: Int &rarr; (Int &rarr; a) &rarr; Vector a</li>
+	<li>iterateN :: Int &rarr; (a &rarr; a) &rarr; a &rarr; Vector a</li>
+	<li>unfoldr :: <em>...</em></li>
+	<li>(//) :: Vector a &rarr; [(Int, a)] &rarr; Vector a</li>
+	<li>update :: Vector a &rarr; Vector (Int, a) &rarr; Vector a</li>
+	<li>indexed :: Vector a &rarr; Vector (Int, a)</li>
+	<li>imap :: (Int &rarr; a &rarr; b) &rarr; Vector a &rarr; Vector b</li>
+	<li>ifilter :: (Int &rarr; a &rarr; Bool) &rarr; Vector a &rarr; Vector a</li>
+	<li>maxIndex, minIndex[By] :: <em>...</em></li>
+	<li>fromList :: <em>...</em></li>
+</ul>
+<h4>Data.ByteString[.Char8] | Data.Text (not mentioned in below table, plus copy)</h4>
+<p>a is the element type, Word8 or Char. S is the string type, ByteString or Text.</p>
+<table class="padded">
+	<tr><th>Data.ByteString[.Char8]</th><th>Data.Text</th></tr>
+	<tr><td colspan="2">pack :: [a] &rarr; S<br/>unpack :: S &rarr; [a]</td></tr>
+	<tr><td colspan="2">uncons :: S &rarr; Maybe (a, S)</td></tr>
+	<tr><td>unsnoc :: ByteString &rarr; Maybe (ByteString, a)</td><td class="empty"></td></tr>
+	<tr><td colspan="2">copy :: S &rarr; S <em>O(n), prevent a slice from keeping reference to rest of string</em></td></tr>
+	<tr><td colspan="2">intersperse :: a &rarr; S &rarr; S<br/>intercalate :: S &rarr; [S] &rarr; S</td></tr>
+	<tr><td colspan="2">transpose :: [S] &rarr; [S]</td></tr>
+	<tr><td>split :: a &rarr; ByteString &rarr; [ByteString]</td><td class="empty"></td></tr>
+	<tr><td class="empty"></td><td>splitOn :: Text &rarr; Text &rarr; [Text]</td></tr>
+	<tr><td>splitWith :: (a &rarr; Bool) &rarr; ByteString &rarr; [ByteString]</td><td>split :: (Char &rarr; Bool) &rarr; Text &rarr; [Text]</tr>
+	<tr><td colspan="2">is{Pre|Suf|In}fixOf :: S &rarr; S &rarr; Bool</td></tr>
+	<tr><td class="empty"></td><td>replace :: Text <em>(needle)</em> &rarr; Text <em>(replacement)</em> &rarr; Text <em>(haystack)</em> &rarr; Text</td></tr>
+	<tr><td class="empty"></td><td>strip, stripStart, stripEnd :: Text &rarr; Text</td></tr>
+	<tr><td><em>[.Char8 only]</em><br/>readInt :: ByteString &rarr; Maybe (Int, ByteString)<br/>readInteger :: ByteString &rarr; Maybe (Integer, ByteString)</td><td><em>import Data.Text.Read</em><br/>type Reader a = Text &rarr; Either String (a, Text)<br/><br/>decimal, hexadecimal :: Integral a &rArr; Reader a<br/>double :: Reader Double<br/>rational :: Fractional a &rArr; Reader a<br/>signed :: Num a &rArr; Reader a &rarr; Reader a</tr>
+	<tr><td colspan="2"><em>[.Char8 only]</em> lines, words :: S &rarr; [S]</td></tr>
+	<tr><td colspan="2"><em>[.Char8 only]</em> unlines, unwords :: [S] &rarr; S</td></tr>
+	<tr><td class="empty"></td><th>Data.Text.IO</th></tr>
+	<tr><td colspan="2">getLine :: IO S</td></tr>
+	<tr><td colspan="2">getContents :: IO S</td></tr>
+	<tr><td colspan="2">putStr :: S &rarr; IO ()</td></tr>
+	<tr><td colspan="2"><em>[deprecated for Data.ByteString, OK for .Char8]</em> putStrLn :: IO S</td></tr>
+	<tr><td colspan="2">interact :: (S &rarr; S) &rarr; IO ()</td></tr>
+	<tr><td colspan="2">readFile :: FilePath &rarr; IO S</td></tr>
+	<tr><td colspan="2">writeFile :: FilePath &rarr; S &rarr; IO ()</td></tr>
+	<tr><td colspan="2">appendFile :: FilePath &rarr; S &rarr; IO ()</td></tr>
+</table>
+<h4>Data.Char</h4>
+<ul>
+	<li>isControl, isSpace, isLower, isUpper, isAlpha, isAlphaNum, isPrint, isDigit, isOctDigit, isHexDigit, isLetter, isMark, isNumber, isPunctuation, isSymbol, isSeparator, isAscii, isLatin1, isAsciiUpper, isAsciiLower :: Char &rarr; Bool</li>
+	<li>toUpper, toLower, toTitle :: Char &rarr; Char</li>
+	<li>digitToInt :: Char &rarr; Int</li>
+	<li>intToDigit :: Int &rarr; Char</li>
+	<li>ord :: Char &rarr; Int</li>
+	<li>chr :: Int &rarr; Char</li>
+</ul>
+<h4>Data.Function</h4>
+<ul>
+	<li>on :: (b &rarr; b &rarr; c) &rarr; (a &rarr; b) &rarr; a &rarr; a &rarr; c</li>
+</ul>
+<h4>Data.List and Friends</h4>
+<p><code>C a</code> generically denotes a container containing objects of type <code>a</code>.</p>
+<table class="padded">
+	<tr><th>Prelude<br/>Data.List<br/>[a]</th><th>Data.Sequence<br/>Seq a</th><th>Data.Vector<br/>Vector a</th><th>Data.ByteString[.Char8]<br/>ByteString<br/>(a = Word8 | Char)</th><th>Data.Text, Data.Text.IO, Data.Text.Read<br/>Text<br/>a = Char</th></tr>
+	<tr><td colspan="3"><em>Functor</em> fmap <em>&equiv;</em> (&lt;$&gt;)</td><td class="empty" colspan="2"></td></tr>
+	<tr><td colspan="3"><em>Applicative</em> pure, (&lt;*&gt;)</td><td class="empty" colspan="2"></td></tr>
+	<tr><td colspan="3"><em>Monad</em> return, (&gt;&gt;=), <em>...</em></td><td class="empty" colspan="2"></td></tr>
+	<tr><td colspan="3"><em>MonadPlus</em> mzero, mplus, <em>...</em></td><td class="empty" colspan="2"></td></tr>
+	<tr><td colspan="3"><em>Foldable</em> fold, foldMap, fold{lr1'},
+			<br/>&nbsp;&nbsp;&nbsp;&nbsp;concat <em>&sub;</em> msum, asum <em>&sub;</em> fold
+			<br/>&nbsp;&nbsp;&nbsp;&nbsp;concatMap <em>&sub;</em> foldMap
+			<br/>&nbsp;&nbsp;traverse_, mapM_, forM_, sequence_, toList <em>...</em>
+			<br/>&nbsp;&nbsp;and, or, any, all, sum, product<br/>&nbsp;&nbsp;maximum[By], minimum[By], elem, notElem, find
+	</td><td colspan="2"><em>&Delta; package contains many similar [Word8|Char]-only functions with same names</em><br/>unpack :: BS &rarr; [a]<br/>unpack :: Text &rarr; [Char]</td></tr>
+	<tr><td colspan="3"><em>Traversable</em> traverse, sequenceA, mapM, sequence</td><td class="empty" colspan="2"></td></tr>
+	<tr><td colspan="5"><em>Monoid</em> mempty, mappend <em>&equiv;</em> (&lt;&gt;)</td></tr>
+	<tr><td>(++)</td><td>(&gt;&lt;)</td><td>(++)</td><td colspan="2">append</td></tr>
+	<tr><td>[]</td><td colspan="4">empty</td></tr>
+	<tr><td class="empty"></td><td colspan="4">singleton :: a &rarr; C a</td></tr>
+	<tr><td colspan="5">null</td></tr>
+	<tr><td class="empty" colspan="2"></td><td>force :: Vector a &rarr; Vector a</td><td colspan="2">copy :: {BS|Text} &rarr; {BS|Text}</td></tr>
+	<tr><td>length</td><td>size</td><td colspan="3">length</td></tr>
+	<tr><td class="empty" colspan="4"></td><td>compareLength :: Text &rarr; Int &rarr; Ordering</td></tr>
+	<tr><td colspan="4">replicate :: Int &rarr; a &rarr; C a</td><td>replicate :: Int &rarr; Text &rarr; Text</td></tr>
+	<tr><td><em>import Control.Monad</em><br/>replicateM :: Int &rarr; m a &rarr; m [a]</td><td colspan="2">replicateM :: Int &rarr; m a &rarr; m (C a)</td><td class="empty" colspan="2"></td></tr>
+	<tr><td colspan="5">head, last</td></tr>
+	<tr><td>(!!)</td><td>index</td><td>(!)<br/>(!?)<br/>unsafeIndex</td><td colspan="2">index</td></tr>
+	<tr><td colspan="5">tail, init</td></tr>
+	<tr><td colspan="5">take, drop, splitAt</td></tr>
+	<tr><td colspan="2">tails, inits</td><td class="empty"></td><td colspan="2">tails, inits</td></tr>
+	<tr><td colspan="5">map</td></tr>
+	<tr><td colspan="5">reverse</td></tr>
+	<tr><td colspan="5">filter</td></tr>
+	<tr><td>(:)</td><td>(&lt;|)</td><td colspan="3">cons</td></tr>
+	<tr><td class="empty"></td><td>(|&gt;)</td><td colspan="3">snoc</td></tr>
+	<tr><td colspan="5">scan[lr][1]</td></tr>
+	<tr><td>takeWhile</td><td>takeWhileL<br/>takeWhileR</td><td colspan="3">takeWhile</td></tr>
+	<tr><td>dropWhile</td><td>dropWhileL<br/>dropWhileR</td><td colspan="2">dropWhile</td><td>dropWhile<br/>dropWhileEnd<br/>dropAround</td></tr>
+	<tr>
+		<td>elemIndex<br/>findIndex</td>
+		<td>elemIndex{LR}<br/>findIndex</td>
+		<td>elemIndex<br/>findIndex</td>
+		<td>elemIndex[End]<br/>findIndex <em>no [End]!</em></td>
+		<td>findIndex</td>
+	<tr>
+		<td>elemIndices<br/>findIndices<br/>:: &rarr; [Int]</td>
+		<td>elemIndices{LR}<br/>findIndices{LR}<br/>:: &rarr; [Int]</td>
+		<td>elemIndices<br/>findIndices<br/>:: &rarr; Vector Int</td>
+		<td>elemIndices<br/>findIndices<br/>:: &rarr; [Int]</td>
+		<td class="empty"></td>
+	</tr>
+	<tr><td>span</td><td>spanl<br/>spanr</td><td>span</td><td>span<br/>spanEnd</td><td>span</td></tr>
+	<tr><td>break</td><td>breakl<br/>breakr</td><td>break</td><td>break<br/>breakEnd</td><td>span</td></tr>
+	<tr><td colspan="2">partition</td><td>partition<br/>unstablePartition</td><td colspan="2">partition</td></tr>
+	<tr><td>sort[By]</td><td>sort[By]<br/>unstableSort[By]</td><td colspan="2">sort</td><td class="empty"></td></tr>
+	<tr><td>zip<em>{..7}</em></td><td>zip<em>{..4}</em></td><td>zip<em>{..6}</em></td><td colspan="2">zip :: (BS|T) &rarr; (BS|T) &rarr; [(a,a)]</td></tr>
+	<tr><td>zipWith<em>{..7}</em></td><td>zipWith<em>{..4}</em></td><td>zipWith<em>{..6}</em></td><td colspan="2">zipWith :: (a &rarr; a &rarr; b) &rarr; (BS|T) &rarr; (BS|T) &rarr; [b]</td></tr>
+</table>
+<h4>Data.List (not mentioned above)</h4>
+<p><em>Note:</em> Nearly every function on Foldables, defined in Data.Foldable, has a list-specific version in Data.List; see above. These are not listed although they're technically not the same functions.</p>
+<ul>
+	<li>intersperse :: a &rarr; [a] &rarr; [a]</li>
+	<li>intercalate :: [a] &rarr; [[a]] &rarr; [a]</li>
+	<li>transpose :: [[a]] &rarr; [[a]]</li>
+	<li>subsequences :: [a] &rarr; [[a]]</li>
+	<li>permutations :: [a] &rarr; [[a]]</li>
+	<li>iterate :: (a &rarr; a) &rarr; a &rarr; [a]</li>
+	<li>repeat :: a &rarr; [a]</li>
+	<li>cycle :: [a] &rarr; [a]</li>
+	<li>lines, words :: String &rarr; [String]</li>
+	<li>unlines, unwords :: [String] &rarr; String</li>
+	<li>nub :: Eq a &rArr; [a] &rarr; [a]</li>
+	<li>nubBy :: (a &rarr; a &rarr; Bool) &rarr; [a] &rarr; [a]</li>
+</ul>
+<h4>Data.Map</h4>
+<p>
+Note: Many names clash with Prelude; please <code>import qualified Data.Map as Map</code>
+</p>
+<ul>
+	<li>(!) :: Ord k &rArr; Map k a &rarr; k &rarr; a</li>
+	<li>lookup :: Ord k &rArr; k &rarr; Map k a &rarr; Maybe a <em>note: (!) and lookup have flipped arguments</em></li>
+	<li>findWithDefault :: Ord k &rArr; a &rarr; k &rarr; Map k a &rarr; a</li>
+	<li>null :: Map k a &rarr; Bool</li>
+	<li>size :: Map k a &rarr; Int</li>
+	<li>member :: Ord k &rarr; k &rarr; Map k a &rarr; Bool</li>
+	<li>empty :: Map k a</li>
+	<li>singleton :: k &rarr; a &rarr; Map k a</li>
+	<li>insert :: Ord k &rArr; k &rarr; a &rarr; Map k a &rarr; Map k a</li>
+	<li>insertWith :: Ord k &rArr; (a &rarr; a &rarr; a) &rarr; k &rarr; a &rarr; Map k a &rarr; Map k a</li>
+	<li>delete :: Ord k &rArr; k &rarr; Map k a &rarr; Map k a</li>
+	<li>adjust :: Ord k &rArr; (a &rarr; a) &rarr; k &rarr; Map k a &rarr; Map k a</li>
+	<li>update :: Ord k &rArr; (a &rarr; Maybe a) &rarr; k &rarr; Map k a &rarr; Map k a</li>
+	<li>alter :: Ord k &rArr; (Maybe a &rarr; Maybe a) &rarr; k &rarr; Map k a &rarr; Map k a</li>
+	<li>elems :: Map k a &rarr; [a]</li>
+	<li>keys :: Map k a &rarr; [k]</li>
+	<li>toList :: Map k a &rarr; [(k, a)]</li>
+	<li>fromList :: Ord k &rArr; [(k, a)] &rarr; Map k a</li>
+</ul>
+<h4>Data.Maybe</h4>
+<ul>
+	<li>maybe :: b &rarr; (a &rarr; b) &rarr; Maybe a &rarr; b</li>
+	<li>isJust :: Maybe a &rarr; Bool</li>
+	<li>isNothing :: Maybe a &rarr; Bool</li>
+	<li>fromJust :: Maybe a &rarr; Bool</li>
+	<li>fromMaybe :: a &rarr; Maybe a &rarr; a</li>
+	<li>listToMaybe :: [a] &rarr; Maybe a</li>
+	<li>maybeToList :: Maybe a &rarr; [a]</li>
+	<li>catMaybes :: [Maybe a] &rarr; [a]</li>
+	<li>mapMaybe :: (a &rarr; Maybe b) &rarr; [a] &rarr; [b]</li>
+</ul>
+<h4>Data.Monoid</h4>
+<ul>
+	<li>mappend <em>(&equiv; (&lt;&gt;))</em> :: (Monoid a) &rArr; a &rarr; a &rarr; a</li>
+</ul>
+<h5>newtypes:</h5>
+<ul>
+	<li>Dual a = Dual { getDual :: a } <em>monoid with `mappend` parameters flipped</em></li>
+	<li>Endo a = Endo { appEndo :: a &rarr; a } <em>function composition</em></li>
+	<li>All = All { getAll :: Bool }</li>
+	<li>Any = Any { getAny :: Bool }</li>
+	<li>Sum a = Sum { getSum :: a } <em>addition monoid w/ (Num a)</em></li>
+	<li>Product a = Product { getProduct :: a } <em>multiplication monoid w/ (Num a)</em></li>
+	<li>First a = First { getFirst :: Maybe a }</li>
+	<li>Last a = Last { getLast :: Maybe a }</li>
+</ul>
+<h4>Data.Ord</h4>
+<ul>
+	<li>comparing :: (Ord a) &rArr; (b &rarr; a) &rarr; b &rarr; b &rarr; b &rarr; Ordering <em>(used for e.g. sortBy)</em></li>
+</ul>
+<h5>newtype Down a</h5>
+<ul>
+	<li>Eq a &rArr; Eq (Down a)</li>
+	<li>Ord a &rArr; Ord (Down a) <em>reverses order</em></li>
+</ul>
+<h4>Data.Set</h4>
+<p>
+Note: Many names clash with Prelude; please <code>import qualified Data.Set as Set</code>
+</p>
+<ul>
+	<li>member :: Ord a &rArr; a &rarr; Set a &rarr; Bool</li>
+	<li>null :: Set a &rarr; Bool</li>
+	<li>size :: Set a &rarr; Int</li>
+	<li>lookup<i>[LT,GT,LE,GE]</i> :: Ord a &rArr; a &rarr; Set a &rarr; Maybe a</li>
+	<li>empty :: Set a</li>
+	<li>singleton :: a &rarr; Set a</li>
+	<li>insert :: Ord a &rArr; a &rarr; Set a &rarr; Set a</li>
+	<li>delete :: Ord a &rArr; a &rarr; Set a &rarr; Set a</li>
+	<li>elems <em>(&equiv; toAscList)</em> :: Set a &rarr; [a]</li>
+	<li>fromList :: [a] &rarr; Set a</li>
+</ul>
+<h4>Debug.Trace</h4>
+<ul>
+	<li>trace :: String &rarr; a &rarr; a</li>
+	<li>traceShow :: (Show a) &rArr; a &rarr; b &rarr; b</li>
+</ul>
+<h4>System.IO</h4>
+<ul>
+	<li>stdin, stdout, stderr :: Handle</li>
+	<li>withFile :: FilePath &rarr; IOMode &rarr; (Handle &rarr; IO r) &rarr; IO r</li>
+	<li>openFile :: FilePath &rarr; IOMode &rarr; IO Handle</li>
+	<li>hClose :: Handle &rarr; IO ()</li>
+	<li>readFile :: FilePath &rarr; IO String</li>
+	<li>writeFile, appendFile :: FilePath &rarr; String &rarr; IO ()</li>
+	<li>hFileSize :: Handle &rarr; IO Integer</li>
+	<li>hGetLine :: Handle &rarr; IO String</li>
+	<li>hGetContents :: Handle &rarr; IO String</li>
+</ul>
