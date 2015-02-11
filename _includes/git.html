@@ -20,7 +20,7 @@
 <p>The actual cheat sheet.</p>
 <table>
 	<tr><th>Command</th><th colspan="4">Subcommands, flags, arguments</th><th>Description</th></tr>
-	<tr><td rowspan="38">git</td>
+	<tr><td rowspan="39">git</td>
 		<td colspan="4">status</td><td class="empty"></td></tr>
 	<tr><td colspan="4">hist</td><td>[alias]<br/>&nbsp; &nbsp; hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short<br/>(see <a href="http://gitimmersion.com/lab_10.html">git immersion</a>)</td></tr>
 	<tr><td rowspan="5">add</td><td colspan="3" class="cr">files</td><td class="empty"></td></tr>
@@ -36,9 +36,10 @@
 	<tr><td>-e</td><td colspan="2" class="cr">files</td><td>edit patch yourself</td></tr>
 	<tr><td colspan="3">-u / --update</td><td>all modifications and deletions</td></tr>
 	<tr><td colspan="3">-A / --all</td><td>all additions, modifications, and deletions</td></tr>
-	<tr><td rowspan="3">commit</td><td colspan="4" class="empty">&empty;</td></tr>
+	<tr><td rowspan="4">commit</td><td colspan="4" class="empty">&empty;</td></tr>
 	<tr><td colspan="3">-a / --all</td><td>like add -u</td></tr>
-	<tr><td colspan="3">--amend</td><td class="empty"></td></tr>
+	<tr><td rowspan="2">--amend</td><td colspan="3" class="empty">∅</td></tr>
+	<tr><td colspan="2">--date="<em>`date`</em>"</td><td>amend w/ current date<br />(via command substitution; somehow, works even though my `date` is in Chinese)</td></tr>
 	<tr><td rowspan="4">branch</td><td colspan="3">[-r / -a]</td><td>list (remote / all)</td></tr>
 	<tr><td>-d / -D</td><td colspan="2" class="cg">branch</td><td>delete (safe / forceful)</td></tr>
 	<tr><td class="cg" rowspan="2">newbranch</td><td colspan="2" class="empty">&empty;</td><td rowspan="2">new branch (but not checked out; you probably want checkout -b)</td></tr>
