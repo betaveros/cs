@@ -1,109 +1,105 @@
-<h2 id="web"><span class="toggle" onClick="toggle('webcont');return false">Web</span> <a href="#top">&uArr;</a></h2>
-<div id="webcont">
-	<h3>CSS</h3>
-	<table>
-		<tr><td>E F</td><td>descendant</td></tr>
-		<tr><td>E &gt; F</td><td>child</td></tr>
-		<tr><td>E:first-child</td><td>first child of its parent</td></tr>
-		<tr><td>E + F</td><td>F preceded by E</td></tr>
-		<tr><td>E[foo]</td><td>has foo attribute</td></tr>
-		<tr><td>E[foo="bar"]</td><td>foo attribute equal to bar</td></tr>
-		<tr><td>E[foo~="warning"]</td><td>foo attribute, as space-separated list, equal to bar</td></tr>
-		<tr><td>E.x</td><td>class</td></tr>
-		<tr><td>E#id</td><td>id</td></tr>
-		<tr><td rowspan="2">background:</td><td>linear-gradient(<em>to right</em>, black, white);
-				<ul>
-					<li><em>to top;</em> [top, bottom, left, right]</li>
-					<li><em>to top right;</em></li>
-					<li><em>42deg;</em> (polar in vendor, navigational in official!)</li>
-				</ul>
-		</td></tr>
-		<tr><td>url("bg.png") black repeat-y fixed;
-				<ul>
-					<li>fixed (to viewport), local (w/ contents), scroll (w/ element), inherit</li>
-					<li>repeat-x, repeat-y, repeat, no-repeat, space, round (last two are obscure)</li>
-				</ul>
-		</td></tr>
-	</table>
-	<h3>HTTP Responses</h3>
-	<table>
-		<tr><th>Response</th><th>Name</th><th>Description</th></tr>
-		<tr><td>100</td><td>Continue</td><td>Request headers are good, send the body please (in response to Expect: 100-continue)</td></tr>
-		<tr><td>101</td><td>Switch Protocols</td><td>e.g. HTTP to FTP</td></tr>
-		<tr><td>200</td><td>OK</td><td>successful</td></tr>
-		<tr><td>201</td><td>Created</td><td>new resource, see here</td></tr>
-		<tr><td>203</td><td>Non-Authoritative Information</td><td>the following data is from e.g. a third party</td></tr>
-		<tr><td>204</td><td>No Content</td><td>successful, but nothing to return</td></tr>
-		<tr><td>205</td><td>Reset Content</td><td>successful, please reset your view (e.g. form)</td></tr>
-		<tr><td>206</td><td>Partial Content</td><td>successful, only returning requested parts (e.g. in response to partial downloading program)</td></tr>
-		<tr><td>300</td><td>Multiple Choice</td><td>pick a choice</td></tr>
-		<tr><td>301</td><td>Moved Permanently</td><td>use this new URL</td></tr>
-		<tr><td>404</td><td>Not Found</td><td>you know</td></tr>
-		<tr><td>503</td><td>Service Unavailable</td><td>temporary condition (overload, often)</td></tr>
-		<tr><td>?</td><td>I should stop procrastinating</td><td>hello thar</td></tr>
-	</table>
-	<h3>Ampersand Escapes (+ LaTeX)</h3>
-	<table>
-		<tr><td>&larr;</td><td>[udlr]arr;</td><td>\(up|down|left|right)arrow (math)</td></tr>
-		<tr><td>&lArr;</td><td>[udlr]Arr;</td><td>\(Up|Down|Left|Right)arrow (math)</td></tr>
-		<tr><td>&para;</td><td>para;</td><td>\P</td></tr>
-		<tr><td>&times;</td><td>times;</td><td>\times (math)</td></tr>
-		<tr><td>&div;</td><td>div;</td><td>\div (math)</td></tr>
-		<tr><td>&hellip;</td><td>hellip;</td><td>\ldots</td></tr>
-		<tr><td>&infin;</td><td>infin;</td><td>\infty (math)</td></tr>
-		<tr><td>&agrave;&egrave;&igrave;&ograve;&ugrave;</td><td>[aeiou]grave;</td></tr>
-		<tr><td>&aacute;&eacute;&iacute;&oacute;&uacute;</td><td>[aeiou]acute;</td></tr>
-		<tr><td>&lsquo;&rsquo;&ldquo;&rdquo;</td><td>[lr][sd]quo;</td></tr>
-		<tr><td><a href="https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references">more</a></td><td>hi</td></tr>
-	</table>
-	<h3>JavaScript DOM</h3>
-	<a href="https://developer.mozilla.org/en-US/docs/Web/API/document">mdn @ document</a>
-	<table>
-		<tr><th>document.</th></tr>
-		<tr><td>head</td></tr>
-		<tr><td>body</td></tr>
-		<tr><td>title</td></tr>
-		<tr><td>createAttribute(String name)</td><td>Attr object</td></tr>
-		<tr><td>createElement(String name)</td></tr>
-		<tr><td>createTextNode(String text)</td></tr>
-		<tr><td>getElementsByClassName(String className)</td></tr>
-		<tr><td>getElementsByTagName(String tagName)</td></tr>
-		<tr><td>getElementById(String id)</td></tr>
-		<tr><td>querySelector(String selector)</td><td>first element matching CSS selector, e.g. <code>.myclass</code>, <code>#foo td</code></td></tr>
-		<tr><td>querySelectorAll(String selector)</td><td>all elements matching CSS selector</td></tr>
-	</table>
-	<a href="https://developer.mozilla.org/en-US/docs/Web/API/element">mdn @ element</a>
-	<table>
-		<tr><th>node.</th></tr>
-		<tr><td>parentNode</td><td>or null</td></tr>
-		<tr><td>childNodes</td><td>NodeList (can use <code>.length</code>, <code>[0]</code></td></tr>
-		<tr><td>firstChild</td><td>or null</td></tr>
-		<tr><td>lastChild</td><td>or null</td></tr>
-		<tr><td>nextSibling</td><td>or null</td></tr>
-		<tr><td>previousSibling</td><td>or null</td></tr>
-		<tr><td>appendChild(Node node)</td></tr>
-		<tr><td>insertBefore(Node node, Node refchild)</td><td>insert node as child before refchild, which must be a child</td></tr>
-		<tr><td>removeChild(Node child)</td><td>returns child, which may be reused</td></tr>
-		<tr><th>element.</th></tr>
-		<tr><td>parentElement</td><td>or null</td></tr>
-		<tr><td>children</td><td>(Elements) HTMLCollection (can use <code>.length</code>, <code>[0]</code>, <code>["key"]</code></td></tr>
-		<tr><td>classList</td><td>DOMTokenList (can use <code>.length</code>, <code>.contains("token")</code>, <code>.add("token")</code>...</td></tr>
-		<tr><td>className</td></tr>
-		<tr><td>id</td></tr>
-		<tr><td>innerHTML</td><td>"experimental"</td></tr>
-		<tr><td>outerHTML</td><td>"experimental"</td></tr>
-		<tr><td>firstElementChild</td><td>(Element) or null</td></tr>
-		<tr><td>lastElementChild</td><td>(Element) or null</td></tr>
-		<tr><td>nextElementSibling</td><td>(Element) or null</td></tr>
-		<tr><td>previousElementSibling</td><td>(Element) or null</td></tr>
-		<tr><td>getAttribute(String name)</td><td>string; may be null or "" on no attribute</td></tr>
-		<tr><td>hasAttribute(String name)</td></tr>
-		<tr><td>setAttribute(String name, value)</td></tr>
-		<tr><td>getElementsByClassName(String className)</td></tr>
-		<tr><td>getElementsByTagName(String tagName)</td></tr>
-		<tr><td>querySelector(String selector)</td><td>CSS selector, e.g. <code>.myclass</code>, <code>#foo td</code></td></tr>
-	</table>
-	<pre>
-
-	</pre>
-</div>
+<h3>CSS</h3>
+<table>
+	<tr><td>E F</td><td>descendant</td></tr>
+	<tr><td>E &gt; F</td><td>child</td></tr>
+	<tr><td>E:first-child</td><td>first child of its parent</td></tr>
+	<tr><td>E + F</td><td>F preceded by E</td></tr>
+	<tr><td>E[foo]</td><td>has foo attribute</td></tr>
+	<tr><td>E[foo="bar"]</td><td>foo attribute equal to bar</td></tr>
+	<tr><td>E[foo~="warning"]</td><td>foo attribute, as space-separated list, equal to bar</td></tr>
+	<tr><td>E.x</td><td>class</td></tr>
+	<tr><td>E#id</td><td>id</td></tr>
+	<tr><td rowspan="2">background:</td><td>linear-gradient(<em>to right</em>, black, white);
+			<ul>
+				<li><em>to top;</em> [top, bottom, left, right]</li>
+				<li><em>to top right;</em></li>
+				<li><em>42deg;</em> (polar in vendor, navigational in official!)</li>
+			</ul>
+	</td></tr>
+	<tr><td>url("bg.png") black repeat-y fixed;
+			<ul>
+				<li>fixed (to viewport), local (w/ contents), scroll (w/ element), inherit</li>
+				<li>repeat-x, repeat-y, repeat, no-repeat, space, round (last two are obscure)</li>
+			</ul>
+	</td></tr>
+</table>
+<h3>HTTP Responses</h3>
+<table>
+	<tr><th>Response</th><th>Name</th><th>Description</th></tr>
+	<tr><td>100</td><td>Continue</td><td>Request headers are good, send the body please (in response to Expect: 100-continue)</td></tr>
+	<tr><td>101</td><td>Switch Protocols</td><td>e.g. HTTP to FTP</td></tr>
+	<tr><td>200</td><td>OK</td><td>successful</td></tr>
+	<tr><td>201</td><td>Created</td><td>new resource, see here</td></tr>
+	<tr><td>203</td><td>Non-Authoritative Information</td><td>the following data is from e.g. a third party</td></tr>
+	<tr><td>204</td><td>No Content</td><td>successful, but nothing to return</td></tr>
+	<tr><td>205</td><td>Reset Content</td><td>successful, please reset your view (e.g. form)</td></tr>
+	<tr><td>206</td><td>Partial Content</td><td>successful, only returning requested parts (e.g. in response to partial downloading program)</td></tr>
+	<tr><td>300</td><td>Multiple Choice</td><td>pick a choice</td></tr>
+	<tr><td>301</td><td>Moved Permanently</td><td>use this new URL</td></tr>
+	<tr><td>404</td><td>Not Found</td><td>you know</td></tr>
+	<tr><td>503</td><td>Service Unavailable</td><td>temporary condition (overload, often)</td></tr>
+	<tr><td>?</td><td>I should stop procrastinating</td><td>hello thar</td></tr>
+</table>
+<h3>Ampersand Escapes (+ LaTeX)</h3>
+<table>
+	<tr><td>&larr;</td><td>[udlr]arr;</td><td>\(up|down|left|right)arrow (math)</td></tr>
+	<tr><td>&lArr;</td><td>[udlr]Arr;</td><td>\(Up|Down|Left|Right)arrow (math)</td></tr>
+	<tr><td>&para;</td><td>para;</td><td>\P</td></tr>
+	<tr><td>&times;</td><td>times;</td><td>\times (math)</td></tr>
+	<tr><td>&div;</td><td>div;</td><td>\div (math)</td></tr>
+	<tr><td>&hellip;</td><td>hellip;</td><td>\ldots</td></tr>
+	<tr><td>&infin;</td><td>infin;</td><td>\infty (math)</td></tr>
+	<tr><td>&sdot;</td><td>sdot;</td><td>\cdot (?) (math)</td></tr>
+	<tr><td>&sub;&sup;&nsub;&nsup;&sube;&supe;</td><td>sub;sup;nsub;nsup;sube;supe</td><td>...</td></tr>
+	<tr><td>&agrave;&egrave;&igrave;&ograve;&ugrave;</td><td>[aeiou]grave;</td></tr>
+	<tr><td>&aacute;&eacute;&iacute;&oacute;&uacute;</td><td>[aeiou]acute;</td></tr>
+	<tr><td>&lsquo;&rsquo;&ldquo;&rdquo;</td><td>[lr][sd]quo;</td></tr>
+	<tr><td><a href="https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references">more</a></td><td>hi</td></tr>
+</table>
+<h3>JavaScript DOM</h3>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/document">mdn @ document</a>
+<table>
+	<tr><th>document.</th></tr>
+	<tr><td>head</td></tr>
+	<tr><td>body</td></tr>
+	<tr><td>title</td></tr>
+	<tr><td>createAttribute(String name)</td><td>Attr object</td></tr>
+	<tr><td>createElement(String name)</td></tr>
+	<tr><td>createTextNode(String text)</td></tr>
+	<tr><td>getElementsByClassName(String className)</td></tr>
+	<tr><td>getElementsByTagName(String tagName)</td></tr>
+	<tr><td>getElementById(String id)</td></tr>
+	<tr><td>querySelector(String selector)</td><td>first element matching CSS selector, e.g. <code>.myclass</code>, <code>#foo td</code></td></tr>
+	<tr><td>querySelectorAll(String selector)</td><td>all elements matching CSS selector</td></tr>
+</table>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/element">mdn @ element</a>
+<table>
+	<tr><th>node.</th></tr>
+	<tr><td>parentNode</td><td>or null</td></tr>
+	<tr><td>childNodes</td><td>NodeList (can use <code>.length</code>, <code>[0]</code></td></tr>
+	<tr><td>firstChild</td><td>or null</td></tr>
+	<tr><td>lastChild</td><td>or null</td></tr>
+	<tr><td>nextSibling</td><td>or null</td></tr>
+	<tr><td>previousSibling</td><td>or null</td></tr>
+	<tr><td>appendChild(Node node)</td></tr>
+	<tr><td>insertBefore(Node node, Node refchild)</td><td>insert node as child before refchild, which must be a child</td></tr>
+	<tr><td>removeChild(Node child)</td><td>returns child, which may be reused</td></tr>
+	<tr><th>element.</th></tr>
+	<tr><td>parentElement</td><td>or null</td></tr>
+	<tr><td>children</td><td>(Elements) HTMLCollection (can use <code>.length</code>, <code>[0]</code>, <code>["key"]</code></td></tr>
+	<tr><td>classList</td><td>DOMTokenList (can use <code>.length</code>, <code>.contains("token")</code>, <code>.add("token")</code>...</td></tr>
+	<tr><td>className</td></tr>
+	<tr><td>id</td></tr>
+	<tr><td>innerHTML</td><td>"experimental"</td></tr>
+	<tr><td>outerHTML</td><td>"experimental"</td></tr>
+	<tr><td>firstElementChild</td><td>(Element) or null</td></tr>
+	<tr><td>lastElementChild</td><td>(Element) or null</td></tr>
+	<tr><td>nextElementSibling</td><td>(Element) or null</td></tr>
+	<tr><td>previousElementSibling</td><td>(Element) or null</td></tr>
+	<tr><td>getAttribute(String name)</td><td>string; may be null or "" on no attribute</td></tr>
+	<tr><td>hasAttribute(String name)</td></tr>
+	<tr><td>setAttribute(String name, value)</td></tr>
+	<tr><td>getElementsByClassName(String className)</td></tr>
+	<tr><td>getElementsByTagName(String tagName)</td></tr>
+	<tr><td>querySelector(String selector)</td><td>CSS selector, e.g. <code>.myclass</code>, <code>#foo td</code></td></tr>
+</table>

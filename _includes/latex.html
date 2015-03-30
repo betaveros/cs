@@ -1,5 +1,7 @@
 <h3>Stuff</h3>
 <pre>\includegraphics[width=\textwidth]{grasshopper.jpg}</pre>
+<p>(Mac) Use TeX Live Utility to install from repos. Or, stuff goes in <code>~/Library/texmf/tex/latex</code>. LaTeX will find it.</p>
+<pre>\includegraphics[width=\textwidth]{grasshopper.jpg}</pre>
 <h3>Packages</h3>
 Some command-line magic: <code>ack usepackage | sed 's/^.*{\(.*\)}.*$/\1/g' | sort | uniq | less</code>. Don't do the search too widely, I think at some point the pipe gets too huge and some programs give up.
 <ul>
