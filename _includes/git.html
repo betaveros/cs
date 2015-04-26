@@ -20,7 +20,7 @@
 <p>The actual cheat sheet.</p>
 <table>
 	<tr><th>Command</th><th colspan="4">Subcommands, flags, arguments</th><th>Description</th></tr>
-	<tr><td rowspan="39">git</td>
+	<tr><td rowspan="49">git</td>
 		<td colspan="4">status</td><td class="empty"></td></tr>
 	<tr><td colspan="4">hist</td><td>[alias]<br/>&nbsp; &nbsp; hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short<br/>(see <a href="http://gitimmersion.com/lab_10.html">git immersion</a>)</td></tr>
 	<tr><td rowspan="5">add</td><td colspan="3" class="cr">files</td><td class="empty"></td></tr>
@@ -74,5 +74,15 @@
 	<tr><td colspan="2">--root</td></tr>
 	<tr><td colspan="3">--continue</td><td>with interactive</td></tr>
 	<tr><td>revert</td><td class="cg" colspan="3">tree-ish</td><td>Make a commit that restores to this commit</td></tr>
+	<tr><td rowspan="10">stash</td><td class="empty" colspan="3"></td><td>put current changes in stash</td></tr>
+	<tr><td colspan="3">list</td><td>list stashes</td></tr>
+	<tr><td rowspan="2">pop</td><td class="empty" colspan="2">&empty;</td><td rowspan="2">apply stash + pop it (if no conflicts)</td></tr>
+	<tr><td class="cg" colspan="2">stash@{8}</td></tr>
+	<tr><td rowspan="2">apply</td><td class="empty" colspan="2">&empty;</td><td rowspan="2">apply stash</td></tr>
+	<tr><td class="cg" colspan="2">stash@{8}</td></tr>
+	<tr><td rowspan="2">drop</td><td class="empty" colspan="2">&empty;</td><td rowspan="2">delete top stash w/o applying<br />(esp. after git stash pop + resolving conflicts)</td></tr>
+	<tr><td class="cg" colspan="2">stash@{8}</td></tr>
+	<tr><td rowspan="2">show</td><td class="empty">&empty;</td><td rowspan="2">[ -p ]</td><td rowspan="2">show stash briefly<br />(-p: as patch)</td></tr>
+	<tr><td class="cg">stash@{8}</td></tr>
 	<tr><td>ls-files</td><td colspan="3">| xargs wc -l</td><td>Count lines...</td></tr>
 </table>
