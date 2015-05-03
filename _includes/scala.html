@@ -2,3 +2,4 @@
 <p>[Gen] means the collection might be sequential or parallel.</p>
 <p>TraversableOnce has foldLeft[B](z: B)(op: (B, A) &rArr; B): B and foldRight[B](z: B)(op: (A, B) &rArr; B): B. There's no reconstruction.</p>
 <p>Traversable begins to have stuff like collect[B](pf: PartialFunction[A, B]): CC[B] and map[B](f: (A) ⇒ B): CC[B].</p>
+<p><a href="https://stackoverflow.com/questions/9578521/scala-sbt-how-to-re-run-with-deprecation">rerun sbt with flags like -deprecation</a>: <code>set scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation")</code></p>
