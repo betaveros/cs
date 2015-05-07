@@ -86,3 +86,7 @@ password = getpass.getpass()</pre>
 <h3>Hax</h3>
 <pre>[t for t in (1).__class__.__bases__[-1].__subclasses__() if t.__name__ == 'file'][0]('/etc/passwd').read()</pre>
 <p>(from <a href="http://eev.ee/blog/2012/03/24/on-principle/"><cite>On principle</cite> (eevee)</a>)</p>
+<h3>pygmentize</h3>
+<p>has complicated command line flags:</p>
+<pre>pygmentize -f html -l python -O full,style=tango -o out.html src.py</pre>
+<p>note it can guess -f and infer -l from source file extension</p>
