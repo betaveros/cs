@@ -83,9 +83,11 @@
 	<tr><td>combinations('ABCD', 2)</td><td>AB, AC, AD, BC, BD, CD</td></tr>
 	<tr><td>combinations_with_replacement('ABCD', 2)</td><td>AA, AB, AC, AD, BB[...]</td></tr>
 </table>
-<h3>Password</h3>
+<h3>Other Standard Library</h3>
 <pre>import getpass
 password = getpass.getpass()</pre>
+<pre>import time
+time.sleep(0.5) # 0.5 seconds</pre>
 <h3>Hax</h3>
 <pre>[t for t in (1).__class__.__bases__[-1].__subclasses__() if t.__name__ == 'file'][0]('/etc/passwd').read()</pre>
 <p>(from <a href="http://eev.ee/blog/2012/03/24/on-principle/"><cite>On principle</cite> (eevee)</a>)</p>
