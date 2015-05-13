@@ -10,6 +10,14 @@
 <p><code># coding=utf-8</code></p>
 <p><code># -*- coding: utf-8 -*-</code></p>
 <p><code># vim: set fileencoding=utf-8 :</code></p>
+<pre>
+import codecs
+codecs.encode(obj, encoding, errors)
+codecs.decode(obj, encoding, errors)
+</pre>
+<p>can pass first 1 or first 2 arguments</p>
+<p>encoding = "<code>ascii</code>" if omitted; alternatives: <code>utf_8</code>, <code>latin_1</code>, <code>big5</code> etc.</p>
+<p>errors = "<code>strict</code>" if omitted; alternatives: <code>ignore</code>, <code>replace</code> etc.</p>
 <h3>String (&rarr; <a href="http://docs.python.org/library/stdtypes.html#string-methods">std. methods</a>, <a href="http://docs.python.org/library/string.html">module</a>)</h3>
 <ul>
 	<li><code>"formatstring".format(arg0, arg1, name=value)</code>
