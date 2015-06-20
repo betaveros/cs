@@ -107,7 +107,12 @@ instance Quux Int where
 <ul>
 	<li>runSTArray :: (<em>forall</em> s. ST s (STArray s i e)) &rarr; Array i e</li>
 	<li>runSTUArray :: (<em>forall</em> s. ST s (STUArray s i e)) &rarr; Array i e</li>
-	<li>newArray :: (i, i) &rarr; e &rarr; m (a i e)</li>
+	<li>newArray :: (i, i) &rarr; e &rarr; m (a i e)
+	<ul>
+		<li>note, when necessary, this is a good place to specialize ST: <code>foo &lt;- newArray (0,9) False :: ST s (STArray s Int Bool)</code></li>
+	</ul>
+	</li>
+	<li>newArray_ :: (i, i) &rarr; m (a i e)</li>
 	<li>readArray :: a i e &rarr; i &rarr; m e</li>
 	<li>writeArray :: a i e &rarr; i &rarr; e &rarr; m e</li>
 	<li>getElems :: a i e &rarr; m e</li>
