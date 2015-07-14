@@ -25,7 +25,7 @@
 <p>The actual cheat sheet.</p>
 <table>
 	<tr><th>Command</th><th colspan="4">Subcommands, flags, arguments</th><th>Description</th></tr>
-	<tr><td rowspan="49">git</td>
+	<tr><td rowspan="51">git</td>
 		<td colspan="4">status</td><td class="empty"></td></tr>
 	<tr><td colspan="4">hist</td><td>[alias]<br/>&nbsp; &nbsp; hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short<br/>(see <a href="http://gitimmersion.com/lab_10.html">git immersion</a>)</td></tr>
 	<tr><td rowspan="5">add</td><td colspan="3" class="cr">files</td><td class="empty"></td></tr>
@@ -49,9 +49,10 @@
 	<tr><td>-d / -D</td><td colspan="2" class="cg">branch</td><td>delete (safe / forceful)</td></tr>
 	<tr><td class="cg" rowspan="2">newbranch</td><td colspan="2" class="empty">&empty;</td><td rowspan="2">new branch (but not checked out; you probably want checkout -b)</td></tr>
 	<tr><td colspan="2" class="cg">oldbranch</td></tr>
-	<tr><td rowspan="3">checkout</td><td class="cg" colspan="3">master</td><td class="empty"></td></tr>
+	<tr><td rowspan="4">checkout</td><td class="cg" colspan="3">master</td><td class="empty"></td></tr>
 	<tr><td>-b</td><td class="cg" colspan="2">branch</td><td>First make new branch</td></tr>
 	<tr><td class="cr" colspan="3">file</td><td>Reset local unstaged changes</td></tr>
+	<tr><td colspan="3">--ours / --theirs</td><td>One or the other version, during a merge</td></tr>
 	<tr><td rowspan="3">reset</td><td class="cg">HEAD</td><td class="cr" colspan="2">files</td><td>Reset index = make changes unstaged</td></tr>
 	<tr><td>--soft</td><td class="cg" colspan="2">branch</td><td>Reset HEAD</td></tr>
 	<tr><td>--hard</td><td class="cg" colspan="2">HEAD</td><td>Reset index and workspace = destroy changes</td></tr>
@@ -65,7 +66,8 @@
 	<tr><td class="cb" rowspan="3">upstream</td><td class="cg" rowspan="3">branch</td><td class="empty" colspan="4">&empty;</td></tr>
 	<tr><td>-u / --set-upstream</td><td>track branches</td></tr>
 	<tr><td>-f / --force</td><td>after you screw up</td></tr>
-	<tr><td>merge</td><td class="cg" colspan="3">branch</td><td>Use some other tree-ish to extend this one</td></tr>
+	<tr><td rowspan="2">merge</td><td class="cg" colspan="3">branch</td><td>Use some other tree-ish to extend this one</td></tr>
+	<tr><td colspan="3">--abort</td><td>abort a merge</td></tr>
 	<tr><td rowspan="5">rebase</td><td class="cg" rowspan="2">stem</td><td class="empty" colspan="2"></td><td>Graft branch and commits somewhere else</td></tr>
 	<tr><td class="cg" colspan="2">tip</td><td>(tip will first get checked out)</td></tr>
 	<tr><td rowspan="2">-i / --interactive</td><td class="cg" colspan="2">HEAD~1337</td><td rowspan="2">interactive rebase: rearrange, edit, squash commits...
