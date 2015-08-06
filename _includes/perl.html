@@ -1,0 +1,21 @@
+<h3>Command-Line Flags</h3>
+<p><a href="http://perldoc.perl.org/perlrun.html">perlrun</a> or <code>perldoc perlrun</code></p>
+<p>Switch-clustering is OK. <code>#!/usr/bin/env perl -flagstuvwxyz</code></p>
+<table>
+	<tr><th>switch</th><th>meaning</th></tr>
+	<tr><td>-e</td><td>eval code from command-line argument</td></tr>
+	<tr><td>-n</td><td>run against every line</td></tr>
+	<tr><td>-p</td><td>run against every line + print result</td></tr>
+	<tr><td>-i</td><td>modify file in-place</td></tr>
+	<tr><th colspan="2">awk-like flags</th></tr>
+	<tr><td>-l</td><td>chomp lines + make print statements output record separators (?)</td></tr>
+	<tr><td>-F<em>pattern</em></td><td>change </td></tr>
+	<tr><td>-a</td><td>autosplit: input fields are placed in <code>@F</code> (<code>$f[0]</code>, <code>$f[1]</code>...)</td></tr>
+</table>
+
+<p>awk note: a file contains records (usually lines), which contain fields (usually whitespace-delimited tokens)</p>
+<p>In practice:</p>
+<ul>
+	<li><code>perl -ne 'print if /pattern/'</code></li>
+	<li><code>perl -pe 's/from/to/g'</code></li>
+</ul>
