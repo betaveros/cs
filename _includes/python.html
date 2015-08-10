@@ -59,7 +59,7 @@ codecs.decode(obj, encoding, errors)
 	<tr><td>d.items()</td><td>[(k1, v1)...]</td></tr>
 </table>
 <p>keys(), values(), items(): prepend 'iter' to name for iterator. Note that iter(d) &equiv; d.iterkeys()</p>
-<h3>os Navigate Filesystem</h3>
+<h3><a href="https://docs.python.org/2/library/os.html">os</a> Navigate Filesystem</h3>
 <ul>
 	<li><code>os.chdir(pathstring)</code></li>
 	<li><code>os.listdir(pathstring)</code> (unordered list of entries, no <code>.</code> or <code>..</code>)</li>
@@ -67,7 +67,7 @@ codecs.decode(obj, encoding, errors)
 	<li><code>os.path.join(*paths)</code> intelligently joins</li>
 	<li><code>os.rename(src, dst)</code> (file or dir)</li>
 	<li><code>os.renames(src, dst)</code> (same, path dirs allowed)</li>
-	<li><code>os.walk(path, topdown=True, (more omitted))</code> is a generator that walks all subdirectories. It yields a 3-tuple <code>(dirpath, dirnames, filenames)</code> for each directory</li>
+	<li><code>os.walk(path, topdown=True, <a href="https://docs.python.org/2/library/os.html#os.walk">(more omitted)</a>)</code> is a generator that walks all subdirectories. It yields a 3-tuple <code>(dirpath, dirnames, filenames)</code> for each directory. To do stuff, use <code>os.path.join(root, x)</code> for <code>x</code>  and use You can modify <code>dirnames</code> in-place to inform or prune the walk.</li>
 	<li><code>os.path.exists("foo")</code></li>
 	<li><code>os.path.isfile("foo")</code> (exists and is file?)</li>
 	<li><code>os.path.isdir("foo")</code> (exists and is directory?)</li>
