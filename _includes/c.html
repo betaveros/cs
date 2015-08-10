@@ -15,16 +15,16 @@ Read right-to-left.</p>
 	</li>
 </ul>
 <h3>struct: initializer, operator</h3>
-<pre>struct query {
-	query(int l, int r)<em>: left(l), right(r)</em> {}
+<pre>struct Query {
+	Query(int l, int r)<em>: left(l), right(r)</em> {}
 	int left;
 	int right;
-	<em>bool operator&lt;(const query&amp; other) const</em> {
-		if (right &lt; other.right) return true;
-		if (right &gt; other.right) return false;
+	<em>bool operator&lt;(const Query&amp; other) const</em> {
+		if (right != other.right) return right &lt; other.right;
 		return left &lt; other.left;
 	}
 };</pre>
+<p>If you don't want to write a constructor, construction as <code>(Query) { .left = 123, .right = 456 }</code> works too. <em>Don't both write a constructor and construct structs this way!</em></p>
 <h3>qsort</h3>
 <pre>#include &lt;cstdlib&gt;
 int cmp(<em>const void * a, const void * b</em>) {
