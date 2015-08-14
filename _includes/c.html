@@ -34,6 +34,14 @@ int cmp(<em>const void * a, const void * b</em>) {
 }
 std::qsort(arr, n, sizeof(int), cmp);
 </pre>
+<h3>permutation loop</h3>
+<p><code>next_permutation</code> mutates a sequence to the lexicographically next and returns true, except it rolls over from the last to the first and returns false. If <code>a</code> starts sorted, this loops over all permutations and exits the loop sorted again.</p>
+<pre>
+do {
+	// stuff
+} while (next_permutation(a, a + n));
+</pre>
+<p><code>prev_permutation</code> is dual.</p>
 <table class="padded">
 	<tr><td></td><th colspan="3">C++ Sequence containers</th><th colspan="4">C++ Associative containers</th><th>C++ bitset</th><th colspan="4">Java Collections</th></tr>
 	<tr><td>#include<br/>import</td><th><tt>&lt;vector&gt;</tt></th><th><tt>&lt;deque&gt;</tt></th><th><tt>&lt;list&gt;</tt></th><th colspan="2"><tt>&lt;set&gt;</tt></th><th colspan="2"><tt>&lt;map&gt;</tt></th><th><tt>&lt;bitset&gt;</tt></th><th colspan="4">java.util.*</th></tr>
