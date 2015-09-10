@@ -2,6 +2,14 @@
 <pre>\includegraphics[width=\textwidth]{grasshopper.jpg}</pre>
 <p>(Mac) Use TeX Live Utility to install from repos. Or, stuff goes in <code>~/Library/texmf/tex/latex</code>. LaTeX will find it.</p>
 <pre>\includegraphics[width=\textwidth]{grasshopper.jpg}</pre>
+<h3>Alignment and Space etc.</h3>
+<p><code>\noindent</code></p>
+<p><code>\hfill</code>, <code>\vfill</code>, <code>\hspace{...}</code>, <code>\vspace{...}</code></p>
+<p>Centering: <code>\begin{center} ... \end{center}</code> for a paragraph or so, <code>\centerline{...}</code> for a line continuing the same paragraph</p>
+<h3>Defining</h3>
+<p>
+<code>\DeclareMathOperator{\End}{End}</code> &equiv; <code>\newcommand{\End}{\operatorname{End}}</code> (also, starred versions typeset limits under/over, instead of as sub/superscripts)
+</p>
 <h3>Packages</h3>
 Some command-line magic: <code>ack usepackage | sed 's/^.*{\(.*\)}.*$/\1/g' | sort | uniq | less</code>. Don't do the search too widely, I think at some point the pipe gets too huge and some programs give up.
 <ul>
@@ -11,13 +19,16 @@ Some command-line magic: <code>ack usepackage | sed 's/^.*{\(.*\)}.*$/\1/g' | so
 	<li><code>amssymb</code>: math symbols</li>
 	<li><code>color</code>: color</li>
 	<li><code>enumerate</code>: more choices for <code>enumerate</code> item format</li>
-	<li><code>fancyhdr</code>: headers</li>
+	<li><code>fancyhdr</code>: headers:
+<pre>\lhead{...}\rhead{...}\cfoot{\thepage} % set headers
+\pagestyle{fancy} % show headers
+\thispagestyle{plain} % omit headers here (e.g. first page)</li>
 	<li><code>fontspec</code>: ?</li>
 	<li><code>framed</code>: framing a paragraph</li>
 	<li><code>fullpage</code>: ?</li>
-	<li><code>geometry</code>: setting margins</li>
+	<li><code>geometry</code>: setting margins: <code>\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}</code> or <code>\usepackage[margin=1in]{geometry}</code></li>
 	<li><code>graphicx</code>: graphics</li>
-	<li><code>hyperref</code>: ?</li>
+	<li><code>hyperref</code>: makes cross-references into links (suggested to be included last)</li>
 	<li><code>icomma</code>: remove space after comma in $1,000$</li>
 	<li><code>ifpdf</code>: ?</li>
 	<li><code>inputenc</code>: ?</li>
@@ -40,7 +51,7 @@ Some command-line magic: <code>ack usepackage | sed 's/^.*{\(.*\)}.*$/\1/g' | so
 	<li><code>thumbpdf</code>: ?</li>
 	<li><code>times</code>: Times New Roman</li>
 	<li><code>ulem</code>: ?</li>
-	<li><code>url</code>: ?</li>
+	<li><code>url</code>: gives you \url{...} (or \url|...|)</li>
 	<li><code>verbatim</code>: ?</li>
 	<li><code>xeCJK</code>: ?</li>
 </ul>
