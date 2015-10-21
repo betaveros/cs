@@ -1,15 +1,32 @@
 <h3>Stuff</h3>
 <pre>\includegraphics[width=\textwidth]{grasshopper.jpg}</pre>
 <p>(Mac) Use TeX Live Utility to install from repos. Or, stuff goes in <code>~/Library/texmf/tex/latex</code>. LaTeX will find it.</p>
-<pre>\includegraphics[width=\textwidth]{grasshopper.jpg}</pre>
 <h3>Alignment and Space etc.</h3>
-<p><code>\noindent</code></p>
-<p><code>\hfill</code>, <code>\vfill</code>, <code>\hspace{...}</code>, <code>\vspace{...}</code></p>
+<p><code>\noindent</code>; <code>\hfill</code>, <code>\vfill</code>, <code>\hspace{...}</code>, <code>\vspace{...}</code></p>
 <p>Centering: <code>\begin{center} ... \end{center}</code> for a paragraph or so, <code>\centerline{...}</code> for a line continuing the same paragraph</p>
+<h3>References</h3>
+<pre>\begin{equation} \label{eq:life}
+6 \times 9 = 42
+\end{equation}
+
+Equation \ref{eq:life} is good. \eqref{eq:life} is good.</pre>
 <h3>Defining</h3>
 <p>
 <code>\DeclareMathOperator{\End}{End}</code> &equiv; <code>\newcommand{\End}{\operatorname{End}}</code> (also, starred versions typeset limits under/over, instead of as sub/superscripts)
 </p>
+<h3>Things Above and Below</h3>
+<ul>
+	<li><code>\overset{top}{=}</code></li>
+	<li><code>\underset{bot}{=}</code></li>
+	<li><code>\overbrace{x + y}^{top}</code> (or overbracket)</li>
+	<li><code>\underbrace{x + y}_{top}</code> (or underbracket)</li>
+	<li><code>\xrightarrow{top}</code>, <code>\xrightarrow[bot]{top (or leave blank)}</code> (or xleftarrow, or more arrows/harpoons in \usepackage{mathtools})</li>
+</ul>
+<h3>Cases</h3>
+<pre>f(x) = \begin{cases}
+	0 &amp; \text{if } x = 0 \\
+	1 &amp; \text{else}
+\end{cases}</pre>
 <h3>Packages</h3>
 Some command-line magic: <code>ack usepackage | sed 's/^.*{\(.*\)}.*$/\1/g' | sort | uniq | less</code>. Don't do the search too widely, I think at some point the pipe gets too huge and some programs give up.
 <ul>
@@ -32,7 +49,7 @@ Some command-line magic: <code>ack usepackage | sed 's/^.*{\(.*\)}.*$/\1/g' | so
 	<li><code>icomma</code>: remove space after comma in $1,000$</li>
 	<li><code>ifpdf</code>: ?</li>
 	<li><code>inputenc</code>: ?</li>
-	<li><code>lastpage</code>: ?</li>
+	<li><code>lastpage</code>: refer to last page with <code>\pageref{\LastPage}</code></li>
 	<li><code>longtable</code>: ?</li>
 	<li><code>makeidx</code>: ?</li>
 	<li><code>mla</code>: ?</li>
