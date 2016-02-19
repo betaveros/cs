@@ -59,6 +59,22 @@ codecs.decode(obj, encoding, errors)
 	<tr><td>d.items()</td><td>[(k1, v1)...]</td></tr>
 </table>
 <p>keys(), values(), items(): prepend 'iter' to name for iterator. Note that iter(d) &equiv; d.iterkeys()</p>
+<h3>Sets <a href="https://docs.python.org/2/library/stdtypes.html#set">(&rarr; std. doc)</a></h3>
+<ul>
+	<li><code>x in set_a</code>, <code>x not in set_a</code></li>
+	<li>
+		<code>set_a | set_b</code>,
+		<code>set_a &amp; set_b</code>,
+		<code>set_a - set_b</code>,
+		<code>set_a ^ set_b</code>; compound assignment <code>set_a |= set_b</code> etc.
+	</li>
+	<li><code>set_a.add(x)</code></li>
+	<li><code>set_a.remove(x)</code> (KeyError if <code>x not in set_a</code>)</li>
+	<li><code>set_a.discard(x)</code> (no error)</li>
+	<li><code>set_a.pop()</code> (arbitrary element)</li>
+	<li><code>set_a.clear()</code></li>
+</ul>
+
 <h3><a href="https://docs.python.org/2/library/os.html">os</a> Navigate Filesystem</h3>
 <ul>
 	<li><code>os.chdir(pathstring)</code></li>
