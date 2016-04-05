@@ -53,12 +53,23 @@ codecs.decode(obj, encoding, errors)
 <table>
 	<tr><th>(python) sequences</th><th>&darr;</th></tr>
 	<tr><td>sorted(iterable, key = lambda x: x[1], reverse=True)</td><td>...</td></tr>
+	<tr><td>max(iterable, key = lambda x: x[1])<br />min(iterable, key = lambda x: x[1])</td><td>...</td></tr>
 	<tr><td>enumerate('ABCD', start=1)</td><td>(1, 'A'), (2, 'B')...</td></tr>
-	<tr><td>d.keys()</td><td>[k1, k2...]</td></tr>
-	<tr><td>d.values()</td><td>[v1, v2...]</td></tr>
-	<tr><td>d.items()</td><td>[(k1, v1)...]</td></tr>
+	<tr><th>(python) dictionaries</th><th>&darr;</th></tr>
+	<tr><td>d.keys(), d.iterkeys(), iter(d)</td><td>[k1, k2...]</td></tr>
+	<tr><td>d.values(), d.itervalues()</td><td>[v1, v2...]</td></tr>
+	<tr><td>d.items(), d.iteritems()</td><td>[(k1, v1)...]</td></tr>
 </table>
-<p>keys(), values(), items(): prepend 'iter' to name for iterator. Note that iter(d) &equiv; d.iterkeys()</p>
+<ul>
+<li><em>Python 2.7</em>: Replace "iter" with "view" for view objects.</li>
+<li><em>Python 3 change</em>: keys(), values(), items() give view objects instead of lists; the other methods are gone (but you can just <code>list</code>ify view objects). View objects are iterable, have <code>len</code>, update dynamically if the map changes, and can be used like sets.</li>
+</ul>
+<ul>
+	<li>Destructively updating a dictionary with another, or with a sequence of key-value pairs: <code>d1.update(d2)</code>.</li>
+	<li>Nondestructive idiom(?) for union-ing two dictionaries: <code>dict(d1, **d2)</code>.</li>
+</ul>
+<p>In both points above, when there are conflicting mappings for the same key, <code>d2</code> takes precedence.</p>
+</ul>
 <h3>Sets <a href="https://docs.python.org/2/library/stdtypes.html#set">(&rarr; std. doc)</a></h3>
 <ul>
 	<li><code>x in set_a</code>, <code>x not in set_a</code></li>
