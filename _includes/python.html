@@ -51,11 +51,16 @@ codecs.decode(obj, encoding, errors)
 </p>
 <h3>Sequences <a href="http://docs.python.org/2/library/stdtypes.html#sequence-types-str-unicode-list-tuple-bytearray-buffer-xrange">(&rarr; std. methods)</a> and Dictionaries <a href="http://docs.python.org/2/library/stdtypes.html#mapping-types-dict">(&rarr; pydoc)</a></h3>
 <table>
-	<tr><th>(python) sequences</th><th>&darr;</th></tr>
+	<tr><th>(python) <a href="https://docs.python.org/2/library/stdtypes.html#sequence-types-str-unicode-list-tuple-bytearray-buffer-xrange">sequences</a></th><th>&darr;</th></tr>
 	<tr><td>sorted(iterable, key = lambda x: x[1], reverse=True)</td><td>...</td></tr>
 	<tr><td>max(iterable, key = lambda x: x[1])<br />min(iterable, key = lambda x: x[1])</td><td>...</td></tr>
 	<tr><td>enumerate('ABCD', start=1)</td><td>(1, 'A'), (2, 'B')...</td></tr>
-	<tr><th>(python) dictionaries</th><th>&darr;</th></tr>
+	<tr><th>(python) <a href="https://docs.python.org/2/library/stdtypes.html#mutable-sequence-types">mutable lists</a></th><th>&darr;</th></tr>
+	<tr><td colspan="2">s.append(x)</td></tr>
+	<tr><td colspan="2">s.extend(xs) <em>or</em> s += xs</td></tr>
+	<tr><td colspan="2">s.insert(i, x)</td></tr>
+	<tr><td>s.pop()<br />s.pop(0) <em>(from left)</em></td><td>popped element<br /><code>pop</code> returns it in Python in general <small>(unlike some other languages)</small></td></tr>
+	<tr><th>(python) <a href="https://docs.python.org/2/library/stdtypes.html#mapping-types-dict">dictionaries</a></th><th>&darr;</th></tr>
 	<tr><td>d.keys(), d.iterkeys(), iter(d)</td><td>[k1, k2...]</td></tr>
 	<tr><td>d.values(), d.itervalues()</td><td>[v1, v2...]</td></tr>
 	<tr><td>d.items(), d.iteritems()</td><td>[(k1, v1)...]</td></tr>
