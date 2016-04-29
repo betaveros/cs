@@ -59,7 +59,7 @@ codecs.decode(obj, encoding, errors)
 	<tr><td>d.keys(), d.iterkeys(), iter(d)</td><td>[k1, k2...]</td></tr>
 	<tr><td>d.values(), d.itervalues()</td><td>[v1, v2...]</td></tr>
 	<tr><td>d.items(), d.iteritems()</td><td>[(k1, v1)...]</td></tr>
-	<tr><td colspan="2">d.clear()</td><tr>
+	<tr><td colspan="2">d.clear()</td></tr>
 </table>
 <ul>
 <li><em>Python 2.7</em>: Replace "iter" with "view" for view objects.</li>
@@ -70,7 +70,6 @@ codecs.decode(obj, encoding, errors)
 	<li>Nondestructive idiom(?) for union-ing two dictionaries: <code>dict(d1, **d2)</code>.</li>
 </ul>
 <p>In both points above, when there are conflicting mappings for the same key, <code>d2</code> takes precedence.</p>
-</ul>
 <h3>Sets <a href="https://docs.python.org/2/library/stdtypes.html#set">(&rarr; std. doc)</a></h3>
 <ul>
 	<li><code>x in set_a</code>, <code>x not in set_a</code></li>
