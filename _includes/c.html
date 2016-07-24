@@ -34,6 +34,32 @@ int cmp(<em>const void * a, const void * b</em>) {
 }
 std::qsort(arr, n, sizeof(int), cmp);
 </pre>
+<h3>lambda (anonymous function) (closure)</h3>
+<pre>int x = 0;
+auto increaseX = <em>[&amp;](int y) -&gt; int</em> {
+	x += y;
+};
+</pre>
+<ul>
+	<li><code>-&gt; return_type</code> is optional and can be inferred.</li>
+	<li><code>[...]</code> is the capture-list:
+		<ul>
+			<li><code>[&amp;]</code> captures everything necessary by reference</li>
+			<li><code>[=]</code> captures everything necessary by value</li>
+			<li><code>[]</code> captures nothing</li>
+			<li>You can also just list an optional default, followed by variables optionally prefixed with <code>&amp;</code>s, all separated by commas.</li>
+		</ul>
+	</li>
+</ul>
+<p>You can store the lambda in a <code>std::function</code> (from <code>&lt;functional&gt;</code>) to make the type explicit, especially if you want recursion:</p>
+<pre><em>std::function&lt;char(char, int)&gt;</em> f = [&amp;](char c, int reps) -&gt; char {
+	if (reps &gt; 0) {
+		putchar(c);
+		return f(c + 1, reps - 1);
+	}
+	return c;
+};
+</pre>
 <h3>permutation loop</h3>
 <p><code>next_permutation</code> mutates a sequence to the lexicographically next and returns true, except it rolls over from the last to the first and returns false. If <code>a</code> starts sorted, this loops over all permutations and exits the loop sorted again.</p>
 <pre>
