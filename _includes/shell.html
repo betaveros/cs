@@ -1,0 +1,53 @@
+<h3>grep and friends</h3>
+
+Syntax: <code>grep pattern files...</code>
+
+<ul>
+	<li><code>grep</code>, <code>grep -G</code>: "basic regular expressions"</li>
+	<li><code>egrep</code>, <code>grep -E</code>: "extended regular expressions"</li>
+	<li><code>fgrep</code>, <code>grep -F</code>: fixed strings</li>
+</ul>
+<h4>options everybody knows</h4>
+<ul>
+	<li><code>-A NUM</code>: print NUM lines of context after</li>
+	<li><code>-B NUM</code>: print NUM lines of context before</li>
+	<li><code>-C[NUM]</code>: print NUM lines of context, default 2 (grep says there must be no space between the option and its argument! others don't)</li>
+	<li><code>-i</code>: ignore case</li>
+	<li><code>-m NUM</code>: stop reading file after NUM matches</li>
+	<li><code>-r</code>: recursive</li>
+	<li><code>-w</code>: search for as if a word</li>
+</ul>
+<h4>grep</h4>
+<ul>
+	<li><code>--color</code>: color-highlight matches</li>
+	<li><code>--exclude PAT</code>: exclude files matching the filename pattern</li>
+	<li><code>--exclude-dir PAT</code>: exclude directories matching the filename pattern</li>
+	<li><code>--include PAT</code>: <em>only</em> search files matching the filename pattern</li>
+	<li><code>--include-dir PAT</code>: <em>only</em> search directories matching the filename pattern</li>
+</ul>
+<h4>ack</h4>
+<ul>
+	<li><code>-f</code>: just list files that have been selected for searching</li>
+	<li><code>-g PATTERN</code>: print files where relative path + filename matches PATTERN</li>
+	<li><code>--ignore-dir DIRNAME</code>: ignore directories with this exact name (not a pattern!)</li>
+	<li><code>--ignore-file FILTER</code>: ignore files matching this filter</li>
+	<li><code>-Q</code>: match as literal string</li>
+	<li><code>--smart-case</code></li>
+	<li><code>--type-set=yourtypename:FILTER --yourtypename</code>: create a custom file filter type, and use it (probably put the first part in your ~/.ackrc)</li>
+	<li>Filters:
+		<ul>
+			<li><code>is:FILENAME</code> matches FILENAME literally</li>
+			<li><code>ext:EXTENSION,...</code> e.g. <code>ext:hs</code> or <code>ext:c,h,cpp</code> checks the extension</li>
+			<li><code>match:PATTERN</code> matches filename with pattern, case-insensitively</li>
+		</ul>
+	</li>
+</ul>
+<h4>ag</h4>
+<ul>
+	<li><code>-g PATTERN</code>: print filenames that match</li>
+	<li><code>-G PATTERN</code>: only search filenames whose names match</li>
+	<li><code>--ignore PATTERN</code>: ignore files/directories whose names match this pattern</li>
+	<li><code>-Q</code>: match as literal string</li>
+	<li><code>-S --smart-case</code></li>
+	<li><code>-U</code>: don't use VCS ignore files (.gitignore etc.) but  still use .agignore</li>
+</ul>
