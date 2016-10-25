@@ -157,3 +157,25 @@ time.sleep(0.5) # 0.5 seconds</pre>
 <p>has complicated command line flags:</p>
 <pre>pygmentize -f html -l python -O full,style=tango -o out.html src.py</pre>
 <p>note it can guess -f and infer -l from source file extension</p>
+<h3>numpy</h3>
+<p><code>import numpy as np</code> is standard. <code>np.</code> is implied in most names below...</p>
+<h4>Array construction</h4>
+<ul>
+	<li><code>array([[1, 2, 3], [4, 5, 6]])</code></li>
+	<li><code>eye(n)</code>, <code>identity(n)</code></li>
+	<li><code>ones(shape)</code>, <code>zeros(shape)</code>, <code>full(shape, fill_values)</code></li>
+	<li><code>fromfunction(fn, shape)</code></li>
+</ul>
+<h4>Matrix operations</h4>
+<p>Note that <code>*</code> (along with most other operations) acts element-wise!</p>
+<ul>
+	<li><code>np.transpose(_)</code> or <code>_.T</code> (<em>identity on 1D arrays!</em> may need to reshape)</li>
+	<li><code>np.linalg.det(_)</code></li>
+	<li><code>np.dot(_, _)</code>, or <code>_ @ _</code> (<em>Python 3 only</em>: <code>__matmul__</code> operator)</li>
+	<li><code>np.linalg.inv(_)</code></li>
+</ul>
+<h4>Array manipulation</h4>
+<ul>
+	<li><code>np.append(arr1, arr2, axis=0)</code> e.g. <code>np.append(x, [[1]], axis=0)</code> (you almost certainly want an axis; otherwise it flattens everything, ew)</li>
+	<li><code>arr.reshape(shape)</code> e.g. <code>arr.reshape((-1, 1))</code> converts to a column vector; <code>-1</code> is the unknown dimension you can specify once</li>
+</ul>
