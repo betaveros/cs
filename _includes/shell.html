@@ -51,3 +51,31 @@ Syntax: <code>grep pattern files...</code>
 	<li><code>-S --smart-case</code></li>
 	<li><code>-U</code>: don't use VCS ignore files (.gitignore etc.) but  still use .agignore</li>
 </ul>
+
+<h3>identify and convert (ImageMagick)</h3>
+
+<p><a href="http://www.imagemagick.org/Usage/">Usage</a></p>
+
+<p>
+Snippet to get name, height, width in format of an HTML tag: <code>identify -format '&lt;img src="%f" width="%w" height="%h" /&gt;' $argv</code>
+</p>
+
+<h4>Crop</h4>
+
+<code>convert dragon.gif -crop 40x30+10+10 +repage crop_dragon.gif</code>
+
+<h4>Resize</h4>
+
+<pre>convert dragon.gif -resize 64x64 resized_dragon.gif</pre>
+
+<p>This resizes the gif, preserving aspect ratio, so that it is as large as possible while fitting in a 64x64 box (one dimension = 64, the other &le; 64). Variants (which often need to be escaped for the shell to see them):</p>
+
+<ul>
+	<li><code>64x64!</code>: Exactly that size; don't preserve aspect ratio</li>
+	<li><code>64x64&gt;</code>: Only shrink</li>
+	<li><code>64x64&lt;</code>: Only enlarge</li>
+	<li><code>64x64^</code>: Fill area: make it as small as possible while containing a 64x64 box (one dimension = 64, the other &gt; 64). Corollary: <code>1x64^</code> forces a height of 64; <code>64x1^</code> forces a width of 64.</li>
+	<li><code>50%</code> just means fifty percent</li>
+</ul>
+
+<p>These characters are just flags that affect the entire <code>-resize</code>. Location doesn't matter. <code>50%x30</code> doesn't work.</p>
