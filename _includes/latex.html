@@ -151,3 +151,13 @@ Other arrows: <code>Begin<em>[Arc]</em>Arrow</code>,
 <code><em>[Arc]</em>Arrows</code> (on both ends).
 Or pass <code>position=<em>real</em></code> (e.g. 0.7) as an argument to the <code>Arrow</code> constructor.
 </p>
+<h3 id="tikz">TikZ</h3>
+<pre>\begin{tikzpicture}[scale=2]
+\draw(0,0)--(0,1.5);
+\draw[dotted](0,1)--(2,3) .. controls (2,4) and (3,5) .. (4,5);
+\node[anchor=center] at (2,2) {lorem};
+\node[anchor=south west] at (3,3) {ipsum};
+\end{tikzpicture}</pre>
+<p>
+You can specify units in coordinates e.g. <code>(1cm, 2pt)</code>. If unitless, <code>cm</code> implied. Polar coordinates: <code>(30:1cm)</code> Relative coordinates: <code>+(2,0)</code> ("temporarily shifts the pen") or <code>++(2,0)</code> ("permamently shifts the pen").
+</p>
