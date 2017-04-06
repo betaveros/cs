@@ -4,7 +4,7 @@
 <table>
 	<tr><th>switch</th><th>meaning</th></tr>
 	<tr><td>-e</td><td>eval code from command-line argument</td></tr>
-	<tr><td>-n</td><td>run against every line</td></tr>
+	<tr><td>-n</td><td>run against every line of file(s) from command line (current filename will be in $ARGV)</td></tr>
 	<tr><td>-p</td><td>run against every line + print result</td></tr>
 	<tr><td>-i</td><td>modify file in-place</td></tr>
 	<tr><th colspan="2">awk-like flags</th></tr>
@@ -19,3 +19,7 @@
 	<li><code>perl -ne 'print if /pattern/'</code></li>
 	<li><code>perl -pe 's/from/to/g'</code></li>
 </ul>
+<p>A sort of mini-ack clone:</p>
+<code>perl -ne'print $ARGV, ":", $_ if /foo/ &amp;&amp; /bar/' $(find . -type f)</code>
+<p>Using ack's defaults:
+<code>perl -ne'print $ARGV, ":", $_ if /foo/ &amp;&amp; /bar/' $(ack -f)</code>
