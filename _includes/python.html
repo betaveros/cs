@@ -165,7 +165,14 @@ time.sleep(0.5) # 0.5 seconds</pre>
 	<li><code>array([[1, 2, 3], [4, 5, 6]])</code></li>
 	<li><code>eye(n)</code>, <code>identity(n)</code></li>
 	<li><code>ones(shape)</code>, <code>zeros(shape)</code>, <code>full(shape, fill_values)</code></li>
+	<li>The above can receive a <code>dtype</code> argument which is like <code>numpy.int64</code>, <code>numpy.float_</code>, or <code>numpy.bool_</code>. If you just use Python's <code>int</code>, <code>float</code>, or <code>bool</code>, it will Just Work. You can also make your own by writing something in a string somehow.</li>
 	<li><code>fromfunction(fn, shape)</code></li>
+</ul>
+<h4>Array properties</h4>
+<ul>
+	<li><code>arr.shape</code> is a tuple of the dimensions</li>
+	<li><code>arr.ndim</code> is the number of dimensions (so, the length of arr.shape)</li>
+	<li><code>arr.size</code> is a single number, the number of elements (so, the product of arr.shape)</li>
 </ul>
 <h4>Matrix operations</h4>
 <p>Note that <code>*</code> (along with most other operations) acts element-wise!</p>
@@ -175,8 +182,25 @@ time.sleep(0.5) # 0.5 seconds</pre>
 	<li><code>np.dot(_, _)</code>, or <code>_ @ _</code> (<em>Python 3 only</em>: <code>__matmul__</code> operator)</li>
 	<li><code>np.linalg.inv(_)</code></li>
 </ul>
+<h4>Indexing, Slicing, Iterating</h4>
+<ul>
+	<li>Index and/or slice like <code>arr[1,2,3:4]</code>. You can use bare colons to slice everything along a dimension.</li>
+	<li>You can also index with one tuple (but not other sequence types) like <code>arr[(1,2,3)] == arr[1,2,3]</code>.</li>
+	<li>Basic slices return views, so they're fast. <code>arr[::-1]</code> is a good way to reverse.</li>
+	<li>You can also do "advanced indexing" with one or many non-tuple sequences of indices (crudely, it zips them and indexes by each one to produce a new array). So <code>arr[[1,2,3]]</code> (unlike the above) will index by 1, then by 2, then by 3, and return the results in one array; and <code>arr[[1,2,3],[4,5,6]]</code> will index by (1,4), (2,5), and (3,6).</li>
+	<li>Or "advanced indexing" with an array of booleans (it filters for the true ones). Example: you can filter by <code>arr[arr % 2 == 0]</code>.</li>
+	<li>You can combine different indexing modes along different dimensions.</li>
+	<li>Iterating over an array directly indexes along the first (index 0) dimension, e.g. iterating over a 2D array gives you the rows.</li>
+	<li><code>numpy.nonzero(arr)</code> returns the indices of elements that are nonzero, but kind of strangely; watch out! It returns a tuple of arrays, one for each dimension of <code>arr</code>, so <code>arr[nonzero(arr)]</code> gives you an array of the nonzero values. If you want to iterate over indexes and then unpack them, do <code>transpose(nonzero(arr))</code>.</li>
+</ul>
+<h4>Folds</h4>
+<ul>
+	<li><code>np.sum</code>, <code>np.prod</code>, <code>np.min</code>, <code>np.max</code>, <code>np.all</code>, <code>np.any</code>, <code>np.count_nonzero</code> fold the matrix to one scalar result. Specify an <code>axis</code> argument, a dimension or tuple of dimensions, to fold along only certain axes. <code>np.sum</code> usefully promotes to bigger int types on booleans.</li>
+</ul>
 <h4>Array manipulation</h4>
 <ul>
 	<li><code>np.append(arr1, arr2, axis=0)</code> e.g. <code>np.append(x, [[1]], axis=0)</code> (you almost certainly want an axis; otherwise it flattens everything, ew)</li>
+	<li><code>np.concatenate([arr1, arr2, ...], axis=0)</code> (requires arrays have same dimensions except along axis, returns an array also with same dimensions except along axis; axis is 0 by default)</li>
+	<li><code>np.stack([arr1, arr2, ...], axis=0)</code> (requires arrays have the exact same shape, returns an array with an additional axis specified by the parameter)</li>
 	<li><code>arr.reshape(shape)</code> e.g. <code>arr.reshape((-1, 1))</code> converts to a column vector; <code>-1</code> is the unknown dimension you can specify once</li>
 </ul>
