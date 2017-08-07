@@ -154,6 +154,7 @@ Other arrows: <code>Begin<em>[Arc]</em>Arrow</code>,
 Or pass <code>position=<em>real</em></code> (e.g. 0.7) as an argument to the <code>Arrow</code> constructor.
 </p>
 <h3 id="tikz">TikZ</h3>
+Open by <code>\usepackage{tikz}</code>. You can load TikZ libraries like <code>\usetikzlibrary{arrows.meta,calc}</code>
 <pre>\begin{tikzpicture}[scale=2]
 \draw(0,0)--(0,1.5);
 \draw[dotted](0,1)--(2,3) .. controls (2,4) and (3,5) .. (4,5);
@@ -161,5 +162,90 @@ Or pass <code>position=<em>real</em></code> (e.g. 0.7) as an argument to the <co
 \node[anchor=south west] at (3,3) {ipsum};
 \end{tikzpicture}</pre>
 <p>
-You can specify units in coordinates e.g. <code>(1cm, 2pt)</code>. If unitless, <code>cm</code> implied. Polar coordinates: <code>(30:1cm)</code> Relative coordinates: <code>+(2,0)</code> ("temporarily shifts the pen") or <code>++(2,0)</code> ("permamently shifts the pen").
+You can specify units in coordinates e.g. <code>(1cm, 2pt)</code>. If unitless, <code>cm</code> implied. Polar coordinates: <code>(30:1cm)</code> Relative coordinates: <code>+(2,0)</code> ("temporarily shifts the pen") or <code>++(2,0)</code> ("permamently shifts the pen"). Math expressions work in braces e.g.<code>(1,{tan(30)})</code>.
 </p>
+<h4>Paths</h4>
+<table>
+	<tr><td>(0,0)--(1,1)</td><td>line</td></tr>
+	<tr><td>(0,0) .. controls (1,1) and (2,1) .. (2,0)</td><td>curve; you can leave out "and (2,1)" to reuse the first point</td></tr>
+	<tr><td>(0,0)|-(1,1)</td><td>vertical then horizontal line</td></tr>
+	<tr><td>(0,0)-|(1,1)</td><td>horizontal then vertical line</td></tr>
+	<tr><td>(0,0) circle[radius=1cm]</td><td>circle</td></tr>
+	<tr><td>(0,0) ellipse[x radius=10pt, y radius=10pt]</td><td>ellipse</td></tr>
+	<tr><td>(0,0) arc[radius=1,start angle=100,end angle=90,delta angle=10]</td><td>circular arc (specify two of the last three arguments)</td></tr>
+	<tr><td>(0,0) rectangle (1,1)</td><td>rectangle</td></tr>
+	<tr><td>(0,0) grid (1,1)</td><td>grid that fills the rectangle (specify option step=.5 to draw)</td></tr>
+	<tr><td>(0,0) -- (1,0) -- (1,1) -- cycle</td><td>close a path; also joins at that corner correctly</td></tr>
+	<tr><td>(0,0) parabola (1,1)</td><td>parabola (TODO)</td></tr>
+	<tr><td>(0,0) sin (1,1)</td><td>sine (TODO)</td></tr>
+	<tr><td>(0,0) cos (1,1)</td><td>cosine (TODO)</td></tr>
+</table>
+<h4>Making and Drawing Paths</h4>
+<table>
+	<tr><td>\path(0,0)--(1,1);</td><td>defines the path, but doesn't do anything unless you tell it to!</td></tr>
+	<tr><td>\draw(0,0)--(1,1);</td><td>actually just short for \path[draw]</td></tr>
+	<tr><td>\fill(0,0) rectangle (1,1);</td><td>\path[fill]</td></tr>
+	<tr><td>\filldraw(0,0) rectangle (1,1);</td><td>\path[fill,draw]</td></tr>
+	<tr><td>\shade(0,0) rectangle (1,1);<br/>
+			\shade[top color=yellow,bottom color=black]<em>...</em><br/>
+			\shade[left color=yellow,right color=black]<em>...</em><br/>
+			\shade[inner color=yellow,outer color=black]<em>...</em><br/>
+			\shade[ball color=yellow]<em>...</em>
+		</td><td>\path[shade]: shade (with gradient, by default top gray to bottom white)</td></tr>
+		<tr><td>\shadedraw(0,0) rectangle (1,1);</td><td>\path[shade,draw]</td></tr>
+		<tr><td>\clip(0,0) rectangle (1,1);</td><td>\path[clip] clip everything following in this picture (or scope)</td></tr>
+		<tr><td>\useasboundingbox(0,0) rectangle (1,1);</td><td>\path[useasboundingbox]</td></tr>
+</table>
+<h4>Options for Drawing</h4>
+<p>Usually you'll put them right after the \draw analogue you're using. But you can set options anywhere in the middle of a path, and you can get a few options to apply to the remaining part of the path or even to a local scope:</p>
+<pre>\draw (0,0) -- (0,0.5) [xshift=2pt] (0,0) -- (0,0.5);
+\draw (0,0) -- (1,1) {[rounded corners] -- (2,0) -- (3,1)} -- (0,0.5);</pre>
+<p>You can also specify them right after <code>\begin{tikzpicture}</code>, or right after <code>\begin{scope}</code> inside a tikzpicture environment to have then apply to a local scope.</p>
+<table>
+	<tr><td>\draw[color=blue!40]<em>...</em></td><td>color ("color=" can be omitted if no confusion)</td></tr>
+	<tr><td>\draw[draw=blue!40]<em>...</em></td><td>color for drawing only</td></tr>
+	<tr><td>\draw[step=0.5]</td><td>grid step</td></tr>
+	<tr><td>\draw[thin]</td><td>thickness: ultra thin, very thin, thin, semithick, thick, very thick, ultra thick</td></tr>
+	<tr><td>\draw[line cap=butt]</td><td>line ends: round, rect, butt</td></tr>
+	<tr><td>\draw[line join=miter]</td><td>line joins: round, bevel, miter</td></tr>
+	<tr><td>\draw[miter limit=10]</td><td>miter limit by a factor</td></tr>
+	<tr><td>\draw[dotted]</td><td>dash patterns: solid, dotted, densely dotted, loosely dotted, dashed, densely dashed, loosely dashed, [densely/loosely] dash dot, [densely/loosely] dash dot dot</td></tr>
+	<tr><td>\draw[dash pattern=on 2pt off 3pf on 4pt off 5pt,dash phase=3pt]</td><td></td></tr>
+	<tr><td>\draw[arrows=-&gt;]</td><td>arrow tips: &lt;-, -&gt;, &lt;-&gt;, -&gt;&gt; etc. You can set the tips before and after the <code>-</code> independently, and often omit <code>arrows=</code>: every option with a - is considered an arrow specification. For many types of tips, \usetikzlibrary{arrows.meta} and see below.</td></tr>
+	<tr><td>\draw[rotate=10]</td><td>some number of degrees</td></tr>
+	<tr><td>\draw[help lines]</td><td>a predefined style for background lines like grid lines or construction lines</td></tr>
+	<tr><td>\draw[rounded corners=10pt]<br/>\draw[sharp corners]</td><td>rounds corners; the length, an inset, is optional</td></tr>
+</table>
+<p>Define/redefine a style like <code>[help lines/.style={blue!50,very thin}]</code> (<code>/.</code> means "don't use; define"). You can access an argument like <code>#1</code>, and set a default as <code>[help lines/.defualt=black]</code>.</p>
+<h4>Math</h4>
+<p>With <code>\usetikzlibrary{calc}</code>, you can do math in <code>($</code> <code>$)</code> brackets (the symbol is chosen to suggest "math" only; there is no math typesetting).</p>
+<h4>Looping</h4>
+<p>Something like <code>\foreach \x in {1,2,5}{\draw (\x,0) -- (0,\x);}</code> The range syntax can be like <code>{1,...,10}</code> for a range, or <code>{1,3,...,11}</code> for a skip, or (!?) <code>{1,2,...,5,7,8,...,12}</code></p>
+<h4>Arrow Tips</h4>
+<code>\usetikzlibrary{arrows.meta}</code>
+<table>
+	<tr><td>-&gt;</td><td>simple arrow, like \to</td></tr>
+	<tr><td>-&gt;&gt;, -&gt;&gt;&gt;</td><td>you can have multiple arrows</td></tr>
+	<tr><td>-&gt;&gt;.&gt;&gt;</td><td>eveything past a <code>.</code> "hovers"; the arrow stem does not pass through it</td></tr>
+	<tr><td>-&gt;|</td><td>arrow and bar, like for denoting something's dimension</td></tr>
+	<tr><td>-Stealth<br/>-{Stealth[round]}</td><td>concave quadrilateral-ish arrow</td></tr>
+	<tr><td>-Latex<br/>-{Latex[round]}</td><td>triangle-ish arrow</td></tr>
+</table>
+<p>Barbed tips: Arc Barb, Bar, Bracket, Hooks, Parenthesis, Straight Barb, Tee Barb</p>
+<p>Math tips: Classical TikZ Rightarrow, Computer Modern Rightarrow, Implies, To</p>
+<p>Geometric tips: Circle, Diamond, Ellipse, Kite, Latex, Rectangle, Square, Stealth, Triangle, Turned Square. You can make these open.</p>
+<p>Cap tips: Butt Cap, Fast Round (hovering semicircular arc), Fast Triangle (hovering arrow-y concave hexagon), Round Cap, Triangle Cap</p>
+<p>Rays[n=8] ends in like an asterisk.</p>
+<p>Arrow tip options:</p>
+<table>
+	<tr><td>[length=5mm]</td><td>length of tip (measured along arrow; extra parameters cause it to scale with line width but whatever)</td></tr>
+	<tr><td>[width=5mm]</td><td>width of tip (measured perpendicular to arrow)</td></tr>
+	<tr><td>[inset=5mm]</td><td>the concave part of Stealth</td></tr>
+	<tr><td>[scale=2]</td><td>just scale up</td></tr>
+	<tr><td>[reversed]</td><td>reverse the arrow tip</td></tr>
+	<tr><td>[harpoon] or [left]</td><td>use only "left" half of arrow tip</td></tr>
+	<tr><td>[harpoon,swap] or [right]</td><td>use only "right" half of arrow tip</td></tr>
+	<tr><td>[color=red]</td><td>draw with color; again "color=" can be omitted if clear</td></tr>
+	<tr><td>[fill=red]</td><td>fill with color</td></tr>
+	<tr><td>[fill=none] or [open]</td><td>don't fill</td></tr>
+</table>
