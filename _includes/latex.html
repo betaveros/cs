@@ -7,6 +7,12 @@
 <p><code>\noindent</code>; <code>\hfill</code>, <code>\vfill</code>, <code>\hspace{...}</code>, <code>\vspace{...}</code></p>
 <p>Centering: <code>\begin{center} ... \end{center}</code> for a paragraph or so, <code>\centerline{...}</code> for a line continuing the same paragraph</p>
 <p>Same-sizing things: <code>\left</code>, <code>\right</code>, possibly <code>\middle</code>. <code>\middle\mid</code> doesn't work, <a href="http://tex.stackexchange.com/questions/5502/how-to-get-a-mid-binary-relation-that-grows">use</a> <code>\mathrel{}\middle|\mathrel{}</code> instead.
+<h3>Boxes</h3>
+<p>Horizontal box of fixed width: \makebox[5cm][c]{Text}</p>
+<p>Paragraph box of fixed width: \parbox[c]{5cm}{Line one \\ Line two}</p>
+<p>Tabular, for box that takes width of longest line: \begin{tabular}{@{}c{@}}Line one \\ Line two\end{tabular}</p>
+<p>Raise box: \raisebox{5cm}{text}</p>
+<p>Minipage: \begin{minipage}[t]{5cm} \end{minipage}</p>
 <h3>References</h3>
 <pre>\begin{equation} \label{eq:life}
 6 \times 9 = 42
