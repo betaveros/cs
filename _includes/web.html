@@ -100,6 +100,11 @@
 </table>
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/element">mdn @ element</a>
 <table>
+	<tr><th>eventTarget.</th></tr>
+	<tr><td>addEventListener(type: string, listener)</td><td>
+			type can be e.g. "click"/"dblclick", "keydown"/"keypress"/"keyup", "change", "focus"/"blur", "submit"<br/>
+			EventTarget is a superclass of Node
+		</td></tr>
 	<tr><th>node.</th></tr>
 	<tr><td>parentNode</td><td>or null</td></tr>
 	<tr><td>childNodes</td><td>NodeList (can use <code>.length</code>, <code>[0]</code></td></tr>
@@ -107,25 +112,56 @@
 	<tr><td>lastChild</td><td>or null</td></tr>
 	<tr><td>nextSibling</td><td>or null</td></tr>
 	<tr><td>previousSibling</td><td>or null</td></tr>
-	<tr><td>appendChild(Node node)</td></tr>
-	<tr><td>insertBefore(Node node, Node refchild)</td><td>insert node as child before refchild, which must be a child</td></tr>
-	<tr><td>removeChild(Node child)</td><td>returns child, which may be reused</td></tr>
+	<tr><td>appendChild(node: Node)</td></tr>
+	<tr><td>insertBefore(node: Node, refchild: Node)</td><td>insert node as child before refchild, which must be a child</td></tr>
+	<tr><td>removeChild(child: Node)</td><td>returns child, which may be reused</td></tr>
+	<tr><td>textContent</td><td>assignable</td></tr>
 	<tr><th>element.</th></tr>
 	<tr><td>parentElement</td><td>or null</td></tr>
 	<tr><td>children</td><td>(Elements) HTMLCollection (can use <code>.length</code>, <code>[0]</code>, <code>["key"]</code></td></tr>
 	<tr><td>classList</td><td>DOMTokenList (can use <code>.length</code>, <code>.contains("token")</code>, <code>.add("token")</code>...</td></tr>
-	<tr><td>className</td></tr>
+	<tr><td>className</td><td>assignable</td></tr>
 	<tr><td>id</td></tr>
-	<tr><td>innerHTML</td><td>"experimental"</td></tr>
+	<tr><td>innerHTML</td><td>assignable</td></tr>
 	<tr><td>outerHTML</td><td>"experimental"</td></tr>
 	<tr><td>firstElementChild</td><td>(Element) or null</td></tr>
 	<tr><td>lastElementChild</td><td>(Element) or null</td></tr>
 	<tr><td>nextElementSibling</td><td>(Element) or null</td></tr>
 	<tr><td>previousElementSibling</td><td>(Element) or null</td></tr>
-	<tr><td>getAttribute(String name)</td><td>string; may be null or "" on no attribute</td></tr>
-	<tr><td>hasAttribute(String name)</td></tr>
-	<tr><td>setAttribute(String name, value)</td></tr>
-	<tr><td>getElementsByClassName(String className)</td></tr>
-	<tr><td>getElementsByTagName(String tagName)</td></tr>
-	<tr><td>querySelector(String selector)</td><td>CSS selector, e.g. <code>.myclass</code>, <code>#foo td</code></td></tr>
+	<tr><td>getAttribute(name: string)</td><td>string; may be null or "" on no attribute</td></tr>
+	<tr><td>hasAttribute(name: string)</td></tr>
+	<tr><td>setAttribute(name: string, value)</td></tr>
+	<tr><td>getElementsByClassName(className: string)</td></tr>
+	<tr><td>getElementsByTagName(tagName: string)</td></tr>
+	<tr><td>querySelector(selector: string)</td><td>first element matching CSS selector, e.g. <code>.myclass</code>, <code>#foo td</code></td></tr>
+	<tr><td>querySelectorAll(selector: string)</td><td>all elements matching CSS selector</td></tr>
+</table>
+<h3>jQuery</h3>
+$(selector), $(document.createElement(tagname: string))
+<table>
+	<tr><th>Attributes/CSS</th></tr>
+	<tr><td>.attr(name: string)</td><td>.attr(name: string, value: string)</td></tr>
+	<tr><td>.prop(name: string)</td><td>.prop(name: string, value: string)</td></tr>
+	<tr><td>.val()</td><td>.val(value: string)</td></tr>
+	<tr><td>.hasClass(cls: string)</td><td></td></tr>
+	<tr><td></td><td>.addClass(cls: string)</td></tr>
+	<tr><td></td><td>.removeClass(cls: string)</td></tr>
+	<tr><td></td><td>.toggleClass(cls: string)</td></tr>
+	<tr><td>.html()</td><td>.html(value: string)</td></tr>
+	<tr><td>.text()</td><td>.text(value: string)</td></tr>
+	<tr><th>Handlers</th></tr>
+	<tr><td>.click(handler)</td></tr>
+	<tr><td>.dblclick(handler)</td></tr>
+	<tr><td>.hover(handler)</td></tr>
+	<tr><th>Traversal: Filtering</th></tr>
+	<tr><td>.first()</td></tr>
+	<tr><td>.last()</td></tr>
+	<tr><td>.filter(selector: string)</td></tr>
+	<tr><td>.eq(index: number)<br/> (can be negative, Pythonically)</td></tr>
+	<tr><th>Traversal</th></tr>
+	<tr><td>.children(selector?: string)</td></tr>
+	<tr><td>.find(selector: string)<br/> (descendants)</td></tr>
+	<tr><td>.next()</td></tr>
+	<tr><td>.prev()</td></tr>
+	<tr><td>.parent()</td></tr>
 </table>
