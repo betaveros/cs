@@ -315,24 +315,62 @@ Functions already listed in family table or as unsafe interface functions above 
 Note: Many names clash with Prelude; please <code>import qualified Data.Map as Map</code>
 </p>
 <ul>
-	<li>(!) :: Ord k &rArr; Map k a &rarr; k &rarr; a</li>
-	<li>lookup :: Ord k &rArr; k &rarr; Map k a &rarr; Maybe a <em>note: (!) and lookup have flipped arguments</em></li>
-	<li>findWithDefault :: Ord k &rArr; a &rarr; k &rarr; Map k a &rarr; a</li>
-	<li>null :: Map k a &rarr; Bool</li>
-	<li>size :: Map k a &rarr; Int</li>
-	<li>member :: Ord k &rarr; k &rarr; Map k a &rarr; Bool</li>
-	<li>empty :: Map k a</li>
-	<li>singleton :: k &rarr; a &rarr; Map k a</li>
-	<li>insert :: Ord k &rArr; k &rarr; a &rarr; Map k a &rarr; Map k a</li>
-	<li>insertWith :: Ord k &rArr; (a &rarr; a &rarr; a) &rarr; k &rarr; a &rarr; Map k a &rarr; Map k a</li>
-	<li>delete :: Ord k &rArr; k &rarr; Map k a &rarr; Map k a</li>
-	<li>adjust :: Ord k &rArr; (a &rarr; a) &rarr; k &rarr; Map k a &rarr; Map k a</li>
-	<li>update :: Ord k &rArr; (a &rarr; Maybe a) &rarr; k &rarr; Map k a &rarr; Map k a</li>
-	<li>alter :: Ord k &rArr; (Maybe a &rarr; Maybe a) &rarr; k &rarr; Map k a &rarr; Map k a</li>
-	<li>elems :: Map k a &rarr; [a]</li>
-	<li>keys :: Map k a &rarr; [k]</li>
-	<li>toList :: Map k a &rarr; [(k, a)]</li>
-	<li>fromList :: Ord k &rArr; [(k, a)] &rarr; Map k a</li>
+	<li>Lookup
+		<ul>
+			<li>(!) :: Ord k &rArr; Map k a &rarr; k &rarr; a</li>
+			<li>(!?) :: Ord k &rArr; Map k a &rarr; k &rarr; Maybe a <em>(since 0.5.9)</em></li>
+			<li>lookup :: Ord k &rArr; k &rarr; Map k a &rarr; Maybe a <em>note: (!) and lookup have flipped arguments</em></li>
+			<li>findWithDefault :: Ord k &rArr; a &rarr; k &rarr; Map k a &rarr; a</li>
+			<li>lookup<i>[LT,GT,LE,GE]</i> :: Ord k &rArr; k &rarr; Map k v &rarr; Maybe (k, v)</li>
+			<li>member :: Ord k &rarr; k &rarr; Map k a &rarr; Bool</li>
+		</ul>
+	</li>
+	<li>Size
+		<ul>
+			<li>null :: Map k a &rarr; Bool</li>
+			<li>size :: Map k a &rarr; Int</li>
+		</ul>
+	</li>
+	<li>Construction
+		<ul>
+			<li>empty :: Map k a</li>
+			<li>singleton :: k &rarr; a &rarr; Map k a</li>
+		</ul>
+	</li>
+	<li>Insertion and modification
+		<ul>
+			<li>insert :: Ord k &rArr; k &rarr; a &rarr; Map k a &rarr; Map k a</li>
+			<li>insertWith :: Ord k &rArr; (a &rarr; a &rarr; a) &rarr; k &rarr; a &rarr; Map k a &rarr; Map k a</li>
+			<li>delete :: Ord k &rArr; k &rarr; Map k a &rarr; Map k a</li>
+			<li>adjust :: Ord k &rArr; (a &rarr; a) &rarr; k &rarr; Map k a &rarr; Map k a</li>
+			<li>update :: Ord k &rArr; (a &rarr; Maybe a) &rarr; k &rarr; Map k a &rarr; Map k a</li>
+			<li>alter :: Ord k &rArr; (Maybe a &rarr; Maybe a) &rarr; k &rarr; Map k a &rarr; Map k a</li>
+		</ul>
+	</li>
+	<li>Combination
+		<ul>
+			<li>union :: Map k a &rarr; Map k a &rarr; Map k a</li>
+			<li>unions :: [Map k a] &rarr; Map k a</li>
+		</ul>
+	</li>
+	<li>To/from list
+		<ul>
+			<li>map :: (a &rarr; b) &rarr; Map k a &rarr; Map k b</li>
+			<li>elems :: Map k a &rarr; [a]</li>
+			<li>keys :: Map k a &rarr; [k]</li>
+			<li>toList :: Map k a &rarr; [(k, a)]</li>
+			<li>fromList :: Ord k &rArr; [(k, a)] &rarr; Map k a</li>
+			<li>fromListWith :: Ord k &rArr; (a &rarr; a &rarr; a) &rarr; [(k, a)] &rarr; Map k a <em>(combines values; prototypical usage: Map.fromListWith (+) $ map (,1) xs)</em></li>
+		</ul>
+	</li>
+	<li>Min/max
+		<ul>
+			<li>lookupMin :: Map k a &rarr; Maybe (k, a)</li>
+			<li>findMin :: Map k a &rarr; (k, a)</li>
+			<li>minView :: Map k a &rarr; Maybe (a, Map k a)</li>
+			<li>minViewWithKey :: Map k a &rarr; Maybe ((k, a), Map k a)</li>
+		</ul>
+	</li>
 </ul>
 <h4>Data.Maybe</h4>
 <ul>
@@ -384,6 +422,10 @@ Note: Many names clash with Prelude; please <code>import qualified Data.Set as S
 	<li>insert :: Ord a &rArr; a &rarr; Set a &rarr; Set a</li>
 	<li>delete :: Ord a &rArr; a &rarr; Set a &rarr; Set a</li>
 	<li>elems <em>(&equiv; toAscList)</em> :: Set a &rarr; [a]</li>
+	<li>lookupMin :: Set a &rarr; Maybe a</li>
+	<li>findMin :: Set a &rarr; a</li>
+	<li>minView :: Set a &rarr; Maybe (a, Set a)</li>
+	<li>toList :: Set a &rarr; [a]</li>
 	<li>fromList :: [a] &rarr; Set a</li>
 </ul>
 <h4>Debug.Trace</h4>
