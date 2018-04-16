@@ -82,6 +82,47 @@
 	<tr><td>&lsquo;&rsquo;&ldquo;&rdquo;</td><td>[lr][sd]quo;</td></tr>
 	<tr><td><a href="https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references">more</a></td><td>hi</td></tr>
 </table>
+<h3>JavaScript Array</h3>
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">mdn @ Array</a>
+
+<p>Assumes <code>a: T[]</code></p>
+
+<ul>
+	<li>.length: number</li>
+	<li>Start and end:
+		<ul>
+			<li>.pop(): T</li>
+			<li>.unshift(): T</li>
+			<li>.push(e: T): number // new length</li>
+			<li>.shift(e: T): number // new length</li>
+			<li>To extend: Array.prototype.push.apply(a, b: T[])</li>
+		</ul>
+	</li>
+	<li>.join(separator: string): string</li>
+	<li>.slice(start: number, end: number): T[]</li>
+	<li>.indexOf(item: T, fromIndex?: number): number // or -1</li>
+	<li>.lastIndexOf(item: T, fromIndex?: number): number // or -1</li>
+	<li>Iteration methods (all take callbacks f: (item: T, index: number, a: T[]) =&gt; any)
+		<ul>
+			<li>.forEach(f)</li>
+			<li>.map(f)</li>
+			<li>.filter(f)</li>
+			<li>.every(f) // all</li>
+			<li>.some(f) // any</li>
+			<li>.find(f) // or undefined</li>
+			<li>.findIndex(f) // or -1</li>
+			<li>.reduce((accumulator: S, item: T, index: number, a: T[]) =&gt; S, initialValue?: S): S</li>
+		</ul>
+	</li>
+	<li><em>Destructive</em> operations
+		<ul>
+			<li>.reverse()</li>
+			<li>.sort(cmp?: (T, T) =&gt; number) // default order is always lexicographic by toString! e.g. 100 &gt; 20 &gt; 3<br/>
+				.sort((x, y) =&gt; x - y) // numeric sort</li>
+			<li>.splice(startIndex: number, deleteCount?: number, ...items: T[])</li>
+		</ul>
+	</li>
+</ul>
 <h3>JavaScript DOM</h3>
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/document">mdn @ document</a>
 <table>
@@ -166,3 +207,65 @@ $(selector), $(document.createElement(tagname: string))
 	<tr><td>.prev()</td></tr>
 	<tr><td>.parent()</td></tr>
 </table>
+<h3>TypeScript</h3>
+<pre>let one: number = 1;
+function add(a: number, b: number): number {
+	return a + b;
+}</pre>
+Basic types:
+<ul>
+	<li>number, string, boolean</li>
+	<li>any</li>
+	<li>Object</li>
+	<li>undefined, null</li>
+	<li>number[] <em>or</em> Array&lt;number&gt; (any[] works)</li>
+	<li>[string, number] // tuple</li>
+	<li>string|number // union</li>
+	<li>T&amp;U // intersection</li>
+	<li>string|undefined // option (but all types allow undefined and null unless --strictNullChecks)</li>
+	<li>function print(x: string): void {...}</li>
+	<li>function haltCatchFire(): never {...} // bottom type</li>
+	<li>(&lt;string&gt;idk).length <em>or</em> (idk as string).length // type assertion, transpiles to nothing</li>
+	<li>type Name = string; // alias</li>
+	<li>type Coin = "heads" | "tails"; // light enum</li>
+</ul>
+Destructuring:
+<pre>
+let [first, second, ...rest] = [1, 2, 3, 4];
+[first, second] = [second, first];
+let comp = [...rest, first, second];
+function f([a, b]: [number, string]) {...}
+let { a, b } = {a: 1, b: 2};
+</pre>
+Fancy types:
+<pre>
+let add: (a: number, b: number) =&gt; number = ...;
+function f(
+	a: number,
+	defArg: number = 1,
+	optArg?: number,
+	...varArgs: number[]): string { ... }</pre>
+Constrains type of <code>this</code> that method is called on:
+<pre>interface Thing { ... }
+function method(this: Thing) { ... }</pre>
+<code>this</code> must be first argument. Use <code>this: void</code> to force no usage.
+<pre>interface FillStyle {
+	color: string;
+	width?: number;
+}
+interface StyleWithStuff {
+	color: string;
+	[prop: string]: any;
+}
+interface NumericBinaryOperator {
+	(a: number, b: number): number;
+}
+interface StringArray {
+	[index: number]: string;
+}</pre>
+Generics:
+<pre>function identity&lt;T&gt;(arg: T): T { return arg; }</pre>
+Type guard:
+<pre>if (typeof foo === "number") { ... }
+class Thing { ... }
+if (thing instanceof Thing) { ... }</pre>
