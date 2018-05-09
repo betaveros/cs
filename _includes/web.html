@@ -123,6 +123,60 @@
 		</ul>
 	</li>
 </ul>
+
+<h4>Array(n) magic</h4>
+
+<p>(Beware browser compatibility concerns.)</p>
+
+<p><code>Array(20).fill(1)</code> creates a list of 20 ones. <code>Array(26).keys()</code> is an iterator over its keys, and <code>[...Array(26).keys()]</code> is black magic for the half-open range from 0 to 26.</p>
+
+<p>NOTE: <code>Array(20)</code> has "empty" elements, which are different from the elements being <code>undefined</code>. For the sake of functions like <code>.map</code>, "empty" elements are completely skipped, so that <code>Array(20).map(_ =&gt; 1)</code> will give another list of 20 empty elements. But spreading, native iterating, and <code>Array.from()</code> still work fine, for some reason.</p>
+
+<h3>JavaScript String</h3>
+
+<p>Assumes <code>s: string</code></p>
+
+<ul>
+	<li>s.length: number</li>
+	<li>Indexing, ord/chr conversion:
+		<ul>
+			<li>s.charAt(1) <em>or</em> s[1]: length-1 string</li>
+			<li>s.charCodeAt(1): number (UTF-16 code unit)</li>
+			<li>String.fromCharCode(ord: number): length-1 string</li>
+		</ul>
+	</li>
+	<li>Slices and stuff:
+		<ul>
+			<li>s.startsWith(t: string)</li>
+			<li>s.endsWith(t: string)</li>
+			<li>s.indexOf(t: string)</li>
+			<li>s.lastIndexOf(t: string)</li>
+			<li>s.substr(start: number, len: number)</li>
+			<li>s.substring(start: number, end: number)</li>
+			<li>s.trim()</li>
+		</ul>
+	</li>
+	<li>s.split(separator: string, limit: number): string[]
+		<ul>
+			<li>omitting the separator is useless, you get a one-element array with the whole string. Try <code>s.split(/\s+/)</code></li>
+			<li><code>"foo".split('')</code> or <code>Array.from("foo")</code> turns into list of length-1 strings</li>
+		</ul>
+	</li>
+	<li>s.repeat(n: number): string ('abc'.repeat(2) === 'abcabc')</li>
+	<li>s.toLowerCase(), s.toUpperCase()</li>
+	<li>There is not a great way to test if chars are uppercase/lowercase. You can use <code>s !== s.toLowerCase()</code> or <code>/[A-Z]/.test(s)</code>?</li>
+</ul>
+
+<h3>JavaScript Regex</h3>
+
+<p><code>regex: RegExp</code>, get <code>/[A-Z]/</code> or <code>new RegExp('[A-Z]')</code></p>
+
+<ul>
+	<li>regex.exec(s) <em>or</em> s.match(regex): string[]|null, also updates regex.lastIndex if global so you can repeatedly call</li>
+	<li>regex.test(s): boolean <em>or</em> s.search(regex): number|-1</li>
+</ul>
+
+
 <h3>JavaScript DOM</h3>
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/document">mdn @ document</a>
 <table>
