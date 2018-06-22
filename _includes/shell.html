@@ -84,3 +84,101 @@ Snippet to get name, height, width in format of an HTML tag: <code>identify -for
 </ul>
 
 <p>These characters are just flags that affect the entire <code>-resize</code>. Location doesn't matter. <code>50%x30</code> doesn't work.</p>
+
+<h3>shell polyglot</h3>
+
+<table>
+	<tr><th colspan="2">Combining commands</th></tr>
+	<tr><td>a &amp;&amp; b</td><td>a; and b</td></tr>
+	<tr><td>a || b</td><td>a; or b</td></tr>
+	<tr><td>a $(b) <em>will be word-split and path-expanded</em></td><td>a (b | string split " ")</td></tr>
+	<tr>a "$(b)"</td><td>a (b)</td></tr>
+	<tr><th colspan="2">History</th></tr>
+	<tr>
+		<td>!-<em>(number)</em> # nth most recent command
+			<br/>!-1 <em>&equiv;</em> !!
+			<br/>!$ # last argument of most recent command
+			<br/>^old^new^ # substitute old &rarr; new in last command, then re-run it
+		</td>
+		<td>(use arrow keys)</td>
+	</tr>
+	<tr><th colspan="2">Redirection</th></tr>
+	<tr><td colspan="2">&gt;outfile</td></tr>
+	<tr><td>2&gt;errfile</td><td><em>also works, or</em> ^errfile</td></tr>
+	<tr><td>2&gt;&amp;1</td><td><em>also works, or</em> ^&amp;1</td></tr>
+	<tr><td>2&gt;&amp;1</td><td><em>also works, or</em> ^&amp;1</td></tr>
+	<tr><td>2&gt;&amp;1 &gt;/dev/null or whatever</td><td>a 2&amp;| b</td></tr>
+	<tr><td>a &lt;(b)</td><td>a (b | psub)</td></tr>
+	<tr><th colspan="2">Variables</th></tr>
+	<tr><td>var=value</td><td>set var value</td></tr>
+	<tr><td>array=(one two three)</td><td>set array one two three</td></tr>
+	<tr><td>export var=value</td><td>set -x var value <em>(-x &equiv; --export)</em></td></tr>
+	<tr><td>unset var</td><td>set -e var <em>(-e &equiv; --erase)</em></td></tr>
+	<tr>
+		<td class="empty"></td>
+		<td>
+			<ul>
+				<li>no flag: honors existing scope, otherwise local to <em>function</em>)</li>
+				<li>-l / --local: to current block</li>
+				<li>-g / --global</li>
+				<li>-U / --universal: persists across users, restarts</li>
+			</ul>
+		</td>
+	</tr>
+	<tr><td>"$@"<br/>$1 $2 ... ; $# is count; "$*" is all args space-concatenated</td><td>$argv (array)</td></tr>
+	<tr><td>$0</td><td>$_ (currently running command)</td></tr>
+	<tr><td>$?</td><td>$status</td></tr>
+	<tr><td colspan="2">$HOME</td></tr>
+	<tr><td colspan="2">$PWD</td></tr>
+	<tr><td colspan="2">$USER (not technically bash built-in)</td></tr>
+	<tr><td colspan="2">$PATH (array in fish)</td></tr>
+	<tr><th colspan="2">Arrays and data</th></tr>
+	<tr><td colspan="2">seq 5 &rarr; 1 2 3 4 5 (not bash built-in, write a loop if you don't have seq)</td></tr>
+	<tr><td>${#str}</td><td>string length $str</td></tr>
+	<tr><td>${#array[@]}</td><td>count $array</td></tr>
+	<tr><td>[[ bool_expr ]] (better than <code>[ ... ]</code>)</td><td>test bool_expr (<code>[ ... ]</code> works too but dispreferred)</td></tr>
+	<tr>
+		<td colspan="2">
+			<ul>
+				<li>
+					<ul>
+						<li>-e file # file exists</li>
+						<li>-d file # is directory</li>
+						<li>-f file # is regular file (not directory)</li>
+						<li>-s file # size not zero</li>
+					</ul>
+				</li>
+				<li>
+					<ul>
+						<li>str1 = str2 <em>or == in bash</em>
+							<ul>
+								<li>
+									In <code>[[ ]]</code>, the RHS is a glob pattern,
+											so e.g. <code>'foobar' = 'f*r'</code>.
+									To do this in fish, <code>string match --quiet 'f*r' 'foobar'</code>.
+								</li>
+							</ul>
+						</li>
+						<li>str1 != str2</li>
+						<li>-n str1 # length != 0 i.e. nonempty</li>
+						<li>-z str1 # length == 0 i.e. empty</li>
+					</ul>
+				</li>
+				<li>
+					num1 -eq num2 (-ne, -gt, -ge, -lt, -le)
+				</li>
+				<li>
+					<ul>
+						<li>! bool1</li>
+						<li>(test, <code>[ ]</code>) bool1 -a bool2, bool1 -o bool2</li>
+						<li>(<code>[[ ]]</code>) bool1 &amp;&amp; bool2, bool1 || bool2a</li>
+					</ul>
+				</li>
+				<li>
+					( ) for grouping (probably need to escape it)
+				</li>
+			</ul>
+		</td>
+	</tr>
+	<tr><td>$((1 + 2)) # no need for $-prefixing var names</td><td>math -- 1 + 2 # thin wrapper for bc; use -- to avoid negative numbers becoming flags</td></tr>
+</table>
