@@ -205,3 +205,52 @@ time.sleep(0.5) # 0.5 seconds</pre>
 	<li><code>np.stack([arr1, arr2, ...], axis=0)</code> (requires arrays have the exact same shape, returns an array with an additional axis specified by the parameter)</li>
 	<li><code>arr.reshape(shape)</code> e.g. <code>arr.reshape((-1, 1))</code> converts to a column vector; <code>-1</code> is the unknown dimension you can specify once</li>
 </ul>
+<h3>Django</h3>
+<pre>Program.objects.get(name='Splash 2016')</pre>
+<h4>Models (<a href="https://docs.djangoproject.com/en/1.10/topics/db/models/">1.10 docs</a>)</h4>
+<pre>prog = Program(...)
+prog.save()
+prog.name = 'lol'
+prog.save()
+prog.delete()</pre>
+<p>(Or one-step creation:)</p>
+<pre>Program.objects.create(name = 'gg')</pre>
+<p>These all deal with QuerySets.</p>
+<pre>Program.objects # Manager
+Program.objects.all() # QuerySet with all
+Program.objects.filter(name__contains='2016')
+# other things: field__gt=3, field__other_field etc
+Program.objects.get(name='Splash 2016')
+Program.objects.order_by('name')
+
+StudentRegistration.valid_objects().filter(
+             section__parent_class__parent_program=prog,
+             relationship__name='Enrolled'
+         )
+enrolled.values_list('user__last_name', 'user').distinct()</pre>
+<h3>Requests</h3>
+<pre>import requests
+r = requests.get('http://www.example.com/', params={'foo': 'bar'}) # values can also be lists
+r = requests.post('http://www.example.com/', data={'foo': 'bar'})
+r.status_code
+r.text # automagical unicode
+r.content # bytes</pre>
+<h3>Pwntools</h3>
+<pre>from pwn import *
+
+enhex('=') = '3d' / unhex('3d') = ('=')
+concat: List[List[T]] &rarr; List[T]
+concat_all: recursive lists &rarr; flat list
+findall(haystack, needle) &rarr; generator of all indices of needle in haystack
+
+group(n, seq, underfull_action=['ignore'|'drop'|'fill'])
+
+ordlist: List[int] &rarr; str
+unordlist: str &rarr; List[int]
+
+p8, p16, p32, p64 (  pack: int &rarr; bytes)
+u8, u16, u32, u64 (unpack: bytes &rarr; int)
+
+    You can pass endian='little'|'big', sign=False|True
+
+more(text), yesno(text)</pre>
