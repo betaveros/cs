@@ -1,4 +1,5 @@
 <a href="http://hyperpolyglot.org/">HyperPolyglot</a> is a great resource
+<div class="general">
 <table>
 	<tr><th>language  </th><th>string<br/>concat</th><th>range<br/>comment</th><th>eol<br/>comment</th><th>unequal</th><th>' means</th><th>index i</br>elt</th><th>1st elt</th><th>all but first</th><th>int &rarr; string</th><th>uppercase</th></tr>
 	<tr><td>C/C++     </td><td>+                                        </td><td>/* */         </td><td>//            </td><td>!=            </td><td>char 'c'             </td><td>s[i]                   </td><td>[0]          </td><td class="empty">                                  </td><td><em>#include &lt;stdlib.h&gt;</em><br/>atoi(s)</td><td><em>char: #include &lt;cctype&gt;</em><br/>toupper(c)<br/><em>&lt;string&gt;: #include &lt;algorithm&gt;</em><br/>transform(s.begin(), s.end(),<br/>&nbsp;&nbsp;sout.begin(), toupper)</td></tr>
@@ -12,3 +13,4 @@
 	<tr><td>Javascript</td><td>+                                        </td><td>/* */         </td><td>//            </td><td>!=<br/>!==    </td><td>'raw string'         </td><td>s[i]                   </td><td>[0]          </td><td>.slice(1)                                       </td><td>parseInt(s,10)                                </td><td>s.toUpperCase()</td></tr>
 	<tr><td>Clojure   </td><td>(str a b)                                </td><td class="empty"></td><td>;             </td><td class="empty"></td><td>various              </td><td>(nth i s)              </td><td>first        </td><td>rest<br/>next                                   </td><td>Integer/parseInt                              </td><td>(.toUpperCase s)</td></tr>
 </table>
+</div>
