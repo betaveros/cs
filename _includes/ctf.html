@@ -121,22 +121,6 @@ sib byte: scale, index, base.</pre>
 break *0x12345678 // given address from radare2 or something
 run</pre>
 
-<h4>Watchpoint</h4>
-<ul>
-	<li><code>watch expr</code> (break when expr is written)
-	<li><code>rwatch expr</code> (break when expr is read)
-	<li><code>awatch expr</code> (break when expr is read or written)
-	<li><code>clear [location]</code> (delete breakpoint)
-	<li><code>clear</code> (delete current breakpoint)
-</ul>
-	<h4>Source lines (rare)</h4>
-<ul>
-	<li><code>c</code>/<code>continue</code> (until next breakpoint)
-	<li><code>s</code>/<code>step</code> (until different line)
-	<li><code>n</code>/<code>next</code> (until next line; don't enter calls)
-	<li><code>u</code>/<code>until</code> (until numerically next line, so if you're at the end of a loop, runs until after it)
-</ul>
-
 <h4>Instructions</h4>
 
 <ul>
@@ -146,20 +130,43 @@ run</pre>
 	<li><code>nextcall</code> (pwndbg)</li>
 </ul>
 
+<h4>Source lines (rare)</h4>
+
+<ul>
+	<li><code>c</code>/<code>continue</code> (until next breakpoint)
+	<li><code>s</code>/<code>step</code> (until different line)
+	<li><code>n</code>/<code>next</code> (until next line; don't enter calls)
+	<li><code>u</code>/<code>until</code> (until numerically next line, so if you're at the end of a loop, runs until after it)
+</ul>
+
 <h4>Examining</h4>
 
 <pre>
 print expr
 
+	Keeps history in magic variables $1, $2, etc. or in reverse order, $, $$, $$2, $$3, etc.
+
+	expr can be/have an assignment expression or a function call or whatever
+
 x/[number][format][unit]
    number: 10 (bytes, say)
            format: e.g. x for hex
                    unit: b = byte, w = word
+
+	Keeps historical address in $_, value in $__
+
 x/s: string
 
 display/10i $eip
 set disassembly-flavor intel
-disasssemble main (disas main)</pre>
+disasssemble main (disas main)
+
+find start_addr, +len, val
+find start_addr, end_addr, val
+
+	strings will include trailing \0, get around by casting {char[5]}"hello"
+
+</pre>
 
 <pre>info registers
 i r # inspect registers
@@ -167,6 +174,34 @@ i r # inspect registers
 info functions
 
 info proc mappings # has heap ptr etc</pre>
+
+<h4>Writing</h4>
+
+<code>set var</code> is safer because <code>set</code> has subcommands e.g. <code>set g=4</code> is <code>set gnutarget =4</code>
+
+<ul>
+	<li><code>set $esp += 4</code></li>
+	<li><code>set {int}0x12345 = 4</code></li>
+	<li><code>set {int}0x12345 = 4</code></li>
+</ul>
+
+<h4>Hacking</h4>
+
+<ul>
+	<li><code>j</code>/<code>jump</code> location</li>
+	<li><code>return</code> [expr]</li>
+	<li><code>call</code> expr</li>
+	<li><code>set write on</code> / <code>set write off</code> (needs reopen file)</li>
+</ul>
+
+<h4>Watchpoint</h4>
+<ul>
+	<li><code>watch expr</code> (break when expr is written)
+	<li><code>rwatch expr</code> (break when expr is read)
+	<li><code>awatch expr</code> (break when expr is read or written)
+	<li><code>clear [location]</code> (delete breakpoint)
+	<li><code>clear</code> (delete current breakpoint)
+</ul>
 
 <h3>ROP</h3>
 
@@ -201,7 +236,7 @@ print system</pre>
 
 <h4>TechSec ROP</h4>
 
-This is statically linked so nice. Find gadgets with `ROPgadget --binary rop`. Look for good things. These are good:
+This is statically linked so nice. Find gadgets with <code>ROPgadget --binary rop</code>. Look for good things. These are good:
 
 <pre>0x080b9236 : pop eax ; ret
 0x0806fd50 : pop edx ; pop ecx ; pop ebx ; ret
@@ -247,17 +282,17 @@ r &lt; &lt;(python payload.py)
 
 <p>Step through with <code>nextcall</code> or <code>finish</code>.</p>
 
-<p>In 64-bit you use the standard `%edi`, `%esi` stuff. In 64-bit the instruction is actually `syscall`; in 32-bit it's `int 0x80`.</p>
+<p>In 64-bit you use the standard <code>%edi</code>, <code>%esi</code> stuff. In 64-bit the instruction is actually <code>syscall</code>; in 32-bit it's <code>int 0x80</code>.</p>
 
 <h4>Important 64-bit Syscalls</h4>
 
-opcode is `%rax`; args are `%rdi, %rsi, %rdx, %r10, %r8, %r9`.
+opcode is <code>%rax</code>; args are <code>%rdi</code>, <code>%rsi</code>, <code>%rdx</code>, <code>%r10</code>, <code>%r8</code>, <code>%r9</code>.
 
 <ul>
 <li>0: <code>read(uint fd, char* buf, size_t count)</code></li>
 <li>1: <code>write(uint fd, char* buf, size_t count)</code></li>
 <li>2: <code>open(const char* filename, int flags, int mode)</code></li>
-<li>59: <code>0x3b) `execve(const char* filename, const char *const argv, const char *const envp[])</code></li>
+<li>59 (0x3b): <code>execve(const char* filename, const char *const argv, const char *const envp[])</code></li>
 </ul>
 
 <h4>ASLR randomizes</h4>
@@ -304,6 +339,8 @@ Fish:
 
 <h4>Preliminaries</h4>
 <p>Install radare2, it’ll be available as <code>r2</code>. Load an executable <code>prog</code> like <code>r2 prog</code>. radare2 will print a random funny message on startup, sometimes it’s confusing if you’re not used to it.</p>
+<pre>[.][times][cmd][~grep][@[@iter]addr!size][|&gt;pipe] ;</pre>
+<p>radare2 has a "current offset" displayed in the prompt, and is in the magic variable <code>$$</code></p>
 <h4>Startup Commands</h4>
 <p>radare2 commands are weird strings of single letters. Start by issuing <code>aaa</code> or <code>aaaa</code> to analyze the file. More <code>a</code>’s is more analysis but four <code>a</code>’s is experimental.</p>
 <p>Run <code>afl</code> to list all the functions in the program.</p>
@@ -313,14 +350,20 @@ Fish:
 <p>In general <code>pd</code> disassembles stuff, <code>pd3@5.</code> idk? <code>pdf</code> disassembles the function.</p>
 <ul>
 	<li>Call graph: <code>VV @ main</code></li>
-	<li>Print Memory: <code>px</code></li>
+	<li>Print Memory: <code>px</code> bytes; <code>pxw</code> 32-bit words</li>
 </ul>
 
 <h4>Patching</h4>
 <p>Might need to make the executable writable and open with <code>r2 -w</code>.</p>
 <ul>
 	<li>Seek to a position: <code>s 0x12345678</code></li>
-	<li>Write bytes: <code>wx ffffffff @+2</code>. <code>@</code> is your current location. <code>90 = NOP</code> is your friend of course.</li>
+	<li>Write bytes: <code>wx ffffffff @+2</code>. <code>@</code> is your current location. <code>90 = NOP</code> is your friend of course. Other types:
+		<ul>
+			<li><code>w foobar</code> writes string</li>
+			<li><code>wa nop ; nop</code> writes instructions</li>
+			<li><code>wz foobar</code> writes string + \0</li>
+			<li><code>wc</code> lists write changes</li>
+		Or <code>wa push rax ; nop @ 0x12345678</code></li>
 </ul>
 <p><code>https://github.com/radare/radare2/blob/master/doc/intro.md</code></p>
 <h4>Debugging/Running</h4>
@@ -333,6 +376,11 @@ Fish:
 	<li><code>..</code></li>
 	<li><code>eip</code> is the current position.</li>
 	<li><code>dm</code> memory maps, which you can use to find functions exported by libraries for ropping?</li>
+</ul>
+<h4>other stuff</h4>
+<ul>
+	<li><code>f flag_name @ offset</code> a flag is a bookmark</li>
+	<li><code>f -flag_name</code> delete</li>
 </ul>
 
 <h3>magic</h3>
