@@ -1,0 +1,350 @@
+<pre>python -c 'print "\x12\x34\x56\x78"*50'
+edgy:
+perl -e 'print "b" x 0x88, "\x12\x34\x56\x78"'
+
+objdump -d executable
+file
+strings</pre>
+
+<pre>from __future__ import division, print_function
+from pwn import *
+import re, sys
+
+# sys.setrecursionlimit(8000)
+conn = remote('1.2.3.4', 31337)
+# conn = process('rop')
+
+maze_text = conn.recvuntil('(the lower left cell is 0,0)')
+
+goal_res = re.search(r'goal: (\d+), (\d+)', maze_text)
+goal = (int(goal_res.group(1)), int(goal_res.group(2)))
+
+conn.sendline('foo')
+
+conn.interactive()</pre>
+
+<h3>x86</h3>
+<h4>Registers</h4>
+<p>x86(-32) has eight registers: <code>EAX</code>, <code>ECX</code>, <code>EDX</code>, <code>EBX</code>, <code>ESP</code>, <code>EBP</code>, <code>ESI</code>, <code>EDI</code>. (x86-64 has 8 more and adds <code>RAX</code> etc.) Also <code>EIP</code> is the instruction pointer.</p>
+<h4>Stack</h4>
+<pre>| ‹locals/temps›   | &lt;= esp
+| ‹locals/temps›   |    esp+8
+| ‹locals/temps›   |    ...
+| ‹locals/temps›   |    ebp-8
+| ‹old ebp›        | &lt;= ebp
+| ‹return address› |    ebp+8
+| ‹arguments?›     |    ebp+16</pre>
+<ul>
+<li><code>ESP</code> is the Stack Pointer, pointing to the “top” of the stack (the end with lowest address), and is important since PUSHing and POPping handles it.</li>
+<li><code>EBP</code> is the Stack Base Pointer, somewhere “below” (higher memory) ESP on the stack, but above it, a useful baseline from which functions can access things on the stack relatively.</li>
+</ul>
+<p>The stack grows "downward in memory" i.e. toward lower addresses, so if we write the stack memory by increasing memory addresses as usual, the metaphorical top of the stack coincides with the top.</p>
+<h4 id="words">Words</h4>
+<pre>64(----------------RAX-----------------)
+                    32(------EAX-------) (DWORD)
+                              16(--AX--) (WORD)
+                              8(AH)8(AL) (BYTE)</pre>
+<p>x86 is little-endian: least-significant byte first.</p>
+<h3 id="calling-conventions">Calling Conventions</h3>
+<ul>
+<li><p>x86 (32): Arguments go on stack, pushed in reverse order so their memory addresses are in order:</p>
+<pre>push ebp
+mov  ebp, esp
+push arg2
+push arg1
+call callee
+pop ebp</pre></li>
+<li>x86-64, System V/AMD64 ABI/Linux/OSX: First six integer arguments in <code>%rdi</code>, <code>%rsi</code>, <code>%rdx</code>, <code>%rcx</code>, <code>%r8</code>, <code>%r9</code>.</li>
+<li><p>x86-64, Microsoft/Windows: <code>%rcx</code>, <code>%rdx</code>, <code>%r8</code>, <code>%r9</code></p></li>
+</ul>
+<p>Different OS’s have different syscalls.</p>
+<ul>
+<li><code>call callee</code> ≈ <code>push eip+4; mov eip, callee</code></li>
+<li><code>ret</code> ≈ <code>pop eip</code></li>
+</ul>
+
+<h4 id="reference-dive">reference dive</h4>
+<p>Nothing takes immediate of more than 32 bits.</p>
+<p>Offset = base (register) + (index (register) * base(1, 2, 4 or 8)) + displacement (none to 32 bits)</p>
+<h4 id="important-opcodes">Important Opcodes</h4>
+<pre>Registers in order:
+
+rax rcx rdx rbx rsp rbp rsi rdi
+r8  r9  r10 r11 r12 r13 r14 r15
+
+e8: call (4 bytes: relative address)
+e9: jmp (4 bytes: relative address)
+eb: jmp (1 byte: relative address)
+c3: ret</pre>
+<p>For a lot of operations between two 64-bit registers, the bytecode has three bytes like so:</p>
+<pre>0b01001S0D 0bXXXX1001 0b11SSSDDD</pre>
+<p>where the four X bits control the opcode, the four S bits control the source register, the four D bits control the destination register:</p>
+<pre>01: add
+09: or
+11: adc
+19: sbb
+21: and
+29: sub
+31: xor
+39: cmp
+
+   31 (c0 + 8*src + dst): xor reg, reg
+   31 c0: xor eax, eax
+   31 c1: xor ecx, eax
+   31 c8: xor eax, ecx
+   31 d2: xor edx, edx
+48 31 c0: xor rax, rax
+4c 31 c0: xor rax, r8
+49 31 c0: xor r8, rax
+4d 31 c0: xor r8, r8
+
+b8 (4 bytes): mov literal into eax
+48 c7 c0 (4 bytes): mov literal into rax
+49 c7 c0 (4 bytes): mov literal into r8
+
+50-57, 41 50-57: push reg (50: push rax; 41 50: push r8)
+58-5f, 41 58-5f: pop  reg (58: pop rax;  41 58: pop r8)</pre>
+<h4>(16-bit mode??)</h4>
+<pre>55: push bp
+89 e5: mov bp, sp</pre>
+<h4>ModR/M, SIB</h4>
+<pre>mod r/m: 5 bits, eight registers and 24 addressing modes
+reg/opcode: either register number or three more bits of opcode
+
+Vol. 2A page 2-5.
+
+sib byte: scale, index, base.</pre>
+
+<h3>GDB</h3>
+
+<pre>break __libc_start_main
+break *0x12345678 // given address from radare2 or something
+run</pre>
+
+<h4>Watchpoint</h4>
+<ul>
+	<li><code>watch expr</code> (break when expr is written)
+	<li><code>rwatch expr</code> (break when expr is read)
+	<li><code>awatch expr</code> (break when expr is read or written)
+	<li><code>clear [location]</code> (delete breakpoint)
+	<li><code>clear</code> (delete current breakpoint)
+</ul>
+	<h4>Source lines (rare)</h4>
+<ul>
+	<li><code>c</code>/<code>continue</code> (until next breakpoint)
+	<li><code>s</code>/<code>step</code> (until different line)
+	<li><code>n</code>/<code>next</code> (until next line; don't enter calls)
+	<li><code>u</code>/<code>until</code> (until numerically next line, so if you're at the end of a loop, runs until after it)
+</ul>
+
+<h4>Instructions</h4>
+
+<ul>
+	<li><code>si</code>/<code>stepi</code> (until different instruction)</li>
+	<li><code>ni</code>/<code>nexti</code> (until next instruction; don't enter calls)</li>
+	<li><code>finish</code> (finish this call)</li>
+	<li><code>nextcall</code> (pwndbg)</li>
+</ul>
+
+<h4>Examining</h4>
+
+<pre>
+print expr
+
+x/[number][format][unit]
+   number: 10 (bytes, say)
+           format: e.g. x for hex
+                   unit: b = byte, w = word
+x/s: string
+
+display/10i $eip
+set disassembly-flavor intel
+disasssemble main (disas main)</pre>
+
+<pre>info registers
+i r # inspect registers
+
+info functions
+
+info proc mappings # has heap ptr etc</pre>
+
+<h3>ROP</h3>
+
+gdb:
+
+<pre>break somewhere
+print system</pre>
+
+<p>Executables link against your copy of libc. <code>execve</code> is the most useful.</p>
+
+<pre>execve("/bin/sh", 0, 0)</pre>
+
+<h4>32-bit goal</h4>
+
+<ul>
+<li>Fill <code>eax</code> with syscall number, 0xb = 11
+<li>Fill <code>ebx</code> with "/bin/sh"
+<li>Fill <code>ecx</code> with 0
+<li>Fill <code>edx</code> with 0
+</ul>
+
+<h4>64-bit goal</h4>
+
+<ul>
+<li>Fill <code>rax</code> with syscall number, 0x3b = 59
+<li>Fill <code>rdi</code> with "/bin/sh"
+<li>Fill <code>rsi</code> with 0
+<li>Fill <code>rdx</code> with 0
+</ul>
+
+<code>one_gadget</code> will find single places in libc you can jump after possibly setting up some constraints for you. If it's cheap, try all of them without worrying about constraints first. Otherwise <code>ROPgadget --binary some_executable</code>
+
+<h4>TechSec ROP</h4>
+
+This is statically linked so nice. Find gadgets with `ROPgadget --binary rop`. Look for good things. These are good:
+
+<pre>0x080b9236 : pop eax ; ret
+0x0806fd50 : pop edx ; pop ecx ; pop ebx ; ret
+0x0806d905 : int 0x80</pre>
+
+So chain them like this.
+
+<pre>code = 'A' * 36         # 32, plus 4 for ebp
+code += p32(0x080b9236) # pop eax ; ret
+code += p32(0xb)        # (gets popped into eax)
+
+0x080bc6a5 : "/bin/sh"</pre>
+
+<h4>Dynamic</h4>
+
+To ROP on your own machine:
+
+<pre>$ ldd leakRop</pre>
+
+libc is what you care about. <code>ROPgadget --binary</code> or <code>one_gadget</code> that.
+
+If the CTF gives you a libc file, do something like this:
+
+<pre>$ LD_PRELOAD=/path/to/my/libc.so ./executable</pre>
+
+In GDB:
+
+<pre>(gdb) set environment LD_PRELOAD=/path/to/my/libc.so</pre>
+
+You may need to use an absolute path. Now, to figure out an address:
+
+<pre>readelf -s libc-2.19.so | grep puts@
+
+	puts is 0005fca0</pre>
+
+To test: Fire up gdb, do,
+
+<pre>
+break main
+info proc mappings
+r &lt; &lt;(python payload.py)
+</pre>
+
+<p>Step through with <code>nextcall</code> or <code>finish</code>.</p>
+
+<p>In 64-bit you use the standard `%edi`, `%esi` stuff. In 64-bit the instruction is actually `syscall`; in 32-bit it's `int 0x80`.</p>
+
+<h4>Important 64-bit Syscalls</h4>
+
+opcode is `%rax`; args are `%rdi, %rsi, %rdx, %r10, %r8, %r9`.
+
+<ul>
+<li>0: <code>read(uint fd, char* buf, size_t count)</code></li>
+<li>1: <code>write(uint fd, char* buf, size_t count)</code></li>
+<li>2: <code>open(const char* filename, int flags, int mode)</code></li>
+<li>59: <code>0x3b) `execve(const char* filename, const char *const argv, const char *const envp[])</code></li>
+</ul>
+
+<h4>ASLR randomizes</h4>
+
+<ul>
+	<li>Shared libraries (libc)</li>
+	<li>Heap</li>
+	<li>Stack</li>
+	<li>mmap</li>
+	<li>brk</li>
+	<li>virtual something</li>
+</ul>
+
+<p>Check if enabled with <code>/proc/sys/kernel/randomize_va_space</code> (it's usually on).</p>
+
+<p>PIE will additionally put the code in a random place? I think GDB turns all of these off and puts them at fixed offsets. <code>info proc mappings</code> is your friend and will tell you the base addresses where stuff were put. Once you've gotten an exploit working under GDB and identified a leak to the stack or <code>libc</code> or the one you want, do simple arithmetic translation to figure out the proper addresses.</p>
+
+<h3>Pwntools</h3>
+
+<pre>enhex, unhex
+concat, concat_all, findall
+group(n, seq, underfull_action=['ignore'|'drop'|'fill'])
+ordlist, unordlist
+
+p8, p16, p32, p64 (  pack: int → bytes)
+u8, u16, u32, u64 (unpack: bytes → int)
+
+    You can pass endian='little'|'big', sign=False|True
+
+more(text), yesno(text)</pre>
+
+<code>pwn checksec</code>
+<code>pwn hex</code>
+<code>pwn unhex</code>
+
+<h4>virtualbox shared folder because i have nowhere else to put this</h4>
+
+Path: path on the host / Name: somename
+<pre>sudo mount -t vboxsf -o uid=$UID,gid=$(id -g) somename ~/portal</pre>
+Fish:
+<pre>sudo mount -t vboxsf -o uid=(id -u),gid=(id -g) somename ~/portal</pre>
+
+<h3>radare2</h3>
+
+<h4>Preliminaries</h4>
+<p>Install radare2, it’ll be available as <code>r2</code>. Load an executable <code>prog</code> like <code>r2 prog</code>. radare2 will print a random funny message on startup, sometimes it’s confusing if you’re not used to it.</p>
+<h4>Startup Commands</h4>
+<p>radare2 commands are weird strings of single letters. Start by issuing <code>aaa</code> or <code>aaaa</code> to analyze the file. More <code>a</code>’s is more analysis but four <code>a</code>’s is experimental.</p>
+<p>Run <code>afl</code> to list all the functions in the program.</p>
+<h4>Disassembling and Reading Disassembly</h4>
+<p>To disassemble a function <code>main</code>, run <code>pdf@main</code>. To get the output in a pager so you can scroll with the keyboard, append <code>~..</code>; here you’d run <code>pdf@main~..</code>.</p>
+<p>Note: If there’s a period after the bytes corresponding to an instruction, then radare2 isn’t showing you all the bytes corresponding to that instruction because, I’m not sure, it doesn’t fit in the horizontal space?</p>
+<p>In general <code>pd</code> disassembles stuff, <code>pd3@5.</code> idk? <code>pdf</code> disassembles the function.</p>
+<ul>
+	<li>Call graph: <code>VV @ main</code></li>
+	<li>Print Memory: <code>px</code></li>
+</ul>
+
+<h4>Patching</h4>
+<p>Might need to make the executable writable and open with <code>r2 -w</code>.</p>
+<ul>
+	<li>Seek to a position: <code>s 0x12345678</code></li>
+	<li>Write bytes: <code>wx ffffffff @+2</code>. <code>@</code> is your current location. <code>90 = NOP</code> is your friend of course.</li>
+</ul>
+<p><code>https://github.com/radare/radare2/blob/master/doc/intro.md</code></p>
+<h4>Debugging/Running</h4>
+<p><code>r2 -d foo</code></p>
+<ul>
+	<li><code>dc</code>: continue</li>
+	<li><code>dcs</code>: continue to syscall</li>
+	<li><code>dcf</code>: continue to fork</li>
+	<li><code>db</code>: break</li>
+	<li><code>..</code></li>
+	<li><code>eip</code> is the current position.</li>
+	<li><code>dm</code> memory maps, which you can use to find functions exported by libraries for ropping?</li>
+</ul>
+
+<h3>magic</h3>
+<pre>00 00 01 00 - ICO
+1F 9D - LZW zip
+1F A0 - LZH zip
+42 5A 68 "BZh" - Bzip2
+"GIF87a", "GIF89a" - GIF
+49 49 2A 00 - TIFF, little endian
+4D 4D 00 2A - TIFF, big endian
+FF D8 FF DB "ÿØÿÛ" - JPEG
+FF D8 - other JPEG formats
+50 4B [03 04] "PK.." - zip and family (jar, docx...)
+52 61 72 21 "Rar!" - RAR
+7F 45 4C 46 - .ELF</pre>
