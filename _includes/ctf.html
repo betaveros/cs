@@ -61,6 +61,8 @@ pop ebp</pre></li>
 <ul>
 <li><code>call callee</code> ≈ <code>push eip+4; mov eip, callee</code></li>
 <li><code>ret</code> ≈ <code>pop eip</code></li>
+<li><code>enter</code> ≈ <code>push ebp; mov ebp, esp</code></li>
+<li><code>leave</code> ≈ <code>mov esp, ebp; pop ebp</code></li>
 </ul>
 
 <h4 id="reference-dive">reference dive</h4>
