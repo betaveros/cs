@@ -167,43 +167,36 @@ run</pre>
 
 <h4>Examining</h4>
 
-<pre>
-print expr
-
-	Keeps history in magic variables $1, $2, etc. or in reverse order, $, $$, $$2, $$3, etc.
-
-	expr can be/have an assignment expression or a function call or whatever
-
-x/[number][format][unit]
-   number: 10 (bytes, say)
-           format: e.g. x for hex
-                   unit: b = byte, w = word
-
-	Keeps historical address in $_, value in $__
-
-x/s: string
-
-display/10i $eip
-set disassembly-flavor intel
-disasssemble main (disas main)
-
-find start_addr, +len, val
-find start_addr, end_addr, val
-
-	strings will include trailing \0, get around by casting {char[5]}"hello"
-
-</pre>
-
 <ul>
-	<li>
-
-<pre>info registers
-i r # inspect registers
-
-info functions
-
-info proc mappings # has heap ptr etc
-vmmap</pre>
+	<li><code>print expr</code>:
+		<ul>
+			<li>Keeps history in magic variables <code>$1</code>, <code>$2</code>, etc. or in reverse order, <code>$</code>, <code>$$</code>, <code>$$2</code>, <code>$$3</code>, etc.</li>
+			<li>expr can be/have an assignment expression or a function call or whatever.</li>
+		</ul>
+	</li>
+	<li><code>x/[number][format][unit]</code>
+		<ul>
+			<li><code>number</code>: 10 (bytes, say)</li>
+			<li><code>format</code>: e.g. x for hex</li>
+			<li><code>unit</code>: b = byte, w = word</li>
+			<li>Keeps historical address in <code>$_</code>, value in <code>$__</code></li>
+		</ul>
+	</li>
+	<li><code>x/s</code>: string</li>
+	<li><code>display/10i $eip</code></li>
+	<li><code>set disassembly-flavor intel</code>; <code>disasssemble main</code>/<code>disas main</code></li>
+	<li><code>find</code>:
+		<ul>
+			<li><code>find start_addr, +len, val</code></li>
+			<li><code>find start_addr, end_addr, val</code></li>
+			<li>strings will include trailing \0, get around by casting <code>{char[5]}"hello"</code></li>
+		</ul>
+	</li>
+	<li><code>i r</code>/<code>info registers</code> (inspect registers; or try <code>voltron view registers</code> from another window)</li>
+	<li><code>info functions</code></li>
+	<li><code>info proc mappings</code> (has heap ptr etc)</li>
+	<li><code>vmmap</code> (has heap ptr etc)</li>
+</ul>
 
 <h4>Writing</h4>
 
@@ -230,9 +223,9 @@ vmmap</pre>
 	<li><code>watch expr</code> (break when expr is written)
 	<li><code>rwatch expr</code> (break when expr is read)
 	<li><code>awatch expr</code> (break when expr is read or written)
-	<li><code>clear [location]</code> (delete breakpoint)
-	<li><code>clear</code> (delete current breakpoint)
 </ul>
+
+<p>Use the same commands as breakpoints to query/delete/disable/enable: <code>i b</code>/<code>info breakpoints</code>, <code>d</code>/<code>delete <em>[num]</em></code>, <code>dis</code>/<code>disable <em>[num]</em></code>, <code>enable <em>[num]</em></code>.</p>
 
 <p>There's a hardware limit on how many hardware watchpoints you can set. You can make GDB use software watchpoints with <code>set can-use-hw-watchpoints 0</code> but it is very slow.</p>
 
@@ -241,8 +234,6 @@ vmmap</pre>
 	<li><code>config</code> (pwndbg tells you what you can config)</li>
 	<li><code>set context-sections 'disasm'</code> (if you're using <code>voltron</code> for other sections)
 	<li><code>set $base = 0x555555554000</code></li>
-	<li><code>clear [location]</code> (delete breakpoint)
-	<li><code>clear</code> (delete current breakpoint)
 </ul>
 
 <h3>Shellcode</h3>
