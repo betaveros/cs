@@ -1,0 +1,51 @@
+<h3>Types</h3>
+<pre>bool // true, false
+uint8 uint16 uint32 uint64 uint (32 or 64)
+int8 int16 int32 int64 int (32 or 64)
+float32 float64
+uintptr
+byte = uint8
+rune = int32
+string</pre>
+
+<pre>[10]int
+[]byte
+map[int]string // map from int to string</pre>
+
+<p>(channels)</p>
+
+<pre>type A = string // alias; they're exactly the same type
+type B string   // type definition (newtype): distinct from string, but convertable
+type Point struct { x, y float64 }</pre>
+
+<pre>i := x.(int)     // type assertion (panic if fail; i is now of type int)
+i, ok := x.(int) // safe type assertion (ok is false if fail)</pre>
+
+<pre>switch i := x.(type) {
+case int:
+	// i is an int
+case bool, string:
+	// i is a bool or string
+default:
+	// idk
+}
+
+</pre>
+
+<h3>Literals</h3>
+<pre>&amp;Point{1, 2} is valid but e.g. &amp;1 is not
+[]T{x1, x2, ..., xn}
+
+a := make([]T, 10) // slice of length 10
+m := make(map[T]U) // empty map
+append(a, t1, t2, t3) append(a, a...)
+
+value := m[key]
+value, exists := m[key]
+delete(m, key)</pre>
+
+<h3>Varargs</h3>
+
+<pre>func F(stuff ...string)
+stuff := []string{"a", "b"}
+F(stuff...)</pre>

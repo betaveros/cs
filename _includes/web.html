@@ -323,3 +323,10 @@ Type guard:
 <pre>if (typeof foo === "number") { ... }
 class Thing { ... }
 if (thing instanceof Thing) { ... }</pre>
+<h3>Flow</h3>
+<ul>
+	<li>The type of undefined is <code>void</code>, not <code>undefined</code></li>
+	<li>The uninhabitable type is <code>empty</code>, not <code>never</code></li>
+	<li>(1 + 1 : number) is a type assertion. It fails to typecheck if the type is wrong. To cast, type-assert through <code>any</code>.</li>
+	<li>{| foo: bar |} is an "exact object type" that cannot have additional properties.</li>
+</ul>
