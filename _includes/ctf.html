@@ -10,9 +10,18 @@ strings</pre>
 from pwn import *
 import re, sys
 
+# context.arch = "amd64"
+# context.terminal = ['tmux', 'splitw', '-h']
 # sys.setrecursionlimit(8000)
-conn = remote('1.2.3.4', 31337)
-# conn = process('rop')
+
+if args['REMOTE']:
+    conn = remote('1.2.3.4', 1337)
+else:
+    conn = process('executable')
+    if args['GDB']:
+        gdb.attach(conn, """set disassembly-flavor intel
+        b __libc_start_main
+        """)
 
 maze_text = conn.recvuntil('(the lower left cell is 0,0)')
 
@@ -129,16 +138,31 @@ run</pre>
 	<li><code>si</code>/<code>stepi</code> (until different instruction)</li>
 	<li><code>ni</code>/<code>nexti</code> (until next instruction; don't enter calls)</li>
 	<li><code>finish</code> (finish this call)</li>
+	<li><code>u</code>/<code>until <em>location</em></code></li>
 	<li><code>nextcall</code> (pwndbg)</li>
 </ul>
 
 <h4>Source lines (rare)</h4>
 
 <ul>
-	<li><code>c</code>/<code>continue</code> (until next breakpoint)
-	<li><code>s</code>/<code>step</code> (until different line)
-	<li><code>n</code>/<code>next</code> (until next line; don't enter calls)
-	<li><code>u</code>/<code>until</code> (until numerically next line, so if you're at the end of a loop, runs until after it)
+	<li><code>c</code>/<code>continue</code> (until next breakpoint)</li>
+	<li><code>s</code>/<code>step</code> (until different line)</li>
+	<li><code>n</code>/<code>next</code> (until next line; don't enter calls)</li>
+	<li><code>u</code>/<code>until</code> (until numerically next line, so if you're at the end of a loop, runs until after it)</li>
+</ul>
+
+<h4>Breaking</h4>
+
+<ul>
+	<li><code>break label</code> / <code>break *0x12345678</code></li>
+	<li><code>break label if <em>comdition</em></code></li>
+	<li><code>tbreak</code>: as above but delete the breakpoint after broken at</li>
+	<li><code>clear label</code> / <code>clear *0x12345789</code></li>
+	<li><code>clear</code> (clear breakpoint at current location)</li>
+	<li><code>i b</code>/<code>info break</code> (list breakpoints)</li>
+	<li><code>d</code>/<code>delete <em>[num]</em></code> (delete nth breakpoint from <code>i b</code> or ALL breakpoints)</li>
+	<li><code>dis</code>/<code>disable <em>[num]</em></code> (disable nth breakpoint or all)</li>
+	<li><code>enable <em>[num]</em></code> (enable nth breakpoint or all)</li>
 </ul>
 
 <h4>Examining</h4>
@@ -170,12 +194,16 @@ find start_addr, end_addr, val
 
 </pre>
 
+<ul>
+	<li>
+
 <pre>info registers
 i r # inspect registers
 
 info functions
 
-info proc mappings # has heap ptr etc</pre>
+info proc mappings # has heap ptr etc
+vmmap</pre>
 
 <h4>Writing</h4>
 
@@ -197,6 +225,7 @@ info proc mappings # has heap ptr etc</pre>
 </ul>
 
 <h4>Watchpoint</h4>
+
 <ul>
 	<li><code>watch expr</code> (break when expr is written)
 	<li><code>rwatch expr</code> (break when expr is read)
@@ -204,6 +233,45 @@ info proc mappings # has heap ptr etc</pre>
 	<li><code>clear [location]</code> (delete breakpoint)
 	<li><code>clear</code> (delete current breakpoint)
 </ul>
+
+<p>There's a hardware limit on how many hardware watchpoints you can set. You can make GDB use software watchpoints with <code>set can-use-hw-watchpoints 0</code> but it is very slow.</p>
+
+<h4>Config</h4>
+<ul>
+	<li><code>config</code> (pwndbg tells you what you can config)</li>
+	<li><code>set context-sections 'disasm'</code> (if you're using <code>voltron</code> for other sections)
+	<li><code>set $base = 0x555555554000</code></li>
+	<li><code>clear [location]</code> (delete breakpoint)
+	<li><code>clear</code> (delete current breakpoint)
+</ul>
+
+<h3>Shellcode</h3>
+
+<p><a href="http://shell-storm.org/shellcode/">shell-storm.org/shellcode</a>: Most likely you want <a href="http://shell-storm.org/shellcode/files/shellcode-806.php">Dad`'s 27-byte shellcode</a> which is <code>"\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05"</code>.</p>
+
+<pre>
+from pwn import *
+context.arch = "amd64"
+
+shellcode = asm("""
+    mov eax, 0x3b
+    mov rdi, 0x1234567890ab ; ptr to "/bin/sh\0"
+    xor rsi, rsi
+    xor rdx, rdx
+    syscall
+""")
+</pre>
+
+Use shellcraft if you don't want to write your own assembly. Concatenate this with the other assembly and pass into <code>asm</code>:
+
+<pre>
+shellcraft.amd64.mov('rax', 0x12345678)
+shellcraft.amd64.pushstr('foobar', append_null=False)
+
+fd = 4; length = 128
+shellcraft.amd64.linux.syscall('SYS_write', fd, 'rsp', length)
+shellcraft.amd64.linux.syscall('SYS_read',  fd, 'rsp', length)
+</pre>
 
 <h3>ROP</h3>
 
@@ -252,6 +320,12 @@ code += p32(0xb)        # (gets popped into eax)
 
 0x080bc6a5 : "/bin/sh"</pre>
 
+<code>fit</code> is probably better:
+
+<pre>
+code = fit({36: p32(0x080b9236) + p32(0xb)}, filler='A')
+</pre>
+
 <h4>Dynamic</h4>
 
 To ROP on your own machine:
@@ -297,7 +371,9 @@ opcode is <code>%rax</code>; args are <code>%rdi</code>, <code>%rsi</code>, <cod
 <li>59 (0x3b): <code>execve(const char* filename, const char *const argv, const char *const envp[])</code></li>
 </ul>
 
-<h4>ASLR randomizes</h4>
+<h4>ASLR</h4>
+
+<p>Randomizes:</p>
 
 <ul>
 	<li>Shared libraries (libc)</li>
@@ -400,3 +476,23 @@ FF D8 - other JPEG formats
 50 4B [03 04] "PK.." - zip and family (jar, docx...)
 52 61 72 21 "Rar!" - RAR
 7F 45 4C 46 - .ELF</pre>
+
+<h3>environment setup</h3>
+
+<pre>
+function ptrace_scope_off
+	echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+end
+function ptrace_scope_on
+	echo 1 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+end
+function aslr_off
+	echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
+end
+function aslr_on
+	echo 2 | sudo tee /proc/sys/kernel/randomize_va_space
+end
+function hexmath
+	math "obase=16;ibase=16;$argv"
+end
+</pre>
