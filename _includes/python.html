@@ -231,8 +231,14 @@ enrolled.values_list('user__last_name', 'user').distinct()</pre>
 <h3>Requests</h3>
 <pre>import requests
 r = requests.get('http://www.example.com/', params={'foo': 'bar'}) # values can also be lists
-r = requests.post('http://www.example.com/', data={'foo': 'bar'})
-r.status_code
+r = requests.post('http://www.example.com/', data={'foo': 'bar'})</pre>
+<p>Other parameters include:</p>
+<ul>
+	<li>cookies={'foo': 'bar'}</li>
+	<li>headers={'user-agent': 'my-app/0.0.1'}</li>
+</ul>
+<pre>r.status_code
+r.raise_for_status() # raise exception if 4xx or 5xx
 r.text # automagical unicode
 r.content # bytes</pre>
 <h3>Pwntools</h3>
