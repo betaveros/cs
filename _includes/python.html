@@ -124,6 +124,26 @@ codecs.decode(obj, encoding, errors)
 	<li><code>os.path.isfile("foo")</code> (exists and is file?)</li>
 	<li><code>os.path.isdir("foo")</code> (exists and is directory?)</li>
 </ul>
+<h3>subprocess</h3>
+<pre>proc = subprocess.Popen("cat", shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+(stdout_data, stderr_data) = proc.communicate(<em>[input=some_bytes]</em>)</pre>
+
+<p>One-shot, newer API:</p>
+
+<pre>result = subprocess.run("cat", <em>[input=some_bytes,]</em> stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+result.stdout # bytes or None
+result.stderr # bytes or None</pre>
+
+<p>The first argument in both is <code>args: str|List[str]</code>.</p>
+
+<ul>
+	<li>If str: either simply the program to be run (if <code>shell=False</code>) or the whole shell line to lex and expand.</li>
+	<li>If List[str]: a list with first element the program to be run and remaining the string arguments to pass to it.</li>
+</ul>
+
+<p>Add the <code>encoding='utf-8'</code> argument to Popen or run, and use unicode instead of bytes for both input and output.</p>
+
+<p>In 3.7+, on <code>run()</code> only, <code>capture_output=True</code> is short for <code>stdout=subprocess.PIPE, stderr=subprocess.PIPE</code></p>
 <h3>Itertools</h3>
 <table>
 	<tr><th>(python) <a href="http://docs.python.org/library/itertools.html">itertools</a>.</th><th>&darr;</th></tr>
