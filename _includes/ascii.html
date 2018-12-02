@@ -144,7 +144,7 @@
 	<tr><td>001 1111</td><td>037</td><td>31</td><td>1F </td><td>&#x241F; US</td><td class="cg">Unit Separator</td></tr>
 </table>
 <h3>ANSI Escape</h3>
-<p><code><em>&#x241B;[</em>0m</code>. &#x241B; = chr 27 </p>
+<p><code><em>&#x241B;[</em>0m</code>. &#x241B; = chr 27 = \x1b = \033</p>
 <p><code>0</code> can be replaced by a sequence of semicolon-separated numbers.</p>
 <table>
 	<tr><th>Number</th><th>Effect</th></tr>
@@ -154,8 +154,8 @@
 	<tr><td>5</td><td>Blink</td></tr>
 	<tr><td>7</td><td>Reverse video</td></tr>
 	<tr><td>8</td><td>Concealed</td></tr>
-	<tr><td>30~37</td><td>Foreground color</td></tr>
-	<tr><td>40~47</td><td>Background color</td></tr>
+	<tr><td>30~37 or 38;5;n</td><td>Foreground color</td></tr>
+	<tr><td>40~47 or 48;5;n</td><td>Background color</td></tr>
 </table>
 <table>
 	<tr><td>?0</td><td>Black</td></tr>
