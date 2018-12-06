@@ -241,6 +241,37 @@ r = requests.post('http://www.example.com/', data={'foo': 'bar'})</pre>
 r.raise_for_status() # raise exception if 4xx or 5xx
 r.text # automagical unicode
 r.content # bytes</pre>
+<h3>struct</h3>
+<pre>struct.pack(fmt, v1, v2, ...)
+struct.unpack(fmt, bytes) # always tuple, possibly length-1
+struct.calcsize(fmt) # number of bytes
+</pre>
+
+<p>First character of fmt optionally indicates endianness/size/alignment. You probably just want one of:</p>
+
+<pre>&lt; little-endian (x86)
+&gt; big-endian ("natural writing")</pre>
+
+<p>Remaining characters format things one at a time. Uppercase variants indicate the things in brackets, usually <code>unsigned</code>. <code>'&lt;I'</code> packs/unpacks 32-bit unsigned ints.</p>
+
+<table>
+	<tr><th>format</th><th>C type</th><th>Python type</th><th># bytes</th></tr>
+	<tr><td>x</td><td colspan="3" class="empty"></td></tr>
+	<tr><td>c</td><td>char</td><td>bytes (len = 1)</td><td>1</td></tr>
+	<tr><td>b/B</td><td>[unsigned] char</td><td>int</td><td>1</td></tr>
+	<tr><td>?</td><td>_Bool</td><td>bool</td><td>1</td></tr>
+	<tr><td>h/H</td><td>[unsigned] short</td><td>int</td><td>2</td></tr>
+	<tr><td>i/I</td><td>[unsigned] int</td><td>int</td><td>4</td></tr>
+	<tr><td>l/L</td><td>[unsigned] long</td><td>int</td><td>4</td></tr>
+	<tr><td>q/Q</td><td>[unsigned] long long</td><td>int</td><td>8</td></tr>
+	<tr><td>n/N</td><td>[s]size_t</td><td>int</td><td class="empty"></td></tr>
+	<tr><td>e</td><td class="empty"></td><td>float</td><td>2</td></tr>
+	<tr><td>f</td><td>float</td><td>float</td><td>4</td></tr>
+	<tr><td>d</td><td>double</td><td>float</td><td>8</td></tr>
+	<tr><td>s/p</td><td>char[]</td><td>bytes</td><td class="empty"></td></tr>
+	<tr><td>P</td><td>void *</td><td>int</td><td class="empty"></td></tr>
+</table>
+
 <h3>Pwntools</h3>
 <pre>from pwn import *
 
