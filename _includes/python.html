@@ -281,6 +281,8 @@ struct.calcsize(fmt) # number of bytes
 
 <p>Remaining characters format things one at a time. Uppercase variants indicate the things in brackets, usually <code>unsigned</code>. <code>'&lt;I'</code> packs/unpacks 32-bit unsigned ints.</p>
 
+<p>Precede with a count a la <code>vi</code> to repeat: <code>'4h'</code> means <code>'hhhh'</code>. Exception: for <code>'s'</code> the count means the length of the string. (Pascal-style strings are packed with the first byte indicating the length of the string.)</p>
+
 <table>
 	<tr><th>format</th><th>C type</th><th>Python type</th><th># bytes</th></tr>
 	<tr><td>x</td><td colspan="3" class="empty"></td></tr>
@@ -295,7 +297,7 @@ struct.calcsize(fmt) # number of bytes
 	<tr><td>e</td><td class="empty"></td><td>float</td><td>2</td></tr>
 	<tr><td>f</td><td>float</td><td>float</td><td>4</td></tr>
 	<tr><td>d</td><td>double</td><td>float</td><td>8</td></tr>
-	<tr><td>s/p</td><td>char[]</td><td>bytes</td><td class="empty"></td></tr>
+	<tr><td>s/p</td><td>char[] [Pascal style]</td><td>bytes</td><td class="empty"></td></tr>
 	<tr><td>P</td><td>void *</td><td>int</td><td class="empty"></td></tr>
 </table>
 
