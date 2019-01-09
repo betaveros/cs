@@ -38,7 +38,20 @@
 				<li>repeat-x, repeat-y, repeat, no-repeat, space, round (last two are obscure)</li>
 			</ul>
 	</td></tr>
-	<tr><td rowspan="2">overflow:</td><td>linear-gradient(<em>to right</em>, black, white);
+	<tr><td rowspan="2">overflow:</td><td>
+			white-space: normal;
+			white-space: nowrap; /* normal, but don't wrap lines */
+			white-space: pre;
+			white-space: pre-wrap; /* pre, but wrap lines */
+			white-space: pre-line; /* normal but linebreaks break lines */
+			word-break: normal;
+			word-break: normal;
+			word-break: break-all; /* break anywhere, not CJK text */
+			word-break: keep-all; /* do not break CJK text */
+			word-break: break-word; /* first break between words, then anywhere */ /* not standardized */
+			overflow-wrap: normal;
+			overflow-wrap: break-word;
+		</td></tr>
 </table>
 <p>Block formatting contexts (BFCs) are introduced by:</p>
 <ul>
