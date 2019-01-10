@@ -225,6 +225,119 @@ time.sleep(0.5) # 0.5 seconds</pre>
 	<li><code>np.stack([arr1, arr2, ...], axis=0)</code> (requires arrays have the exact same shape, returns an array with an additional axis specified by the parameter)</li>
 	<li><code>arr.reshape(shape)</code> e.g. <code>arr.reshape((-1, 1))</code> converts to a column vector; <code>-1</code> is the unknown dimension you can specify once</li>
 </ul>
+<h3>pandas</h3>
+<pre>import pandas as pd</pre>
+<pre>pd.read_csv(magic)
+pd.read_table(magic) # tsv by default</pre>
+
+<p>1-D data is Series. 2-D data is DataFrame (<code>df</code> below).</p>
+
+<h4>Basic Info</h4>
+
+<pre>df.info() # sizes etc
+df.describe() # descriptive statistics: count, mean etc.
+df['colname'].dtype # data type
+s.values, df.values # ndarray
+s.shape, df.shape # consistent with ndarray
+series.index; df.index, df.columns</pre>
+
+<h4>Slicing</h4>
+
+<pre>df.loc['foo'] # index by label only
+df.iloc[3] # index by numeric position only, 0-indexed
+
+df.head(10)
+df.tail(10)
+
+series.reindex(list_of_indices)</pre>
+
+<h4>Working with Conditions</h4>
+
+<pre>df1 == df2, df1 &lt; df2 # etc. broadcast fine
+(df + df).equals(df * 2) # ==, except NaN equals NaN
+(df['colname'] &lt; 10).count()
+df[df['colname'] &lt; 10]
+df[df['colname'].isin([1, 3, 5, 7, 9])]</pre>
+
+<h4>NaN</h4>
+
+<pre>np.nan
+df.dropna(how='any')
+df.fillna(value=5)
+df.isna(), df.notna() # because nan != nan</pre>
+
+<h4>Reductions</h4>
+
+<pre>series.empty, df.empty
+
+series.mean(), series.sum(), series.std(), ...
+series.nunique() # number of distinct values
+series.value_counts() # value &rarr; frequency of value
+pd.cut(series, num_bins), pd.qcut(series)
+series.idxmin(), series.idxmax() # index of min and max; like argmax, the name numpy uses
+series.agg(np.sum)
+(series &gt; 0).all(), .any(), .bool()
+# above can also be done to DataFrames
+# gives results are per column, for columns that make sense</pre>
+
+<h4>Maps/Lifting</h4>
+
+<pre>df.pipe(f) # f(df), but may be more readable/chainable style</pre>
+
+lift (ndarray &rarr; ndarray) to (DataFrame &rarr; DataFrame)
+<pre>df.transform(np.abs) # map on underlying ndarray
+df.transform([np.abs, lambda x: x + 1])</pre>
+
+lift (Series &rarr; Series) to (DataFrame &rarr; DataFrame)
+<pre>df.apply(lambda x: x.max() - x.min(0)) # map columns</pre>
+
+lift (ndarray &rarr; ndarray) to (Series &rarr; Series)
+(also works to lift element &rarr; element?)
+<pre>series.apply(some_function)
+df['colname'].apply(some_function) # map each element of column
+df['colname'] = df['colname'].apply(some_function)</pre>
+
+lift (element &rarr; element) to (Series &rarr; Series)
+<pre>series.map(lambda x: len(str(x))) # elementwise map</pre>
+
+lift (element &rarr; element) to (DataFrame &rarr; DataFrame)
+<pre>df.applymap(lambda x: len(str(x))) # elementwise map</pre>
+
+cast
+<pre>df.astype('float32')</pre>
+
+proxy-ish map <a href="http://pandas.pydata.org/pandas-docs/stable/text.html">string operations</a></pre>
+<pre>series.str.lower()</pre>
+
+<h4>Sort</h4>
+
+<pre>df.sort_values(by='colname')
+df.sort_values(by='colname', ascending=False)
+df['colname'].sort_values()</pre>
+
+<h4>More Stats</h4>
+<pre>df.cov()
+series1.corr(series2, <em>[method='pearson'|'kendall'|'spearman']</em>)
+series.rank() # minimum is 1, maximum is n; ties become average of tied ranks by default
+</pre>
+
+<h4>Group (split &rarr; apply &rarr; combine)</h4>
+
+Aggregation: Lifts Group[S] &rarr; T reducer. New DataFrame, indexed by value in grouped-by column; value is result
+
+<pre>df.groupby('colname').mean() # mean per group
+etc: .size() .sum() .std()
+df.groupby('colname').describe()
+df.groupby('colname').colname2.agg(['mean', 'min', 'max'])
+df.groupby('colname').get_group('colvalue')
+df.groupby(('colname1', 'colname2'))</pre>
+
+Transformation: Lifts Group[S] &rarr; Group[T] mapper. New DataFrame, same index, each group's values mapped separately
+<pre>df.groupby('colname').transform(lambda x: x - x.mean())</pre>
+
+Filtration: Keep only items in groups satisfying the condition.
+<pre>df.filter(lambda group: group['colname'].sum() &gt; 300)</pre>
+
 <h3>Django</h3>
 <pre>Program.objects.get(name='Splash 2016')</pre>
 <h4>Models (<a href="https://docs.djangoproject.com/en/1.10/topics/db/models/">1.10 docs</a>)</h4>
