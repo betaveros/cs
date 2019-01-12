@@ -186,6 +186,8 @@ time.sleep(0.5) # 0.5 seconds</pre>
 	<li><code>array([[1, 2, 3], [4, 5, 6]])</code></li>
 	<li><code>eye(n)</code>, <code>identity(n)</code></li>
 	<li><code>ones(shape)</code>, <code>zeros(shape)</code>, <code>full(shape, fill_values)</code></li>
+	<li><code>arange([start,] stop, [step])</code> (basically just python range, except returns ndarray)</li>
+	<li><code>linspace(start, stop, num=50, endpoint=True)</code> (50 evenly spaced samples in inclusive interval [start, stop], or half-open [start, stop) if endpoint is False)</li>
 	<li>The above can receive a <code>dtype</code> argument which is like <code>numpy.int64</code>, <code>numpy.float_</code>, or <code>numpy.bool_</code>. If you just use Python's <code>int</code>, <code>float</code>, or <code>bool</code>, it will Just Work. You can also make your own by writing something in a string somehow.</li>
 	<li><code>fromfunction(fn, shape)</code></li>
 </ul>
@@ -194,10 +196,12 @@ time.sleep(0.5) # 0.5 seconds</pre>
 	<li><code>arr.shape</code> is a tuple of the dimensions</li>
 	<li><code>arr.ndim</code> is the number of dimensions (so, the length of arr.shape)</li>
 	<li><code>arr.size</code> is a single number, the number of elements (so, the product of arr.shape)</li>
+	<li><code>arr.dtype</code> is the type of the array's elements</li>
 </ul>
 <h4>Matrix operations</h4>
 <p>Note that <code>*</code> (along with most other operations) acts element-wise!</p>
 <ul>
+	<li><code>_.astype('float32')</code></li>
 	<li><code>np.transpose(_)</code> or <code>_.T</code> (<em>identity on 1D arrays!</em> may need to reshape)</li>
 	<li><code>np.linalg.det(_)</code></li>
 	<li><code>np.dot(_, _)</code>, or <code>_ @ _</code> (<em>Python 3 only</em>: <code>__matmul__</code> operator)</li>
@@ -230,7 +234,7 @@ time.sleep(0.5) # 0.5 seconds</pre>
 <pre>pd.read_csv(magic)
 pd.read_table(magic) # tsv by default</pre>
 
-<p>1-D data is Series. 2-D data is DataFrame (<code>df</code> below).</p>
+<p>1-D data is Series. 2-D data is DataFrame (<code>df</code> below). They are quite similar to ndarray. The most important philosophical difference is that the data in Series and DataFrame are tightly associated with their labels or indices, and operations generally preserve and operate between corresponding labels and indices (for example, slicing [1:4] will give a result that still has indices 1, 2, 3) (whereas in ndarrays, operations operate between corresponding fickle positions.)</p>
 
 <h4>Basic Info</h4>
 
@@ -249,7 +253,35 @@ df.iloc[3] # index by numeric position only, 0-indexed
 df.head(10)
 df.tail(10)
 
-series.reindex(list_of_indices)</pre>
+df.drop([1, 2, 3])
+df.drop(['colname'], axis=1)</pre>
+
+<h4>New Columns</h4>
+
+<pre>df['newcolname'] = df['colname'] + 1
+# nondestructive:
+df.assign({'newcolname': df['colname'] + 1})
+df.assign(newcolname = df['colname'] + 1)</pre>
+
+<h4>Index Manipulation</h4>
+
+<pre>series.reindex(list_of_indices)
+# always keeps association between each index and its data
+# drops missing indexes; fills new indexes with NaN
+
+series.sort_index()
+
+series/df.rename(index: dict|(OldIndex &rarr; NewIndex)) # changes indexes
+df.rename(columns: dict|(OldIndex &rarr; NewIndex)) # changes column labels
+# or, where mapper : dict | (OldIndex &rarr; NewIndex)
+df.rename(mapper, axis='index')
+df.rename(mapper, axis='columns')
+
+df.set_index('colname') # makes the data indexed by existing column 'colname'
+df.set_index(['colname', 'colname2']) # ditto, but MultiIndex
+df.reset_index() # demotes index to a normal column, index by 0, 1, etc.</pre>
+
+<p>If you just want to blow away the index-value association, I think <code>df.values</code> is the best way.</p>
 
 <h4>Working with Conditions</h4>
 
