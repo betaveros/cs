@@ -316,30 +316,34 @@ series.agg(np.sum)
 
 <pre>df.pipe(f) # f(df), but may be more readable/chainable style</pre>
 
-lift (ndarray &rarr; ndarray) to (DataFrame &rarr; DataFrame)
-<pre>df.transform(np.abs) # map on underlying ndarray
+<ul>
+	<li>
+		lift (ndarray &rarr; ndarray) to (DataFrame &rarr; DataFrame)
+		<pre>df.transform(np.abs) # map on underlying ndarray
 df.transform([np.abs, lambda x: x + 1])</pre>
-
-lift (Series &rarr; Series) to (DataFrame &rarr; DataFrame)
-<pre>df.apply(lambda x: x.max() - x.min(0)) # map columns</pre>
-
-lift (ndarray &rarr; ndarray) to (Series &rarr; Series)
-(also works to lift element &rarr; element?)
-<pre>series.apply(some_function)
+	</li><li>
+		lift (Series &rarr; Series) to (DataFrame &rarr; DataFrame)
+		<pre>df.apply(lambda x: x.max() - x.min(0)) # map columns</pre>
+	</li><li>
+		lift (ndarray &rarr; ndarray) to (Series &rarr; Series)
+		(also works to lift element &rarr; element?)
+		<pre>series.apply(some_function)
 df['colname'].apply(some_function) # map each element of column
 df['colname'] = df['colname'].apply(some_function)</pre>
-
-lift (element &rarr; element) to (Series &rarr; Series)
-<pre>series.map(lambda x: len(str(x))) # elementwise map</pre>
-
-lift (element &rarr; element) to (DataFrame &rarr; DataFrame)
-<pre>df.applymap(lambda x: len(str(x))) # elementwise map</pre>
-
-cast
-<pre>df.astype('float32')</pre>
-
-proxy-ish map <a href="http://pandas.pydata.org/pandas-docs/stable/text.html">string operations</a></pre>
-<pre>series.str.lower()</pre>
+	</li><li>
+		lift (element &rarr; element) to (Series &rarr; Series)
+		<pre>series.map(lambda x: len(str(x))) # elementwise map</pre>
+	</li><li>
+		lift (element &rarr; element) to (DataFrame &rarr; DataFrame)
+		<pre>df.applymap(lambda x: len(str(x))) # elementwise map</pre>
+	</li><li>
+		cast
+		<pre>df.astype('float32')</pre>
+	</li><li>
+		proxy-ish map <a href="http://pandas.pydata.org/pandas-docs/stable/text.html">string operations</a></pre>
+		<pre>series.str.lower()</pre>
+	</li>
+</ul>
 
 <h4>Sort</h4>
 
