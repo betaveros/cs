@@ -238,6 +238,7 @@ Functions already listed in family table or as unsafe interface functions above 
 </ul>
 <h4>Data.List and Friends</h4>
 <p><code>C a</code> generically denotes a container containing objects of type <code>a</code>.</p>
+<div class="general">
 <table class="padded">
 	<tr><th>Prelude<br/>Data.List<br/>[a]</th><th>Data.Sequence<br/>Seq a</th><th>Data.Vector<br/>Vector a</th><th>Data.ByteString[.Char8]<br/>ByteString<br/>(a = Word8 | Char)</th><th>Data.Text, Data.Text.IO, Data.Text.Read<br/>Text<br/>a = Char</th></tr>
 	<tr><td colspan="3"><em>Functor</em> fmap <em>&equiv;</em> (&lt;$&gt;)</td><td class="empty" colspan="2"></td></tr>
@@ -294,6 +295,7 @@ Functions already listed in family table or as unsafe interface functions above 
 	<tr><td>zip<em>{..7}</em></td><td>zip<em>{..4}</em></td><td>zip<em>{..6}</em></td><td colspan="2">zip :: (BS|T) &rarr; (BS|T) &rarr; [(a,a)]</td></tr>
 	<tr><td>zipWith<em>{..7}</em></td><td>zipWith<em>{..4}</em></td><td>zipWith<em>{..6}</em></td><td colspan="2">zipWith :: (a &rarr; a &rarr; b) &rarr; (BS|T) &rarr; (BS|T) &rarr; [b]</td></tr>
 </table>
+</div>
 <h4>Data.List (not mentioned above)</h4>
 <p><em>Note:</em> Nearly every function on Foldables, defined in Data.Foldable, has a list-specific version in Data.List; see above. These are not listed although they're technically not the same functions.</p>
 <ul>
