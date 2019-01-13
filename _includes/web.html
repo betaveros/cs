@@ -39,18 +39,31 @@
 			</ul>
 	</td></tr>
 	<tr><td rowspan="2">overflow:</td><td>
-			white-space: normal;
-			white-space: nowrap; /* normal, but don't wrap lines */
-			white-space: pre;
-			white-space: pre-wrap; /* pre, but wrap lines */
-			white-space: pre-line; /* normal but linebreaks break lines */
-			word-break: normal;
-			word-break: normal;
-			word-break: break-all; /* break anywhere, not CJK text */
-			word-break: keep-all; /* do not break CJK text */
-			word-break: break-word; /* first break between words, then anywhere */ /* not standardized */
-			overflow-wrap: normal;
-			overflow-wrap: break-word;
+			<ul>
+				<li>white-space:
+					<ul>
+						<li>normal;</li>
+						<li>nowrap; /* normal, but don't wrap lines */</li>
+						<li>pre;</li>
+						<li><strong>pre-wrap; /* pre, but wrap lines */</strong></li>
+						<li>pre-line; /* normal but linebreaks break lines */</li>
+					</ul>
+				</li>
+				<li>word-break:
+					<ul>
+						<li>normal;</li>
+						<li>break-all; /* break anywhere, not CJK text */</li>
+						<li>keep-all; /* do not break CJK text */</li>
+						<li>break-word; /* first break between words, then anywhere */ /* not standardized */</li>
+					</ul>
+				</li>
+				<li>overflow-wrap:
+					<ul>
+						<li>normal;</li>
+						<li>break-word;</li>
+					</ul>
+				</li>
+			</ul>
 		</td></tr>
 </table>
 <p>Block formatting contexts (BFCs) are introduced by:</p>
