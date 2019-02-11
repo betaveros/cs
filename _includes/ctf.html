@@ -168,17 +168,18 @@ run</pre>
 <h4>Examining</h4>
 
 <ul>
-	<li><code>print expr</code>:
+	<li><code>p</code>/<code>print expr</code> (<a href="https://sourceware.org/gdb/current/onlinedocs/gdb/Data.html#Data">link</a>):
 		<ul>
 			<li>Keeps history in magic variables <code>$1</code>, <code>$2</code>, etc. or in reverse order, <code>$</code>, <code>$$</code>, <code>$$2</code>, <code>$$3</code>, etc.</li>
 			<li>expr can be/have an assignment expression or a function call or whatever.</li>
+			<li><code>print /<em>f</em> expr</code>: <em>f</em> = t(!), o, u/d, x/z for base 2, 8, 10 (unsigned/signed), 16 (direct/zero-padded); a for address, c for character, s for string, f for float</li>
 		</ul>
 	</li>
 	<li><code>x/[number][format][unit]</code>
 		<ul>
 			<li><code>number</code>: 10 (bytes, say)</li>
-			<li><code>format</code>: e.g. x for hex</li>
-			<li><code>unit</code>: b = byte, w = word</li>
+			<li><code>format</code>: like <code>print /f</code> e.g. x for hex</li>
+			<li><code>unit</code>: b = byte, h = halfword (two bytes), w = word, g = "giant word" (eiGht bytes)</li>
 			<li>Keeps historical address in <code>$_</code>, value in <code>$__</code></li>
 		</ul>
 	</li>
@@ -232,7 +233,7 @@ run</pre>
 <h4>Config</h4>
 <ul>
 	<li><code>config</code> (pwndbg tells you what you can config)</li>
-	<li><code>set context-sections 'disasm'</code> (if you're using <code>voltron</code> for other sections)
+	<li><code>set context-sections 'disasm'</code> (if you're using <code>voltron</code> for other sections; default is <code>'regs disasm code stack backtrace'</code>)
 	<li><code>set $base = 0x555555554000</code></li>
 </ul>
 
