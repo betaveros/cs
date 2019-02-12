@@ -424,7 +424,12 @@ struct.calcsize(fmt) # number of bytes
 <pre>&lt; little-endian (x86)
 &gt; big-endian ("natural writing")</pre>
 
-<p>Remaining characters format things one at a time. Uppercase variants indicate the things in brackets, usually <code>unsigned</code>. <code>'&lt;I'</code> packs/unpacks 32-bit unsigned ints.</p>
+<p>Remaining characters format things one at a time. Uppercase variants indicate the things in brackets, usually <code>unsigned</code>. Most useful:</p>
+
+<ul>
+	<li><code>'&lt;I'</code> packs/unpacks 32-bit unsigned ints. <code>struct.pack('&lt;I', num)</code></li>
+	<li><code>'&lt;Q'</code> packs/unpacks 64-bit unsigned ints. <code>struct.pack('&lt;Q', num)</code></li>
+</ul>
 
 <p>Precede with a count a la <code>vi</code> to repeat: <code>'4h'</code> means <code>'hhhh'</code>. Exception: for <code>'s'</code> the count means the length of the string. (Pascal-style strings are packed with the first byte indicating the length of the string.)</p>
 
