@@ -191,3 +191,11 @@ Snippet to get name, height, width in format of an HTML tag: <code>identify -for
 	</tr>
 	<tr><td>$((1 + 2)) # no need for $-prefixing var names</td><td>math -- 1 + 2 # thin wrapper for bc; use -- to avoid negative numbers becoming flags</td></tr>
 </table>
+
+<h3>path manipulation</h3>
+<pre>
+basename /path/to/foo &rarr; foo
+basename /path/to/foo.cpp .cpp &rarr; foo
+dirname /path/to/foo &rarr; /path/to
+dirname foo &rarr; .
+</pre>
