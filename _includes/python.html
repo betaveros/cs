@@ -474,3 +474,13 @@ u8, u16, u32, u64 (unpack: bytes &rarr; int)
     You can pass endian='little'|'big', sign=False|True
 
 more(text), yesno(text)</pre>
+
+<h3>getter/setter</h3>
+<pre>
+class Foo:
+    @property
+    def bar(self): return self._bar
+    @bar.setter
+    def bar(self, value): self._bar = value
+    @bar.deleter
+    def bar(self): del self._bar</pre>
