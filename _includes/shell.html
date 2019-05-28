@@ -2,6 +2,14 @@
 
 <p><code>tr 'a-z' 'n-za-m'</code>, or <code>tr -d ' '</code> to delete things.</p>
 
+<p><code>wget -r -np -k example.com</code>
+<ul>
+	<li>-r = --recursive: recursive retrieving, default depth of 5</li>
+	<li>-np = --no-parent: never ascend to parent directory, so that only files below in hierarchy will be downloaded</li>
+	<li>-k = --convert-links: rewrite links so pages are suitable for local viewing</li>
+</ul>
+</p>
+
 <p><code>sudo echo foo &gt; privileged_file</code> does not work, try <code>echo foo | sudo tee privileged_file</code>
 or <code>sudo sh -c 'echo foo &gt; privileged_file'</code>.
 related vim hack, if you accidentally opened a privileged file read-only and edited: <code>:w !sudo tee %</code></p>
