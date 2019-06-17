@@ -1,0 +1,35 @@
+<p>Written in a hurry for a certain Codeforces contest. There's more here than Scala because I learned Scala more slowly and systematically by actually writing a Scala project.</p>
+<h3>Variables and Types</h3>
+<p><code>val</code>, <code>var</code>, <code>fun</code>. Types are postfix with colon. <code>Unit</code> is void and can be omitted. You've seen this before in Scala except for <code>fun</code>.</p>
+<pre>fun sum(a: Int, b: Int): Int {
+	return a + b
+}</pre>
+<pre>fun sum(a: Int, b: Int): Int = a + b</pre>
+<p>You can call functions with named default arguments like <code>f(arg = param)</code>.</p>
+<p>Strings template with <code>$foo</code> like Perl or <code>${foo}</code> like JavaScript template literals.</p>
+<p>instanceof is <code>is</code>: <code>obj is String</code>. The inverse is <code>!is</code>. Casting is <code>as?</code>?</p>
+<h3>Expressions</h3>
+<code>if (c) a else b</code>
+<p>if (x in 1..5) { print(x) }. Inverse is <code>!in</code>. for (x in 1..5) { print(x) }, for (x in 9 downTo 9 step 3) { print(x) }. Ranges are inclusive as in Haskell.</p>
+<h3>Functions and Lambdas</h3>
+<p>Everything in braces: <code>{ arg1, arg2 -&gt; arg1 + arg2 }</code>. Fast single-argument anonymous functions use <code>it</code>: <code>ints.filter { it != 0 }</code>. More explicitly you can write <code>fun(arg: T): T { return arg }</code>.</p>
+<p>The type of a function is <code>(A1, A2) -> R</code>.</p>
+<p>Note that to use a function declared not-inline as <code>fun foo() { ... }</code> as a value, you write <code>::foo</code>.</p>
+<h3>Nullability</h3>
+<p>T? basically means nullable T. T looks like a subtype of T?, and control flow narrows the type</p>
+<p><code>a?.b</code> is null if a is null, a.b otherwise</p>
+<p><code>a ?: b</code> (the "Elvis operator") is b if a is null, a otherwise</p>
+<p><code>a!!</code> asserts that a is not null and gets it.</p>
+<p><code>a as? T</code> casts a to T, returning null if it fails.</p>
+<p>Unclear if this goes here, but <code>str.toIntOrNull()</code> is a null-safe version of <code>str.toInt()</code>.</p>
+<h3>Classes</h3>
+
+Similar to Scala again. Everything starts with a constructor signature and the class body is the constructor. You can have multiple constructors though, with <code>constructor</code>, but they must call the main constructor (possibly through other constructors). You can make the constructor arguments public properties with <code>val</code>/<code>var</code>.
+<pre>
+class Foo(bar: T, val baz: U) {
+}
+</pre>
+
+Kotlin's <code>data class</code>es are in the same vein as Scala's <code>case class</code>es, a difference being that you still need to explicitly write <code>val</code> on everything. The nice methods like <code>equals</code> get written for you.
+<h3>Stuff</h3>
+<p>ArrayList and stuff work. You can also use <code>[]</code> indexing.</p>
