@@ -52,7 +52,7 @@
 	<tr><td rowspan="4">checkout</td><td class="cg" colspan="3">master</td><td class="empty"></td></tr>
 	<tr><td>-b</td><td class="cg" colspan="2">branch</td><td>First make new branch</td></tr>
 	<tr><td class="cr" colspan="3">file</td><td>Reset local unstaged changes</td></tr>
-	<tr><td colspan="3">--ours / --theirs</td><td>One or the other version, during a merge</td></tr>
+	<tr><td colspan="3">--ours / --theirs</td><td>One or the other version, during a merge<br/>Note that you manage the canon in rebase: --ours is stem, --theirs is tip</td></tr>
 	<tr><td rowspan="3">reset</td><td class="cg">HEAD</td><td class="cr" colspan="2">files</td><td>Reset index = make changes unstaged</td></tr>
 	<tr><td>--soft</td><td class="cg" colspan="2">branch</td><td>Reset HEAD</td></tr>
 	<tr><td>--hard</td><td class="cg" colspan="2">HEAD</td><td>Reset index and workspace = destroy changes</td></tr>
@@ -60,7 +60,7 @@
 	<tr><td colspan="3">--cached / --staged</td><td>Staged vs last commit</td></tr>
 	<tr><td class="cg" colspan="3">HEAD</td><td>Working vs last commit</td></tr>
 	<tr><td class="cg">HEAD^</td><td class="cg" colspan="2">HEAD</td><td>Changes of last commit (easily generalized)</td></tr>
-	<tr><td rowspan="2">remote</td><td class="empty" colspan="3"></td><td>list remotes</td></tr>
+	<tr><td rowspan="2">remote</td><td colspan="3">[-v]</td><td>list remotes [with URLs]</td></tr>
 	<tr><td>add</td><td class="cb">upstream</td><td class="cb">git://foo</td><td class="empty"></td></tr>
 	<tr><td rowspan="4">push</td><td class="empty" colspan="4">&empty;</td></tr>
 	<tr><td class="cb" rowspan="3">upstream</td><td class="cg" rowspan="3">branch</td><td class="empty" colspan="4">&empty;</td></tr>
