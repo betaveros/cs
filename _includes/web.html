@@ -18,12 +18,13 @@
 				<li>relative (shifts it relative to static)</li>
 				<li>absolute (pulls it out of static flow; fixes it relative to &lt;html&gt; tag or <em>nearest positioned ancestor</em>)</li>
 				<li>fixed (pulls it out of static flow; fixes it relative to browser viewpoint)</li>
+				<li>sticky (static until exceeds some <code>top:</code>/<code>left:</code>/... offset from viewport of closer element with "scoll" via <code>overflow:</code>, then sticks)</li>
 			</ul></td></tr>
 			<tr><td>box-sizing</td><td><ul>
 						<li>content-box &rarr; (content = height, width) + padding + border + margin
 						<li>border-box &rarr; (content + padding + border = height, width) + margin</li>
 			</ul>
-			Note: <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Mastering_margin_collapsing">Margins collapse</a>
+			Note: <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Mastering_margin_collapsing">Margins collapse</a> between siblings, parent and first/last child, and two margins of empty block.
 				</td></tr>
 	<tr><td rowspan="2">background:</td><td>linear-gradient(<em>to right</em>, black, white);
 			<ul>
@@ -40,6 +41,15 @@
 	</td></tr>
 	<tr><td rowspan="2">overflow:</td><td>
 			<ul>
+				<li>overflow:
+					<ul>
+						<li>visible; (default)</li>
+						<li>hidden; /* can only cause scrolling programmatically */</li>
+						<li>clip; /* no scrolling ever */</li>
+						<li>scroll; /* scrollbars always */</li>
+						<li>auto; /* scrollbars when needed */</li>
+					</ul>
+				</li>
 				<li>white-space:
 					<ul>
 						<li>normal;</li>
@@ -66,15 +76,29 @@
 			</ul>
 		</td></tr>
 </table>
-<p>Block formatting contexts (BFCs) are introduced by:</p>
+<p>Contexts:</p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Block_formatting_context">Block formatting contexts</a> (BFCs) affect positioning stuff: chiefly, they contain floats; margins only collapse inside BFCs; <code>position: static|relative|sticky</code> use them. They are introduced by:</p>
 <ul>
-	<li>overflow: anything by visible</li>
-	<li>getting out of flow: floating, absolute positioning</li>
+	<li>overflow: anything not <code>visible</code></li>
+	<li>getting out of flow: floating, absolute/fixed positioning, <code>display: flow-root;</code> (the purest way to make a new BFC, mediocre browser support)</li>
 	<li>display: inline-block, table-cell, table-caption</li>
+	<li>flex and grid items</li>
+	<li>(<code>contain: layout|content|strict</code> (very poor browser support))</li>
 </ul>
-<p>Centering: for inline or inline-block, set <code>text-align: center</code> on parent; for blocks: <code>margin: 0 auto;</code>.</p>
-<p>Vertical centering: Apparently <code>position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)</code>.</p>
-<p>Z-index requires set <code>position</code>.</p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block">Containing blocks</a> for</p>
+<ul>
+	<li>static/relative/sticky: content box of closest block container or BFC</li>
+	<li>absolute: padding box os closest element with position not <code>static</code> or with a <code>transform</code>, <code>perspective</code>, <code>filter</code> (in Fx), <code>contain: paint</code></li>
+	<li>fixed: viewport, or same set of exceptions (<code>transform</code> etc)
+</ul>
+<p>Centering:</p>
+<ul>
+	<li>for inline or inline-block, set <code>text-align: center</code> on parent</li>
+	<li>for blocks: <code>margin: 0 auto;</code></li>
+	<li>vertical centering: Apparently <code>position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);</code></li>
+	<li>or just use flexbox, it's 2019.</li>
+</ul>
+<p><code>z-index</code> requires set <code>position</code> and competes with other elements in the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context">stacking context</a>.</p>
 <h3>HTTP Responses</h3>
 <table>
 	<tr><th>Response</th><th>Name</th><th>Description</th></tr>
@@ -257,6 +281,10 @@
 	<tr><td>getElementsByTagName(tagName: string)</td></tr>
 	<tr><td>querySelector(selector: string)</td><td>first element matching CSS selector, e.g. <code>.myclass</code>, <code>#foo td</code></td></tr>
 	<tr><td>querySelectorAll(selector: string)</td><td>all elements matching CSS selector</td></tr>
+	<tr><td>clientHeight, clientWidth</td><td>padding + content, excluding scrollbars; rounded to integer!</td></tr>
+	<tr><td>scrollHeight, scrollWidth</td><td>padding + space for content to not scroll; rounded to integer!</td></tr>
+	<tr><td>offsetHeight, offsetWidth</td><td>(HTMLElement only?) border + padding + scrollbars if any + content; rounded to integer!</td></tr>
+	<tr><td>getBoundingClientRect()<br/>.height, .width, (.top, .left, ...)</td><td>border + padding + scrollbars if any + content; floating-point<br/>Coordinates are from viewport's scrolling position; add <code>window.scrollX</code>/<code>scrollY</code> for absolute</td></tr>
 </table>
 <h3>jQuery</h3>
 $(selector), $(document.createElement(tagname: string))
