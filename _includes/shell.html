@@ -220,3 +220,27 @@ basename /path/to/foo.cpp .cpp &rarr; foo
 dirname /path/to/foo &rarr; /path/to
 dirname foo &rarr; .
 </pre>
+<h3>strftime</h3>
+<pre>
+man date:
+
+| date        %F = %Y-%m-%d = 2013-09-27
+|             %D = %m/%d/%y = 09/27/13
+|
+|   year    | %Y = 2013, %C = 20, %y = 13
+|   month   | %m = 09, %b = %h = Sep, %B = September
+|   day     | %d = 27, %e = %_d
+|   of week | %a = Fri, %A = Friday
+|
+|         %j = 001..366
+|
+| time           %T = 13:37:42
+|                %r = locale's 01:11:04 PM
+|   h:m        | %R = 13:37
+|       hour   | %H = (00..23), %I = (01..12); %k = %_H, %l = %_I
+|              |                %p = AM/PM, %P = am/pm
+|       minute | %M = 37
+|       second | %S = (00..60)
+
+ISO time (more or less): %Y-%m-%dT%H:%M:%S%z = %FT%T%z
+</pre>
