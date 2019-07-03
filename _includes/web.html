@@ -99,6 +99,32 @@
 	<li>or just use flexbox, it's 2019.</li>
 </ul>
 <p><code>z-index</code> requires set <code>position</code> and competes with other elements in the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context">stacking context</a>.</p>
+<h4>Flexbox</h4>
+<p><a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/">CSS-tricks' Complete Guide to Flexbox</a></p>
+<p>Flex container:</p>
+<ul>
+	<li>display: flex | inline-flex;</li>
+	<li>flex-direction: row | row-reverse | column | column-reverse;</li>
+	<li>justify-content (parallel to flow)</li>
+	<li>align-items (perpendicular to flow; items in each line)</li>
+	<li>align-content (perpendicular to flow; wrapped flow lines, useless if no wrapping)</li>
+</ul>
+<p>Flex item:</p>
+<ul>
+	<li>flex-grow: (number);</li>
+	<li>flex-shrink: (number);</li>
+	<li>flex-basis: (length) | auto;</li>
+	<li>flex: (flex-grow) (flex-shrink) (flex-basis); /* default = 0 1 auto */
+		<ul>
+			<li>flex: X; = X 1 0;</li>
+			<li>flex: X Y; = X Y 0;</li>
+			<li>flex: initial; = 0 1 auto; /* = default */</li>
+			<li>flex: auto; = 1 1 auto;</li>
+			<li>flex: none; = 0 0 auto;</li>
+		</ul>
+		<em>Important!</em> Without a <code>flex:</code>, flex-basis defaults to auto. With a <code>flex:</code> that omits it, flex-basis defaults to 0.
+	</li>
+</ul>
 <h3>HTTP Responses</h3>
 <table>
 	<tr><th>Response</th><th>Name</th><th>Description</th></tr>
