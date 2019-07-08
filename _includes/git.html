@@ -25,7 +25,7 @@
 <p>The actual cheat sheet.</p>
 <table>
 	<tr><th>Command</th><th colspan="4">Subcommands, flags, arguments</th><th>Description</th></tr>
-	<tr><td rowspan="51">git</td>
+	<tr><td rowspan="57">git</td>
 		<td colspan="4">status</td><td class="empty"></td></tr>
 	<tr><td colspan="4">hist</td><td>[alias]<br/>&nbsp; &nbsp; hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short<br/>(see <a href="http://gitimmersion.com/lab_10.html">git immersion</a>)</td></tr>
 	<tr><td rowspan="5">add</td><td colspan="3" class="cr">files</td><td class="empty"></td></tr>
@@ -91,5 +91,11 @@
 	<tr><td class="cg" colspan="2">stash@{8}</td></tr>
 	<tr><td rowspan="2">show</td><td class="empty">&empty;</td><td rowspan="2">[ -p ]</td><td rowspan="2">show stash briefly<br />(-p: as patch)</td></tr>
 	<tr><td class="cg">stash@{8}</td></tr>
+	<tr><td rowspan="6">clean</td><td>-f</td><td colspan="2" rowspan="6">[path]</td><td>Remove files not in version control</td></tr>
+	<tr><td>-i</td><td>Interactively</td></tr>
+	<tr><td>-n</td><td>Dry run</td></tr>
+	<tr><td>-d</td><td>Also directories</td></tr>
+	<tr><td>-x</td><td>Even if .gitignore'd</td></tr>
+	<tr><td>-X</td><td>Only if .gitignore'd</td></tr>
 	<tr><td>ls-files</td><td colspan="3">| xargs wc -l</td><td>Count lines...</td></tr>
 </table>
