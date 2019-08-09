@@ -13,12 +13,13 @@
 	<tr><td>E#id</td><td>id</td></tr>
 </table>
 <table>
+	<tr><td>table {<br/>&nbsp;&nbsp;border-collapse:<br/>}</td><td>collapse;<br/>separate;</td></tr>
 	<tr><td>position:<br/>(accompanied by top: and left:)</td><td><ul>
 				<li>static (default)</li>
 				<li>relative (shifts it relative to static)</li>
 				<li>absolute (pulls it out of static flow; fixes it relative to &lt;html&gt; tag or <em>nearest positioned ancestor</em>)</li>
 				<li>fixed (pulls it out of static flow; fixes it relative to browser viewpoint)</li>
-				<li>sticky (static until exceeds some <code>top:</code>/<code>left:</code>/... offset from viewport of closer element with "scoll" via <code>overflow:</code>, then sticks)</li>
+				<li>sticky (static until exceeds some <code>top:</code>/<code>left:</code>/... offset from viewport of closer element with "scroll" via <code>overflow:</code>, then sticks)</li>
 			</ul></td></tr>
 			<tr><td>box-sizing</td><td><ul>
 						<li>content-box &rarr; (content = height, width) + padding + border + margin
