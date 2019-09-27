@@ -287,7 +287,8 @@
 	<tr><td>previousSibling</td><td>or null</td></tr>
 	<tr><td>appendChild(node: Node)</td></tr>
 	<tr><td>insertBefore(node: Node, refchild: Node)</td><td>insert node as child before refchild, which must be a child</td></tr>
-	<tr><td>removeChild(child: Node)</td><td>returns child, which may be reused</td></tr>
+	<tr><td>removeChild(child: Node)</td><td>returns child, which may be reused<br/>var myNode = document.getElementById("foo");<br/>while (myNode.firstChild) myNode.removeChild(myNode.firstChild);
+		</td></tr>
 	<tr><td>textContent</td><td>assignable</td></tr>
 	<tr><th>element.</th></tr>
 	<tr><td>parentElement</td><td>or null</td></tr>
