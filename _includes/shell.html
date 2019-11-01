@@ -1,5 +1,23 @@
 <h3>misc</h3>
 
+<p><code>ls</code></p>
+
+<ul>
+	<li><code>-l</code> long</li>
+	<li><code>-S</code> sort by file, largest first</li>
+	<li><code>-r</code> reverse (can be combined)</li>
+	<li><code>-h</code> human-readable sizes</li>
+</ul>
+
+<p><code>tar</code></p>
+
+<ul>
+	<li><code>cf archive.tar src1.txt src2.txt</code>: create</li>
+	<li><code>xf archive.tar</code>: extract</li>
+	<li><code>xvzf archive.tar.gz</code>: extract gzip verbosely</li>
+	<li><code>cvzf archive.tar.gz src1.txt src2.txt</code>: create gzip verbosely</li>
+</ul>
+
 <p><code>tr 'a-z' 'n-za-m'</code>, or <code>tr -d ' '</code> to delete things.</p>
 
 <p>timezones on some flavors of Linux: <code>sudo dpkg-reconfigure tzdata</code></p>
@@ -213,6 +231,43 @@ Snippet to get name, height, width in format of an HTML tag: <code>identify -for
 		</td>
 	</tr>
 	<tr><td>$((1 + 2)) # no need for $-prefixing var names</td><td>math -- 1 + 2 # thin wrapper for bc; use -- to avoid negative numbers becoming flags</td></tr>
+	<tr><th colspan="2">control flow i guess?</th></tr>
+	<tr><td><pre>if ...; then
+...
+elif ...; then
+...
+else
+...
+fi</pre></td><td><pre>if ...
+...
+else if ...
+...
+else
+...
+end</pre></td></tr>
+	<tr><td><pre>for v in 1 2 3
+do
+echo $v
+done</pre></td><td><pre>for v in 1 2 3
+echo $v
+end</pre></td></tr>
+	<tr><td><pre>case ... in
+pattern1)
+...
+;;
+pattern2)
+...
+;;
+*)
+...
+esac</pre></td><td><pre>switch ...
+case pattern1
+...
+case pattern2
+...
+case '*'
+...
+end</pre></td></tr>
 </table>
 
 <h3>path manipulation</h3>
