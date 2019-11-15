@@ -113,3 +113,30 @@ do {
 	<li><code>cout &lt;&lt; fixed;</code> (prevent scientific notation for big/small numbers)</li>
 	<li>Others that can get <code>&lt;&lt;</code>ed: <code>dec</code>, <code>hex</code>, <code>oct</code>, <code>setw(7)</code>, <code>setfill('a')</code></li>
 </ul>
+<h3>???</h3>
+<pre>
+std::shared_ptr&lt;int&gt; foo = std::make_shared&lt;int&gt;(10);
+std::weak_ptr&lt;int&gt; bar(foo);
+
+*foo // or foo-&gt;field_name
+*bar
+foo.use_count()
+bar.expired()
+bar.use_count()
+
+
+class Foo {
+friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, Foo foo);
+private:
+	int x;
+
+public:
+	Foo(int x);
+
+};
+
+std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, Foo foo) {
+	// do stuff
+	return os;
+}
+</pre>
