@@ -1,5 +1,9 @@
 <h3>misc</h3>
 
+<code>ssh user@example.com "gzip -c /home/user/bigfile" &gt; backup-(date +%F-%T).db.gz</code>
+
+<code>ssh user@example.com mysqldump --user=some_user --password=some_password --host=some_host.db --databases some_database | gzip &gt; backup-(date +%F-%T).sql.gz</code>
+
 <p><code>ls</code></p>
 
 <ul>
