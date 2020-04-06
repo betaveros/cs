@@ -323,6 +323,22 @@
 	<tr><td>offsetHeight, offsetWidth</td><td>(HTMLElement only?) border + padding + scrollbars if any + content; rounded to integer!</td></tr>
 	<tr><td>getBoundingClientRect()<br/>.height, .width, (.top, .left, ...)</td><td>border + padding + scrollbars if any + content; floating-point<br/>Coordinates are from viewport's scrolling position; add <code>window.scrollX</code>/<code>scrollY</code> for absolute</td></tr>
 </table>
+<h3>MouseEvent</h3>
+<p>click, dblclick, mouseup, mousedown, mousemove; mouseover/mouseout (a single event that bubbles); mouseenter/mouseleave (doesn't bubble, one event per element; more like :hover)</p>
+<table>
+	<tr><td>clientX, clientY</td><td>client (viewport) coordinates (same as getBoundingClientRect())</td></tr>
+	<tr><td>pageX, pageY</td><td>page (edge of document) coordinates</td></tr>
+	<tr><td>screenX, screenY</td><td>screen coordinates</td></tr>
+	<tr><td>offsetX, offsetY</td><td>coordinates from padding edge (experimental and not in e.g. React's synthetic version)</td></tr>
+</table>
+<h3>KeyEvent</h3>
+<p>keydown, keyup (keypress is deprecated, just use keydown or beforeinput)</p>
+<table>
+	<tr><td>key</td><td>"q"</td></tr>
+	<tr><td>code</td><td>"KeyQ" (physical key, e.g. that's also the Dvorak <kbd>'</kbd> key)</td></tr>
+	<tr><td>altKey, ctrlKey, metaKey, shiftKey</td><td>boolean</td></tr>
+	<tr><td>repeat</td><td>boolean: for keydown, whether this event from the key being held down and automatically repeating</td></tr>
+</table>
 <h3>jQuery</h3>
 $(selector), $(document.createElement(tagname: string))
 <table>
