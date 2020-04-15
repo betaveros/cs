@@ -36,6 +36,10 @@ Equation \ref{eq:life} is good. \eqref{eq:life} is good.</pre>
 	0 &amp; \text{if } x = 0 \\
 	1 &amp; \text{else}
 \end{cases}</pre>
+<h3>Tabular</h3>
+<pre>\begin{tabular}[pos]{table spec}</pre>
+
+Columns in spec: <code>lcr</code>; <code>pmb</code> followed by width for paragraphs (the latter two require array package)
 <h3>Packages</h3>
 Some command-line magic: <code>ack usepackage | sed 's/^.*{\(.*\)}.*$/\1/g' | sort | uniq | less</code>. Don't do the search too widely, I think at some point the pipe gets too huge and some programs give up.
 <ul>
