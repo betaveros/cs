@@ -1,3 +1,27 @@
+<h3>how do you server</h3>
+
+<pre>
+sudo vim /etc/nginx/conf.d/your.website.com.conf
+sudo nginx -s reload
+
+location /someexactpath/ {
+    proxy_pass http://localhost:12345/;
+    proxy_buffering off;
+}
+
+# or location ~* ^/somepath/ { }
+
+location /idk/ {
+    proxy_pass http://localhost:12345/;
+    proxy_buffering off;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+    proxy_set_header Host $host;
+    proxy_read_timeout 7200;
+}
+</pre>
+
 <h3>misc</h3>
 
 <p><code>sudo dpkg -i foo.deb</code>; <code>sudo apt install -f</code></p>
