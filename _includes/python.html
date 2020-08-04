@@ -403,7 +403,48 @@ StudentRegistration.valid_objects().filter(
              section__parent_class__parent_program=prog,
              relationship__name='Enrolled'
          )
-enrolled.values_list('user__last_name', 'user').distinct()</pre>
+enrolled.values_list('user__last_name', 'user').distinct()
+
+# race-condition-free modifying stuff in database:
+reporter = Reporters.objects.get(name='Tintin')
+reporter.stories_filed = F('stories_filed') + 1 # no math happens here!
+reporter.save()
+reporter.refresh_from_db() # if you need the actual data
+
+Entry.objects.filter(number_of_comments__gt=F('number_of_pingbacks') * 2)
+
+Company.objects.order_by(F('last_contacted').desc(nulls_last=True))
+
+company = Company.objects.annotate(chairs_needed=F('num_employees') - F('num_chairs'))
+
+
+from django.db.models import OuterRef, Subquery
+newest = Comment.objects.filter(post=OuterRef('pk')).order_by('-created_at')
+Post.objects.annotate(newest_commenter_email=Subquery(newest.values('email')[:1]))
+
+Post.objects.annotate(
+    recent_comment=Exists(
+        Comment.objects.filter(post=OuterRef('pk'), created_at__gte=one_day_ago)
+    )
+)
+# ~Exists is OK
+
+# this line is Django 3.0+:
+Post.objects.filter(Exists(...))
+
+total_comments = comments.annotate(total=Sum('length')).values('total')
+Post.objects.filter(length__gt=Subquery(total_comments))
+
+
+from django.db.models import Avg, Max, Count, Q
+Book.objects.all().aggregate(foo=Avg('price')) # terminal action, you get { 'foo': 12.34 }
+# (or automatically generated keys if args)
+Publisher.objects.annotate(num_books=Count('book'))
+Publisher.objects.annotate(below_5=Count('book', filter=Q(book__rating__lte=5)))
+
+# joins instead of subqueries, so multiple aggregations are bad:
+Book.objects.annotate(Count('authors', distinct=True), Count('store', distinct=True))
+</pre>
 <h3>Requests</h3>
 <pre>import requests
 r = requests.get('http://www.example.com/', params={'foo': 'bar'}) # values can also be lists
