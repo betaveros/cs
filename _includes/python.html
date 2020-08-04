@@ -175,6 +175,13 @@ time.sleep(0.5) # 0.5 seconds</pre>
 <pre>[x for x in().__class__.__bases__[0].__subclasses__() if x.__name__ == "catch_warnings"
 ][0].__init__.func_globals["linecache"].__dict__["os"].execlp("sh","sh")</pre>
 <p>(from <a href="http://jonathanzong.com/picoctf/2013/05/07/python-eval-5-140">Jonathan Zong's picoCTF 2013 writeup</a>)</p>
+<p>from <a href="https://stackoverflow.com/questions/8294618/define-a-lambda-expression-that-raises-an-exception">stackoverflow</a>, expression to throw an error:</p>
+<pre>type(lambda:0)(type((lambda:0).func_code)(
+  1,1,1,67,'|\0\0\202\1\0',(),(),('x',),'','',1,''),{}
+)(Exception())</pre>
+<pre>type(lambda: 0)(type((lambda: 0).__code__)(
+    1,0,1,1,67,b'|\0\202\1\0',(),(),('x',),'','',1,b''),{}
+)(Exception())</pre>
 <h3>pygmentize</h3>
 <p>has complicated command line flags:</p>
 <pre>pygmentize -f html -l python -O full,style=tango -o out.html src.py</pre>
