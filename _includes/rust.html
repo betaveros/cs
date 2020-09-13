@@ -1,0 +1,78 @@
+<pre>format!("{a} {b}", a=3, b=4);
+// pretty like Python str.format. {}, {0}, {:b} etc.
+// {} uses fmt::Display
+// {:?} uses fmt::Debug, formats text for debugging
+// {:#?} pretty printing
+// {:b} uses binary etc
+print!  println!  eprint!  eprintln! all use this</pre>
+<h3>types</h3>
+<pre>T
+&amp;T       &amp;'a T
+&amp;mut T   &amp;'a mut T
+
+fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str { ... }
+</pre>
+<h3>slices</h3>
+<pre>let s = String::from("hello");
+&amp;s[0..2]; // &amp;str</pre>
+<h3>struct</h3>
+<pre>#[derive(Clone, Debug)]
+struct User {
+    username: String,
+    // ...
+};
+struct Color(i32, i32, i32)
+ 
+let mut user1 = User {
+    username: String::from("lol"),
+    // ...
+};
+
+user1.username = String::from("1234"),
+
+let mut user2 = User {
+    username: String::from("lol"),
+    ..user1
+};
+
+impl User {
+    fn area(&amp;self) -&gt; String {
+        String::clone(self.username)
+    }
+}
+
+enum Message {
+    Quit, // unit
+    Move { x: i32, y: i32 }, // struct-like
+    Write(String),
+    ChangeColor(i32, i32, i32), // tuple-like
+}
+
+enum Option&lt;T&gt; {
+    Some(T),
+    None,
+}
+
+// impl also takes type variables
+impl&lt;T&gt; Point&lt;T&gt; {
+    fn x(&amp;self) -&gt; &amp;T {
+        &amp;self.x
+    }
+}</pre>
+<h3>stuff</h3>
+<pre>pub fn notify(item: impl Summary) {
+    println!("Breaking news! {}", item.summarize());
+}
+// is syntax sugar for
+pub fn notify&lt;T: Summary&gt;(item: T) {
+    println!("Breaking news! {}", item.summarize());
+}
+pub fn notify(item: impl Summary + Display) {
+pub fn notify&lt;T: Summary + Display&gt;(item: T) {
+
+fn some_function&lt;T, U&gt;(t: T, u: U) -&gt; i32
+    where T: Display + Clone,
+          U: Clone + Debug
+{ ... }</pre>
+
+These all monomorphize at compile time (?)
