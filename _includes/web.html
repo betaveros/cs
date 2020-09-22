@@ -253,6 +253,15 @@
 	<li>There is not a great way to test if chars are uppercase/lowercase. You can use <code>s !== s.toLowerCase()</code> or <code>/[A-Z]/.test(s)</code>?</li>
 </ul>
 
+<h3>JavaScript Function</h3>
+
+<pre>
+f.call(thisArg, arg1, arg2, ...);
+f.apply(thisArg, arrayOfArgs);
+
+f.bind(thisArg, arg1, arg2, ...); // bind 'this' + optionally as many args as you want
+</pre>
+
 <h3>JavaScript Regex</h3>
 
 <p><code>regex: RegExp</code>, get <code>/[A-Z]/</code> or <code>new RegExp('[A-Z]')</code></p>
@@ -261,7 +270,6 @@
 	<li>regex.exec(s) <em>or</em> s.match(regex): string[]|null, also updates regex.lastIndex if global so you can repeatedly call</li>
 	<li>regex.test(s): boolean <em>or</em> s.search(regex): number|-1</li>
 </ul>
-
 
 <h3>JavaScript DOM</h3>
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/document">mdn @ document</a>
