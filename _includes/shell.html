@@ -3,7 +3,36 @@
 <pre>
 sudo vim /etc/nginx/conf.d/your.website.com.conf
 sudo nginx -s reload
+</pre>
 
+<pre>
+server {
+    listen 80; # port
+    listen [::]:80; # ipv6 port
+
+    # serve static content
+    root /path/to/static-content-folder;
+    index index.html; # can list more than one
+
+    location /special-static/ {
+        alias /path/to/special/folder/;
+    }
+}
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl ipv6only=on; # ??
+
+    # Certbot should deal with these
+    ssl_certificate /path/to/fullchain.pem;
+    ssl_certificate_key /path/to/privkey.pem;
+    include /path/to/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+</pre>
+
+<a href="https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/">Reverse Proxy</a>: inside a server {}:
+
+<pre>
 location /someexactpath/ {
     proxy_pass http://localhost:12345/;
     proxy_buffering off;
@@ -17,6 +46,8 @@ location /idk/ {
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "Upgrade";
+
+    # by default nginx sets Host to $proxy_host
     proxy_set_header Host $host;
     proxy_read_timeout 7200;
 }
@@ -375,3 +406,12 @@ M-# line numbers
 M-P whitespace
 M-Y color
 </pre>
+
+<h3>sql(ite)</h3>
+
+this doesn't belong here but idk
+
+<code>.tables</code>
+<code>.schema table_name</code>
+<code>.headers ON</code>
+<code>.mode column</code>
