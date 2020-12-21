@@ -34,22 +34,27 @@ codecs.decode(obj, encoding, errors)
 	<li><code>str.replace(old, new)</code> exists (not regex)</li>
 </ul>
 <h3>Regex <a href="http://docs.python.org/library/re.html">(&rarr; pydoc)</a></h3>
-<table>
-	<tr><th>Language</th><th>Special regex chars</th></tr>
-	<tr><td>Python</td>
-		<td><code>.^$*+?{}\[]|()</code></td></tr>
-</table>
+<p>
+Special chars: <code>.^$*+?{}\[]|()</code>
+</p>
 <ul>
-	<li><code>re.search(pattern, string[, flags])</code> yields a <code>MatchObject</code> anywhere in string</li>
-	<li><code>re.match(pattern, string[, flags])</code> yields a <code>MatchObject</code> from start or None</li>
-	<li><code>re.split(pattern, string[, maxsplit=0, flags=0])</code> yields a list of strings</li>
-	<li><code>re.findall(pattern, string[, flags])</code> &rarr; a list of strings</li>
-	<li><code>re.finditer</code> &rarr; iterator of <code>MatchObject</code>s</li>
-	<li><code>re.sub(pattern, repl, string[, count, flags])</code> returns a string. <code>repl</code> is string (double-escape chars like '\n', use r'\1' for a backref) or function mapping MatchObject to string</li>
+	<li><code>re.<a href="https://docs.python.org/3/library/re.html#re.search">search</a>(pattern, string[, flags])</code> yields a <code>MatchObject</code> anywhere in string</li>
+	<li><code>re.<a href="https://docs.python.org/3/library/re.html#re.match">match</a>(pattern, string[, flags])</code> yields a <code>MatchObject</code> from start or None</li>
+	<li><code>re.<a href="https://docs.python.org/3/library/re.html#re.fullmatch">fullmatch</a>(pattern, string[, flags])</code> yields a <code>MatchObject</code> of the whole string or None (3.4+)</li>
+	<li><code>re.<a href="https://docs.python.org/3/library/re.html#re.split">split</a>(pattern, string[, maxsplit=0, flags=0])</code> yields a list of strings</li>
+	<li><code>re.<a href="https://docs.python.org/3/library/re.html#re.findall">findall</a>(pattern, string[, flags])</code> &rarr; a list of strings</li>
+	<li><code>re.<a href="https://docs.python.org/3/library/re.html#re.finditer">finditer</a>(pattern, string[, flags])</code> &rarr; iterator of <code>MatchObject</code>s</li>
+	<li><code>re.<a href="https://docs.python.org/3/library/re.html#re.sub">sub</a>(pattern, replacer, string[, count, flags])</code> returns a string. <code>replacer</code> is string (double-escape chars like <code>'\n'</code>, use <code>r'\1'</code> or <code>r'\g&lt;123&gt;'</code> or <code>r'\g&lt;0&gt;'</code> for a backref) or function mapping MatchObject to string</li>
 </ul>
 <p>
-<code>MatchObject.group(n)</code> gets the nth group. n = 0 or omitted means the whole match.
+<code><a href="https://docs.python.org/3/library/re.html#match-objects">MatchObject</a>.group(n)</code> gets the nth group. n = 0 or omitted means the whole match. Groups:
 </p>
+<ul>
+	<li><code>(?: )</code> non-capturing</li>
+	<li><code>(?# )</code> comment</li>
+	<li><code>(?= )</code> lookahead / <code>(?! )</code> negative lookahead</li>
+	<li><code>(?&lt;= )</code> lookbehind / <code>(?&lt;! )</code> negative lookbehind</li>
+</ul>
 <h3>Sequences <a href="http://docs.python.org/2/library/stdtypes.html#sequence-types-str-unicode-list-tuple-bytearray-buffer-xrange">(&rarr; std. methods)</a> and Dictionaries <a href="http://docs.python.org/2/library/stdtypes.html#mapping-types-dict">(&rarr; pydoc)</a></h3>
 <table>
 	<tr><th>(python) <a href="https://docs.python.org/2/library/stdtypes.html#sequence-types-str-unicode-list-tuple-bytearray-buffer-xrange">sequences</a></th><th>&darr;</th></tr>
@@ -61,7 +66,7 @@ codecs.decode(obj, encoding, errors)
 	<tr><td colspan="2">s.extend(xs) <em>or</em> s += xs</td></tr>
 	<tr><td colspan="2">s.insert(i, x)</td></tr>
 	<tr><td>s.pop()<br />s.pop(0) <em>(from left)</em></td><td>popped element<br /><code>pop</code> returns it in Python in general <small>(unlike some other languages)</small></td></tr>
-	<tr><th>(python) <a href="https://docs.python.org/2/library/stdtypes.html#mapping-types-dict">dictionaries</a></th><th>&darr;</th></tr>
+	<tr><th>(python) <a href="https://docs.python.org/3/library/stdtypes.html#mapping-types-dict">dictionaries</a></th><th>&darr;</th></tr>
 	<tr><td>d.keys(), d.iterkeys(), iter(d)</td><td>[k1, k2...]</td></tr>
 	<tr><td>d.values(), d.itervalues()</td><td>[v1, v2...]</td></tr>
 	<tr><td>d.items(), d.iteritems()</td><td>[(k1, v1)...]</td></tr>
@@ -73,10 +78,10 @@ codecs.decode(obj, encoding, errors)
 </ul>
 <ul>
 	<li>Destructively updating a dictionary with another, or with a sequence of key-value pairs: <code>d1.update(d2)</code>.</li>
-	<li>Nondestructive idiom(?) for union-ing two dictionaries: <code>dict(d1, **d2)</code>.</li>
+	<li>Nondestructive idiom(?) for union-ing two dictionaries with string keys: <code>dict(d1, **d2)</code>. <em>3.9 (<a href="https://www.python.org/dev/peps/pep-0584/">PEP 0584</a>):</em> <code>d1 | d2</code></li>
 </ul>
 <p>In both points above, when there are conflicting mappings for the same key, <code>d2</code> takes precedence.</p>
-<h3>Sets <a href="https://docs.python.org/2/library/stdtypes.html#set">(&rarr; std. doc)</a></h3>
+<h3>Sets <a href="https://docs.python.org/3/library/stdtypes.html#set">(&rarr; std. doc)</a></h3>
 <ul>
 	<li><code>x in set_a</code>, <code>x not in set_a</code></li>
 	<li>
@@ -85,7 +90,7 @@ codecs.decode(obj, encoding, errors)
 		<code>set_a - set_b</code>,
 		<code>set_a ^ set_b</code>; compound assignment <code>set_a |= set_b</code> etc.
 	</li>
-	<li><code>set_a.add(x)</code></li>
+	<li><code>set_a.add(x)</code>; <code>set_a.update(xs)</code></li>
 	<li><code>set_a.remove(x)</code> (KeyError if <code>x not in set_a</code>)</li>
 	<li><code>set_a.discard(x)</code> (no error)</li>
 	<li><code>set_a.pop()</code> (arbitrary element)</li>
