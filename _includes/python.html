@@ -450,21 +450,25 @@ Publisher.objects.annotate(below_5=Count('book', filter=Q(book__rating__lte=5)))
 # joins instead of subqueries, so multiple aggregations are bad:
 Book.objects.annotate(Count('authors', distinct=True), Count('store', distinct=True))
 </pre>
-<h3>Requests</h3>
+<h3><a href="https://requests.readthedocs.io/en/master/">Requests</a></h3>
 <pre>import requests
 r = requests.get('http://www.example.com/', params={'foo': 'bar'}) # values can also be lists
-r = requests.post('http://www.example.com/', data={'foo': 'bar'})</pre>
+r = requests.post('http://www.example.com/', data={'foo': 'bar'}) # auto form-encodes; str/bytes is OK too</pre>
+r = requests.request('VERB', url, ...) # 'GET' or 'POST' or others, even custom
 <p>Other parameters include:</p>
 <ul>
-	<li>cookies={'foo': 'bar'}</li>
-	<li>headers={'user-agent': 'my-app/0.0.1'}</li>
+	<li><code>cookies={'foo': 'bar'}</code></li>
+	<li><code>headers={'user-agent': 'my-app/0.0.1'}</code></li>
+	<li><code>json={'foo': 'bar'}</code> (<code>data=</code> its JSON representation; some APIs take it)</li>
 </ul>
-<pre>r.url # see which URL was requested; includes the encoded params you passed
+<pre>r.url # see which URL was requested, after redirects; includes the encoded params you passed
+  r.history # Response objects for any redirects that occurred
 r.status_code
-r.raise_for_status() # raise exception if 4xx or 5xx
+  r.raise_for_status() # raise exception if 4xx or 5xx
 r.text # automagical unicode
-r.content # bytes
-r.headers # of response; dict
+  r.content # bytes
+  r.json() # parse as JSON
+r.headers # of response; magical dict with case-insensitive keys
 r.cookies # of response</pre>
 <p>Make a session to store cookies:</p>
 <pre>sess = request.Session()
