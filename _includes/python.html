@@ -168,6 +168,18 @@ result.stderr # bytes or None</pre>
 	<tr><td>combinations('ABCD', 2)</td><td>AB, AC, AD, BC, BD, CD</td></tr>
 	<tr><td>combinations_with_replacement('ABCD', 2)</td><td>AA, AB, AC, AD, BB[...]</td></tr>
 </table>
+<h3><a href="https://docs.python.org/3/library/random.html">Random</a></h3>
+<table>
+	<tr><td>randrange(...)</td><td>[start,] stop[, step], just like range (half-open)</td></tr>
+	<tr><td>randint(lo, hi)</td><td>integers; inclusive</td></tr>
+	<tr><td>choice(seq)</td><td>1 sample</td></tr>
+	<tr><td><a href="https://docs.python.org/3/library/random.html#random.choices">choices</a>(seq, ...)</td><td>k samples (w/ replacement), can weight etc. (see docs)</td></tr>
+	<tr><td><a href="https://docs.python.org/3/library/random.html#random.sample">sample</a>(seq, k)</td><td>k samples w/o replacement</td></tr>
+	<tr><td>shuffle(seq)</td><td>modifies in-place</td></tr>
+	<tr><td>random()</td><td>[0, 1) float</td></tr>
+	<tr><td>uniform(lo, hi)</td><td>[lo, hi) float</td></tr>
+	<tr><td>gauss(mu, sigma)<br />normalvariate(mu, sigma)</td><td>normal distribution (latter slower but thread-safe)</td></tr>
+</table>
 <h3>Other Standard Library</h3>
 <pre>import getpass
 password = getpass.getpass()</pre>
@@ -511,6 +523,23 @@ struct.calcsize(fmt) # number of bytes
 	<tr><td>s/p</td><td>char[] [Pascal style]</td><td>bytes</td><td class="empty"></td></tr>
 	<tr><td>P</td><td>void *</td><td>int</td><td class="empty"></td></tr>
 </table>
+<h3>encoding bytes and ints</h3>
+
+<pre>
+# <a href="https://docs.python.org/3/library/base64.html">base64</a> module: bytes to bytes (for greppability: b64encode, b64decode)
+base64.b64{encode,decode}(s, altchars='+/') # url '-_'
+base64.{standard_b64,urlsafe_b64,b32,b16,a85,b85}{encode,decode}
+
+# 3.2+
+(some_int).<a href="https://docs.python.org/3/library/stdtypes.html#int.to_bytes">to_bytes</a>(n, 'big'|'little'[, signed=False])
+	n = (some_int.bit_length() + 7) // 8
+# static method:
+int.<a href="https://docs.python.org/3/library/stdtypes.html#int.from_bytes">from_bytes</a>(some_bytes, 'big'|'little'[, signed=False])
+</pre>
+
+<p>
+As before: little-endian is how you'll see it in e.g. x86, big-endian is "natural writing".
+</p>
 
 <h3>Pwntools</h3>
 <pre>from pwn import *

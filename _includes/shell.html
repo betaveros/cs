@@ -53,11 +53,26 @@ location /idk/ {
 }
 </pre>
 
+<h3>ssh</h3>
+
+<p><code>ssh-keygen {-t rsa -b 4096 | -t ed25519} [-f ~/.ssh/filename] [-C comment@example.com]</code></p>
+<ul>
+<li>show fingerprint: <code>ssh-keygen -l [-f ~/.ssh/filename]</code></li>
+<li>regenerate public from private: <code>ssh-keygen -y [-f ~/.ssh/filename]</code></li>
+<li>change password: <code>ssh-keygen -p [-f ~/.ssh/filename]</code></li>
+</ul>
+
+<p>View the public host key you have stored for a server: <code>ssh-keygen -H -F hostname.example.com[:port]</code> (the hostnames are normally hashed so you can't just list all known hostnames)</p>
+<p>Delete it: <code>ssh-keygen -R hostname.example.com[:port]</code>
+<p>The server's keys might be in <code>/etc/ssh</code>.</p>
+
+<p><code>ssh-copy-id -i ~/.ssh/filename user@host</code></p>
+<p><code>ssh -i ~/.ssh/filename user@host</code></p>
+
 <h3>misc</h3>
 
 <pre>ffmpeg -i input-video.avi -vn -acodec copy output-audio.aac # -vn is no video. -acodec copy says use the same audio stream
 </pre>
-
 
 <p><code>sudo dpkg -i foo.deb</code>; <code>sudo apt install -f</code></p>
 
