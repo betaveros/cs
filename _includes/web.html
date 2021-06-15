@@ -113,9 +113,47 @@
 	<li>display: flex | inline-flex;</li>
 	<li>flex-direction: row | row-reverse | column | column-reverse;</li>
 	<li>justify-content (parallel to flow)</li>
-	<li>align-items (perpendicular to flow; items in each line)</li>
+	<li>align-items (perpendicular to flow; items in each line; default <code>stretch</code>)</li>
 	<li>align-content (perpendicular to flow; wrapped flow lines, useless if no wrapping)</li>
 </ul>
+
+</div>
+<table class="padded">
+	<tr>
+		<th>justify-content</th>
+		<th>align-content</th>
+		<th>align-items<br/>align-self</th>
+	</tr>
+	<tr><td class="cb">flex-start (default)</td><td colspan="2">flex-start</td></tr>
+	<tr><td colspan="3">center</td></tr>
+	<tr><td colspan="3">flex-end</td></tr>
+	<tr>
+		<td class="empty">make children flex-grow instead</td>
+		<td>stretch</td>
+		<td class="cb">stretch (default)</td>
+	</tr>
+	<tr>
+		<td colspan="2">space-between (0:1:1:1:0)
+			<div style="background-color: #222; display: flex; justify-content: space-between;"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div>
+		</td>
+		<td class="empty" rowspan="3">meaningless<br/>(there's only one "thing")</td>
+	</tr>
+	<tr>
+		<td colspan="2">space-around (1:2:2:2:1)
+			<div style="background-color: #222; display: flex; justify-content: space-around;"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">space-evenly (1:1:1:1:1)
+			<div style="background-color: #222; display: flex; justify-content: space-evenly;"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div>
+		</td>
+	</tr>
+	<tr>
+		<td class="empty" colspan="2"></td>
+		<td>baseline</td>
+	</tr>
+</table>
+<p>(Technically align-* default to "normal", which acts as stretch on align-items and as no value (which I don't understand) on align-content)</p>
 <p>Flex item:</p>
 <ul>
 	<li>flex-grow: (number);</li>
