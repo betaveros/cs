@@ -493,3 +493,15 @@ if (thing instanceof Thing) { ... }</pre>
 	<li>(1 + 1 : number) is a type assertion. It fails to typecheck if the type is wrong. To cast, type-assert through <code>any</code>.</li>
 	<li>{| foo: bar |} is an "exact object type" that cannot have additional properties.</li>
 </ul>
+<h3>GreaseMonkey</h3>
+<pre>
+// ==UserScript==
+// @name        name
+// @version     1
+// @namespace   https://www.example.com/
+// @description description
+// @include     https://www.example.com/*
+// @grant       none
+// ==/UserScript==
+// <a href="https://wiki.greasespot.net/Include_and_exclude_rules">Include and exclude rules</a> use * to glob.
+</pre>
