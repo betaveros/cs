@@ -4,6 +4,23 @@
 &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
 
 &lt;link rel="stylesheet" href="styles.css"&gt;</pre>
+
+<pre>
+
+&lt;input type="radio" id="bar" name="foo" value="bar" checked&gt;&lt;label for="foo"&gt;bar&lt;/label&gt;
+&lt;input type="radio" id="quux" name="foo" value="quux" checked&gt;&lt;label for="foo"&gt;quux&lt;/label&gt;
+// Fire "change" events. Surprisingly unnatural to get the value. Classic IE9+:
+document.querySelector('input[name="foo"]:checked').value;
+// More modern, requires a &lt;form&gt;:
+document.getElementById("form-id").elements["foo"].value;
+
+&lt;input type="number" min="0" max="64" step="2"&gt; // "spinner"
+&lt;input type="range" min="0" max="64" step="2"&gt; // slider
+// Step is optional; can be "any" in either.
+
+&lt;div data-foo="bar"&gt;
+// div.dataset.foo === "bar"
+</pre>
 <h3>CSS</h3>
 <p><em>Specificity</em> = (ID selectors) &gg; (class selectors, attribute selectors, pseudo-classes) &gg; (type selectors, pseudo-elements)</p>
 <table>
