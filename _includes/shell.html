@@ -141,6 +141,14 @@ scp foobar.txt your_username@remotehost.edu:/some/remote/directory</pre>
 	<li>-b = --border: include WM border</li>
 </ul>
 
+<h3>random debugging/file-rescuing things</h3>
+
+<p><code>df</code></p>
+<p><code>fsck</code></p>
+<p><code>smartctl</code> (<code>sudo smartctl -x /dev/something</code>, maybe truncate <code>n#p#</code>?)</p>
+<p><code>journalctl</code>: queries systemd journal maybe <code>-k -b -1</code>. <code>-k</code> is kernel only. <code>-b -1</code> is a number, last boots are <code>-0</code>, <code>-1</code>... and first boots are <code>1</code>, <code>2</code>... <code>-e</code> to page to end automatically; <code>-r</code> reverses; <code>-f</code> follows.</p>
+<p><code>dmesg</code></p>
+
 <h3>grep and friends</h3>
 
 Syntax: <code>grep pattern files...</code>
