@@ -1,6 +1,17 @@
 <h3>how do you server</h3>
 
 <pre>
+# these might assume Ubuntu
+adduser example
+adduser example sudo
+
+# log in as example, put entry in ~/.ssh/authorized_keys
+# edit /etc/ssh/sshd_config to say:
+PasswordAuthentication no
+sudo systemctl restart sshd
+</pre>
+
+<pre>
 sudo vim /etc/nginx/conf.d/your.website.com.conf
 sudo nginx -s reload
 </pre>
