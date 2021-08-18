@@ -526,21 +526,97 @@ struct.calcsize(fmt) # number of bytes
 <h3>encoding bytes and ints</h3>
 
 <pre>
-# <a href="https://docs.python.org/3/library/base64.html">base64</a> module: bytes to bytes (for greppability: b64encode, b64decode)
-base64.b64{encode,decode}(s, altchars='+/') # url '-_'
-base64.{standard_b64,urlsafe_b64,b32,b16,a85,b85}{encode,decode}
+b'foo'.<a href="https://docs.python.org/3/library/stdtypes.html#bytes.hex">hex</a>([sep[, bytes_per_sep]]) # 3.5+
+bytes.<a href="https://docs.python.org/3/library/stdtypes.html#bytes.fromhex">fromhex</a>('666f6f') # 3.0+
 
 # 3.2+
 (some_int).<a href="https://docs.python.org/3/library/stdtypes.html#int.to_bytes">to_bytes</a>(n, 'big'|'little'[, signed=False])
 	n = (some_int.bit_length() + 7) // 8
 # static method:
 int.<a href="https://docs.python.org/3/library/stdtypes.html#int.from_bytes">from_bytes</a>(some_bytes, 'big'|'little'[, signed=False])
+
+# <a href="https://docs.python.org/3/library/base64.html">base64</a> module: bytes to bytes (for greppability: b64encode, b64decode)
+base64.b64{encode,decode}(s, altchars='+/') # url '-_'
+base64.{standard_b64,urlsafe_b64,b32,b16,a85,b85}{encode,decode}
 </pre>
 
 <p>
 As before: little-endian is how you'll see it in e.g. x86, big-endian is "natural writing".
 </p>
 
+<h3>hashing, crypto</h3>
+<pre>
+import <a href="https://docs.python.org/3/library/hashlib.html">hashlib</a>
+m = hashlib.sha256(b'init data') # data optional
+m.update(b'more data')
+m.digest(), m.digest_size; m.hexdigest() # all bytes
+
+# fancy new blake hashes; digest_size and key up to 64|32, salt up to 16|8
+# key is replacement for hmac
+m = hashlib.blake2b(b'init data', *, digest_size=64, key, salt, ...)
+m = hashlib.blake2s(b'init data', *, digest_size=32, key, salt, ...)
+</pre>
+
+<pre>
+import <a href="https://docs.python.org/3/library/hmac.html">hmac</a>
+h = hmac.new(key, msg, hashlib.sha256)
+h.update(msg), h.digest(), h.hexdigest()
+hmac.digest(key, msg, hashlib.sha256) # bytes
+hmac.compare_digest(a, b) # constant-time equality
+</pre>
+
+<h4>pip install cryptography</h4>
+
+<pre>
+from <a href="https://cryptography.io/en/latest/">cryptography</a>.fernet import Fernet
+key = Fernet.generate_key() # urlsafe_b64encode(os.urandom(32))
+f = Fernet(key)
+ciphertext = f.encrypt(plaintext) # "Fernet token"; time of generation in plaintext
+f.decrypt(ciphertext)
+
+from <a href="https://cryptography.io/en/latest/">cryptography</a>.hazmat.primitives.ciphers.aead import ChaCha20Poly1305, AESGCM
+# 12-byte nonce only. <a href="https://github.com/pyca/cryptography/issues/5267">no extended nonce (transitive through OpenSSL)</a>
+key = ChaCha20Poly1305.generate_key() # os.urandom(32)
+c = ChaCha20Poly1305(key)
+nonce = os.urandom(12)
+# --- or ---
+key = AESGCM.generate_key(bit_length=128|192|256) # os.urandom(bit_length // 8)
+c = AESGCM(key)
+nonce = os.urandom(12)
+
+ct = c.encrypt(nonce, plaintext, aad)
+c.decrypt(nonce, ciphertext, aad)
+</pre>
+
+<h4>pip install pycryptodome</h4>
+
+Prefers Python implementations.
+
+<pre>from Crypto.Random import get_random_bytes # shrug
+
+from <a href="https://www.pycryptodome.org/en/latest/">Crypto</a>.Cipher import <a href="https://www.pycryptodome.org/en/latest/src/cipher/chacha20_poly1305.html">ChaCha20_Poly1305</a>
+key = get_random_bytes(32)
+nonce = get_random_bytes(8|12|24) # len controls variant, default 12; 24 is XChaCha
+cipher = ChaCha20_Poly1305.new(key=key, nonce=nonce)
+# --- OR ---
+from Crypto.Cipher import AES
+key = get_random_bytes(16)
+nonce = get_random_bytes(16) # lib default 16 but RFC/interop suggests 12
+cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
+
+# if you pass in a nonce, save your own copy; cipher.nonce is a lie (!?)
+
+cipher.update(assoc_data) # optional
+
+ciphertext, tag = cipher.encrypt_and_digest(plaintext) # len(tag) = 16
+# --- OR ---
+plaintext = cipher.decrypt_and_verify(ciphertext, tag)
+
+# or in steps:
+ciphertext = cipher.encrypt(plaintext)  |  plaintext = cipher.decrypt(ciphertext)
+tag = cipher.digest()                   |  cipher.verify(tag)
+hextag = cipher.hexdigest()             |  cipher.hexverify(hextag)
+</pre>
 <h3>Pwntools</h3>
 <pre>from pwn import *
 
