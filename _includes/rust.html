@@ -10,11 +10,54 @@ print!  println!  eprint!  eprintln! all use this</pre>
 &amp;T       &amp;'a T
 &amp;mut T   &amp;'a mut T
 
+[T; n]    // array with compile-time-known length
+  [expr; n] // expression of such an array
+
+// slices, generally only exist behind some reference or other indirection
+&amp;str // always valid UTF-8!
+  &amp;'static str // type of string literals
+&amp;mut str
+&amp;[T]
+&amp;mut [T]
+
+(T, U) // and so on
+() // unit; implicitly returned
+
 fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str { ... }
 </pre>
+
+if <code>value: Foo</code>, then <code>value.bar()</code> tries
+<ul>
+	<li><code>Foo::bar</code></li>
+	<li><code>(&amp;Foo)::bar</code></li>
+	<li><code>(&amp;mut Foo)::bar</code></li>
+	<li><em>dereference</em> by finding either <code>Foo: Deref&lt;Target=U&gt;</code> or <code>Foo: DerefMut&lt;Target=U&gt;</code>, recurse on <code>U</code>
+		<ul><li>Note that
+			<code>Deref::deref(&amp;self) → &amp;Self::Target</code>
+			<code>DerefMut::deref_mut(&amp;mut self) → &amp;mut Self::Target</code>
+			</li>
+		</ul>
+	</li>
+</ul>
+
+When arguments are passed into any function, <em>deref coercion</em> also automatically tries derefencing.
+
 <h3>slices</h3>
 <pre>let s = String::from("hello");
-&amp;s[0..2]; // &amp;str</pre>
+&amp;s[0..2]; // &amp;str
+&amp;mut s[0..2]; // &amp;mut str
+</pre>
+<h3>pointers</h3>
+<ul>
+	<li>Box: Single-ownership heap pointer.</li>
+	<li>Rc: Reference counted heap pointer. Immutable. (But — I just learned this — get_mut and try_unwrap can let you mutate or consume the inner value by checking if there are no other pointers to it first, and make_mut can let you mutate or copy-on-write!) Also has Weak, which you can downgrade to or upgrade from.</li>
+	<li>Cell: Mutable memory location, used for interior mutability. A non-mut ref is enough to mutate the inside thing. Not thread-safe. Never gives you references, just moves values in and out (so you cannot have an "atomic increment", not that there's any other actions to interleave with you can't control, although you can atomically "swap-and-get"); many methods are only implemented if contents are Copy.</li>
+	<li>RefCell: Mutable memory location, used for interior mutability. A non-mut ref is enough to mutate the inside thing. Not thread-safe. Uses a write lock before mutating, tracked at runtime; a client claims temporary exclusive mutable access and can use a mutable reference, but may cause panics (although there are also non-panicking variants).</li>
+	<li>UnsafeCell: What backs both of the above.</li>
+	<li>Arc: Atomically reference counted heap pointer. Immutable. Thread-safe. Also has Weak, which you can downgrade to or upgrade from.</li>
+	<li>Mutex: Mutex-protected mutable data.</li>
+	<li>RwLock: Mutex-protected mutable data permitting either multiple readers or one writer.</li>
+</ul>
 <h3>struct</h3>
 <pre>#[derive(Clone, Debug)]
 struct User {
@@ -22,7 +65,7 @@ struct User {
     // ...
 };
 struct Color(i32, i32, i32)
- 
+
 let mut user1 = User {
     username: String::from("lol"),
     // ...
@@ -59,7 +102,184 @@ impl&lt;T&gt; Point&lt;T&gt; {
         &amp;self.x
     }
 }</pre>
+<h3>conversions and ownership acrobatics</h3>
+Fake function types.
+
+<pre>
+Option&lt;T&gt;.unwrap_or(self, T) → T
+Option&lt;T&gt;.unwrap_or_default(self) → T where T: Default
+
+&amp;Option&lt;T&gt;.is_some(&amp;self) → bool
+&amp;Option&lt;T&gt;.is_none(&amp;self) → bool
+
+Option&lt;T&gt;.map_or(self, U, T → U) → U
+Option&lt;T&gt;.and_then(self, T → Option&lt;U&gt;) → Option&lt;U&gt;
+Option&lt;T&gt;.ok_or(self, E) → Result&lt;T, E&gt;
+
+Option&lt;T&gt;.unwrap(self) → T (or panic!)
+Option&lt;T&gt;.expect(self, &amp;str) → T (or panic!)
+
+&amp;mut Option&lt;T&gt;.take(&amp;mut self) → Option&lt;T&gt;
+Option&lt;&amp;T&gt;.copied(self) → Option&lt;T&gt;
+Option&lt;&amp;T&gt;.cloned(self) → Option&lt;T&gt;
+</pre>
+
+<pre>
+Result&lt;T, E&gt;.ok(self) → Option&lt;T&gt;
+Result&lt;T, E&gt;.err(self) → Option&lt;E&gt;
+
+Result&lt;T, E&gt;.unwrap_or(self, T) → T
+Result&lt;T, E&gt;.unwrap_or_default(self) → T where T: Default
+
+Result&lt;T, E&gt;.map_or(self, U, T → U) → U
+Result&lt;T, E&gt;.map_or_else(self, E → U, T → U) → U // note the order!
+Result&lt;T, E&gt;.and_then(self, T → Result&lt;U, E&gt;) → Result&lt;U, E&gt;
+
+Result&lt;T, E&gt;.unwrap(self) → T (or panic!)
+Result&lt;T, E&gt;.expect(self, &amp;str) → T (or panic!)
+
+&amp;Result&lt;T, E&gt;.as_ref(&amp;self) → Result&lt;&amp;T, &amp;E&gt;
+&amp;mut Result&lt;T, E&gt;.as_mut(&amp;mut self) → Result&lt;&amp;mut T, &amp;mut E&gt;
+</pre>
+
+<h4><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html">Vec</a></h4>
+
+<pre>
+&amp;Vec&lt;T&gt;.len(&amp;self) → usize
+// Both type signatures below are fake, you can also slice.
+&amp;Vec&lt;T&gt;.get(&amp;self, usize) → Option&lt;&amp;T&gt;
+&amp;mut Vec&lt;T&gt;.get_mut(&amp;mut self, usize) → Option&lt;&amp;mut T&gt;
+
+&amp;mut Vec&lt;T&gt;.push(&amp;mut self, T)
+&amp;mut Vec&lt;T&gt;.extend(&amp;mut self, IntoIterator&lt;T&gt;) // via Extend&lt;T&gt;
+
+// Pass .. or a..b. Creates iterator (holding a mut ref) that removes that
+// range and yields its elements.
+&amp;mut Vec&lt;T&gt;.drain(&amp;mut self, RangeBounds&lt;usize&gt;)
+
+&amp;mut Vec&lt;T&gt;.remove(&amp;mut self, usize) → T (or panic!) (shifts things left)
+&amp;mut Vec&lt;T&gt;.swap_remove(&amp;mut self, usize) → T (or panic!) (swaps with last element)
+&amp;mut Vec&lt;T&gt;.pop(&amp;mut self) → Option&lt;T&gt;
+
+// In particular &amp;v[..], &amp;mut v[..] are slices.
+
+a[b] is sugar for the Index trait, with .index(). Panics if OOB!!
+</pre>
+
+<pre>
+mem::drop(T)
+mem::replace(&amp;mut T, T) → T
+mem::take(&amp;mut T) → T where T: Default
+mem::swap(&amp;mut T, &amp;mut T)
+</pre>
+
+<h4><a href="https://doc.rust-lang.org/std/iter/index.html">iterators</a></h4>
+
+<p><code>for e in seq { ... }</code> is always sugar for iterating over <code>seq.into_iter()</code>, but many containers have separate implementations of <code>into_iter</code> for <code>T, &amp;T, &amp;mut T</code>. <code>into_iter()</code> is idempotent on iterators.
+
+<pre>for e in 0..n { ... }
+for e in 1..=n { ... }</pre>
+
+<pre>for e in &amp;seq { ... } // seq.iter() (by convention!)
+for e in &amp;mut seq { ... } // seq.iter_mut() (by convention!)
+for e in seq { ... } // seq.into_iter()
+</pre>
+
+<p>Let T = Self::Item. Type signatures are extremely fake (Iterator and IntoIterator have Item as an output "associated type" rather than an input "type parameter". So an example way to take an iterator:)</p>
+
+<pre>fn next_two&lt;A: Iterator&gt;(mut a: A) -&gt; (Option&lt;A::Item&gt;, Option&lt;A::Item&gt;) {
+    (a.next(), a.next())
+}</pre>
+
+<p>You might want to use <code>&lt;A as Iterator&gt;::Item</code> sometimes? Idk.</p>
+
+<p>Manual iteration: <pre>.next() → Option&lt;T&gt;</pre>. The standard lazy toolkit:</p>
+
+<pre>
+.map(T → B) → Iterator&lt;B&gt;
+.flat_map(T → (U: IntoIterator&lt;B&gt;)) → Iterator&lt;B&gt;
+.flatten() → Iterator&lt;B&gt; where T: IntoIterator&lt;
+.zip(U: IntoIterator&lt;B&gt;) → Iterator&lt;(T, B)&gt;
+.copied() → Iterator&lt;B&gt; where T = &amp;B, B: Copy
+.cloned() → Iterator&lt;B&gt; where T = &amp;B, B: Clone
+
+// note the extra reference in the predicate arguments
+.filter(&amp;T → bool) → Iterator&lt;T&gt;
+.take_while(&amp;T → bool) → Iterator&lt;T&gt;
+.skip_while(&amp;T → bool) → Iterator&lt;T&gt;
+.find(&amp;T → bool) → Option&lt;T&gt;
+
+&amp;mut .position(T → bool) → Option&lt;usize&gt;
+
+.filter_map(T → Option&lt;B&gt;) → Iterator&lt;B&gt;
+
+.fold(self, B, (B, T) → B) → B
+.reduce(self, (T, T) → T) → Option&lt;T&gt; // "fold1"
+
+.enumerate() → Iterator&lt;(usize, T)&gt;
+
+// on &amp;mut!!
+.nth(usize) → Option&lt;T&gt; (skips n, then gives you next)
+
+.take(usize) → Iterator&lt;T&gt;
+.skip(usize) → Iterator&lt;T&gt;
+
+// only on DoubleEndedIterator
+.rev()
+</pre>
+
+<p>Consumers:</p>
+
+<pre>
+.count() → usize
+.for_each(T → ())
+
+.any(T → bool) → bool
+.all(T → bool) → bool
+
+// You can sum/product numeric types, and Options/Results thereof (monadically)
+.sum() → S where S: Sum&lt;T&gt;
+.product() → P where P: Product&lt;T&gt;
+
+.max(), .min() → Option&lt;T&gt; where T: Ord
+.max_by, .min_by((T, T) → Ordering) → Option&lt;T&gt;
+.max_by_key, .min_by_key(T → B) → Option&lt;T&gt; where B: Ord
+
+.collect&gt;B&gt;(self) → B where B: FromIterator&lt;T&gt;
+
+// B is often explicitly specified (with the "turbofish")
+// You can use Vec&lt;_&gt; (or many other collections)
+// collect String from char
+// collect String from String (!)
+// if collect C from T, then collect Option&lt;C&gt; from Option&lt;T&gt;
+// if collect C from T, then collect Result&lt;C, E&gt; from Result&lt;T, E&gt;
+</pre>
+
+To write a consumer, trait bound by <code>Iterator&lt;Item=Foo&gt;</code> or something.
+
+<h3>closures</h3>
+Use vertical bars.
+<pre>
+let cap = 1;
+|arg: Foo| { arg + cap }
+</pre>
+
+Closures capture as weakly as possible (ref, then mut ref, then own). If you want to move, use the <code>move</code> keyword. To move some and not others, put a reference in a separate variable and move that.
+
+<pre>
+move |arg: Foo| { arg + cap }
+</pre>
+
+Every closure that captures something is its own type (just like in C++). So to consume, you want a trait bound (in any of the below syntaxes):
+
+<pre>
+fn foo&lt;F&gt;(f: F) where F: Fn(Foo) -&gt; Bar
+</pre>
+
+The traits are <code>Fn, FnMut, FnOnce</code>. On the other hand, closures that don't capture anything are "plain function pointers" of the concrete type <code>fn(Foo) -&gt; Bar</code>.
+
 <h3>stuff</h3>
+"trait bound"
 <pre>pub fn notify(item: impl Summary) {
     println!("Breaking news! {}", item.summarize());
 }
@@ -67,6 +287,11 @@ impl&lt;T&gt; Point&lt;T&gt; {
 pub fn notify&lt;T: Summary&gt;(item: T) {
     println!("Breaking news! {}", item.summarize());
 }
+// is syntax sugar for
+pub fn notify&lt;T&gt;(item: T) where T: Summary {
+    println!("Breaking news! {}", item.summarize());
+}
+
 pub fn notify(item: impl Summary + Display) {
 pub fn notify&lt;T: Summary + Display&gt;(item: T) {
 
@@ -74,5 +299,13 @@ fn some_function&lt;T, U&gt;(t: T, u: U) -&gt; i32
     where T: Display + Clone,
           U: Clone + Debug
 { ... }</pre>
+
+Where <code>where</code>:
+
+<pre>
+fn other_function&lt;T&gt;(t: T) -&gt; i32
+    where Option&lt;T&gt;: Debug
+{ ... }
+</pre>
 
 These all monomorphize at compile time (?)

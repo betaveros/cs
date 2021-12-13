@@ -646,3 +646,22 @@ class Foo:
     def bar(self, value): self._bar = value
     @bar.deleter
     def bar(self): del self._bar</pre>
+
+<h3>difflib</h3>
+<pre>
+import difflib
+difflib.SequenceMatcher(None, seqa, seqa).get_opcodes():
+</pre>
+List of 5-tuple of operations (tag, i1, i2, j1, j2)
+where tag in ['replace', 'delete', 'insert', 'equal'].
+seqa[i1:i2] partitions seqa, seqb[j1:j2] partitions seqb.
+'insert' means i1 == i2, 'delete' means j1 == j2.
+
+<p>Note: This does not actually produce a minimal edit distance.
+<pre>sum(
+    max(i2 - i1, j2 - j1)
+    for tag, i1, i2, j1, j2
+    in difflib.SequenceMatcher(None, a, b).get_opcodes()
+    if tag != 'equal'
+)
+</pre>
