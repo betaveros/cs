@@ -231,20 +231,26 @@ time.sleep(0.5) # 0.5 seconds</pre>
 	<li><code>np.dot(_, _)</code>, or <code>_ @ _</code> (<em>Python 3 only</em>: <code>__matmul__</code> operator)</li>
 	<li><code>np.linalg.inv(_)</code></li>
 </ul>
-<h4>Indexing, Slicing, Iterating</h4>
+<h4>Indexing, Slicing</h4>
 <ul>
-	<li>Index and/or slice like <code>arr[1,2,3:4]</code>. You can use bare colons to slice everything along a dimension.</li>
+	<li>Index and/or slice like <code>arr[1,2,3:4]</code>. You can use bare colons to slice everything along a dimension. (<code>arr[1][2][3:4]</code> still works, for the reasons you'd expect.)</li>
 	<li>You can also index with one tuple (but not other sequence types) like <code>arr[(1,2,3)] == arr[1,2,3]</code>.</li>
 	<li>Basic slices return views, so they're fast. <code>arr[::-1]</code> is a good way to reverse.</li>
 	<li>You can also do "advanced indexing" with one or many non-tuple sequences of indices (crudely, it zips them and indexes by each one to produce a new array). So <code>arr[[1,2,3]]</code> (unlike the above) will index by 1, then by 2, then by 3, and return the results in one array; and <code>arr[[1,2,3],[4,5,6]]</code> will index by (1,4), (2,5), and (3,6).</li>
 	<li>Or "advanced indexing" with an array of booleans (it filters for the true ones). Example: you can filter by <code>arr[arr % 2 == 0]</code>.</li>
 	<li>You can combine different indexing modes along different dimensions.</li>
-	<li>Iterating over an array directly indexes along the first (index 0) dimension, e.g. iterating over a 2D array gives you the rows.</li>
 	<li><code>numpy.nonzero(arr)</code> returns the indices of elements that are nonzero, but kind of strangely; watch out! It returns a tuple of arrays, one for each dimension of <code>arr</code>, so <code>arr[nonzero(arr)]</code> gives you an array of the nonzero values. If you want to iterate over indexes and then unpack them, do <code>transpose(nonzero(arr))</code>.</li>
+</ul>
+<h4>Iterating</h4>
+<ul>
+	<li>Iterating over an array directly indexes along the first (index 0) dimension, e.g. iterating over a 2D array gives you the rows.</li>
+	<li><code>a.flat</code> yields all values (in row-major order).</li>
+	<li><code>np.ndenumerate(a)</code> yields (index, value) pairs; the index is a tuple of ints.</li>
 </ul>
 <h4>Folds</h4>
 <ul>
-	<li><code>np.sum</code>, <code>np.prod</code>, <code>np.min</code>, <code>np.max</code>, <code>np.all</code>, <code>np.any</code>, <code>np.count_nonzero</code> fold the matrix to one scalar result. Specify an <code>axis</code> argument, a dimension or tuple of dimensions, to fold along only certain axes. <code>np.sum</code> usefully promotes to bigger int types on booleans.</li>
+	<li><code>np.sum</code>, <code>np.prod</code>, <code>np.min</code>, <code>np.max</code>, <code>np.all</code>, <code>np.any</code>, <code>np.count_nonzero</code> fold the matrix to one scalar result. Specify an <code>axis</code> argument, a dimension or tuple of dimensions, to fold along only certain axes. <code>np.sum</code> usefully promotes to bigger int types on booleans. Also all these functions can be called as methods on an array. (I think the modern name under <code>np</code> is <code>np.amin/amax</code>, but the above seem to work too, and methods are still <code>max/min</code>.)</li>
+	<li>(Don't confuse these folds with <code>np.minimum</code> and <code>np.maximum</code>, which take element-wise min/max of arrays, like the pairs of elements adding two arrays would operate on.)</li>
 </ul>
 <h4>Array manipulation</h4>
 <ul>
