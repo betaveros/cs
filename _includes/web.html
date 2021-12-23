@@ -522,3 +522,24 @@ if (thing instanceof Thing) { ... }</pre>
 // ==/UserScript==
 // <a href="https://wiki.greasespot.net/Include_and_exclude_rules">Include and exclude rules</a> use * to glob.
 </pre>
+<h3>SVG</h3>
+<pre>&lt;svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;circle cx="10" cy="10" r="2" fill="red" stroke="blue" stroke-width="3"/&gt;
+  &lt;ellipse cx="10" cy="10" rx="2" ry="3"/&gt;
+  &lt;rect x="20" y="20" width="100" height="100"/&gt;
+  &lt;path d="M10 10" stroke-linecap="bevel|miter|round" stroke-linecap="butt|round|square"/&gt;
+  (undersupported stroke-linecap values: arcs; miter-clip)
+&lt;/svg&gt;</pre>
+<h3>SVG path</h3>
+Everything goes in the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d">d attribute</a>.
+<ul>
+	<li>M x y || m dx dy // move</li>
+	<li>L x y || l dx dy // line</li>
+	<li>H x || h dx // horizontal line</li>
+	<li>V y || v dy // vertical line</li>
+	<li>Z || z // close path; equivalent</li>
+	<li>C x1 y1 x2 y2 x y || c dx1 dy1 dx2 dy2 dx dy // Bézier</li>
+	<li>S x2 y2 x y || s dx2 dy2 dx dy // Bézier; first control point is reflection of second from previous C or S</li>
+	<li>Q x1 y1 x y || q dx1 dy1 dx2 dx dy // quadratic (one control point)</li>
+	<li>A rx ry xrot is-large-arc is-sweep x y || A rx ry xrot is-large-arc is-sweep dx dy // arc of ellipse, complicated and not something I want to bother with today</li>
+</ul>
