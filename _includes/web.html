@@ -325,6 +325,34 @@ f.bind(thisArg, arg1, arg2, ...); // bind 'this' + optionally as many args as yo
 	<li>regex.test(s): boolean <em>or</em> s.search(regex): number|-1</li>
 </ul>
 
+<h3>JavaScript Map, JavaScript Set</h3>
+
+<pre>
+m = new Map();
+m = new Map([[1, 'one'], [2, 'two']]);
+
+m.set(3, 'three'); m.delete(3); m.has(3);
+m.size; // property, not function!
+m.clear();
+m.keys(); m.values(); m.entries(); // all iterators, can spread
+m.forEach((value, key, map) =&gt; {});
+[...m] // like m.entries()
+for (kvpair of s) {...}
+</pre>
+
+<pre>
+s = new Set();
+s = new Set([1, 2, 3, 4, 5]);
+
+s.add(3); s.delete(3); s.has(3);
+s.size // property, not function!
+s.clear();
+s.values(); // iterator; same as s.keys()
+s.forEach((value, value, set) =&gt; {});
+[...s] // spread to convert to array
+for (v of s) {...}
+</pre>
+
 <h3>JavaScript DOM</h3>
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/document">mdn @ document</a>
 <table>
