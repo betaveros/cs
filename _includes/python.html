@@ -232,12 +232,12 @@ print(pickle.loads(pickle.dumps(RCE())))
 <h4>Array properties</h4>
 <ul>
 	<li><code>arr.shape</code> is a tuple of the dimensions</li>
-	<li><code>arr.ndim</code> is the number of dimensions (so, the length of arr.shape)</li>
+	<li><code>arr.ndim</code> is the number of dimensions (so, the length of arr.shape; may be called its <em>rank</em>)</li>
 	<li><code>arr.size</code> is a single number, the number of elements (so, the product of arr.shape)</li>
 	<li><code>arr.dtype</code> is the type of the array's elements</li>
 </ul>
 <h4>Matrix operations</h4>
-<p>Note that <code>*</code> (along with most other operations) acts element-wise!</p>
+<p>Note that <code>*</code> (along with most other operations) acts element-wise! <em>Broadcasting</em> occurs by "right-aligning" axes, e.g. [3 × 1 array] + [3 array] = [3 × 3 array].</p>
 <ul>
 	<li><code>_.astype('float32')</code></li>
 	<li><code>np.transpose(_)</code> or <code>_.T</code> (<em>identity on 1D arrays!</em> may need to reshape)</li>
@@ -272,6 +272,8 @@ print(pickle.loads(pickle.dumps(RCE())))
 	<li><code>np.concatenate([arr1, arr2, ...], axis=0)</code> (requires arrays have same dimensions except along axis, returns an array also with same dimensions except along axis; axis is 0 by default)</li>
 	<li><code>np.stack([arr1, arr2, ...], axis=0)</code> (requires arrays have the exact same shape, returns an array with an additional axis specified by the parameter)</li>
 	<li><code>arr.reshape(shape)</code> e.g. <code>arr.reshape((-1, 1))</code> converts to a column vector; <code>-1</code> is the unknown dimension you can specify once</li>
+	<li><code>arr.expand_dims(axis)</code> adds one or more length-1 axes</li>
+	<li><code>arr.squeeze(axis)</code> eliminates one or more length-1 axes</li>
 </ul>
 <h3>pandas</h3>
 <pre>import pandas as pd</pre>
