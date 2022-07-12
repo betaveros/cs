@@ -64,6 +64,16 @@ location /idk/ {
 }
 </pre>
 
+<pre>
+sudo ufw app list // this does NOT mean what's allowed in lol
+sudo ufw status
+sudo ufw allow 8073
+sudo ufw allow http
+sudo ufw allow https
+sudo ufw allow ssh
+sudo ufw allow mosh
+</pre>
+
 <h3>ssh</h3>
 
 <p><code>ssh-keygen {-t rsa -b 4096 | -t ed25519} [-f ~/.ssh/filename] [-C comment@example.com]</code></p>
