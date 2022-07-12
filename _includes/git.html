@@ -99,3 +99,21 @@
 	<tr><td>-X</td><td>Only if .gitignore'd</td></tr>
 	<tr><td>ls-files</td><td colspan="3">| xargs wc -l</td><td>Count lines...</td></tr>
 </table>
+
+get hash of "blob", deterministic function of file contents
+
+<pre>
+git hash-object filename
+8e045dbc7eac808d0fe8a9f2a706247cb0df5b58
+</pre>
+
+once in:
+
+<pre>
+git cat-file -t 8e045dbc7eac808d0fe8a9f2a706247cb0df5b58
+git cat-file blob 8e045dbc7eac808d0fe8a9f2a706247cb0df5b58
+</pre>
+
+<pre>
+git ls-tree HEAD
+</pre>
