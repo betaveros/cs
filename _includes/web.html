@@ -367,7 +367,7 @@ for (v of s) {...}
 	<tr><td>getElementsByTagName(String tagName)</td></tr>
 	<tr><td>getElementById(String id)</td></tr>
 	<tr><td>querySelector(String selector)</td><td>first element matching CSS selector, e.g. <code>.myclass</code>, <code>#foo td</code></td></tr>
-	<tr><td>querySelectorAll(String selector)</td><td>all elements matching CSS selector</td></tr>
+	<tr><td>querySelectorAll(String selector)</td><td>all elements matching CSS selector. static <a href="https://developer.mozilla.org/en-US/docs/Web/API/NodeList">NodeList</a>, can forEach but not others. <code>Array.from</code> it?</td></tr>
 	<tr><td>addEventListener('DOMContentLoaded', fn)</td></tr>
 </table>
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/element">mdn @ element</a>
@@ -391,7 +391,7 @@ for (v of s) {...}
 	<tr><td>textContent</td><td>assignable</td></tr>
 	<tr><th>element.</th></tr>
 	<tr><td>parentElement</td><td>or null</td></tr>
-	<tr><td>children</td><td>(Elements) HTMLCollection (can use <code>.length</code>, <code>[0]</code>, <code>["key"]</code></td></tr>
+	<tr><td>children</td><td>(Elements) HTMLCollection (can use <code>.length</code>, <code>[0]</code>, <code>["key"]</code>. cannot forEach etc.; <code>Array.from</code> it?</td></tr>
 	<tr><td>classList</td><td>DOMTokenList (can use <code>.length</code>, <code>.contains("token")</code>, <code>.add("token")</code>...</td></tr>
 	<tr><td>className</td><td>assignable</td></tr>
 	<tr><td>id</td></tr>
