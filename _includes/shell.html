@@ -74,6 +74,8 @@ sudo ufw allow ssh
 sudo ufw allow mosh
 </pre>
 
+<p>The opposite of <code>allow</code> is <code>deny</code>, but to undo typing one of the ablve you type <code>delete</code> and then the rule again, e.g. <code>ufw delete allow 8073</code></p>
+
 <h3>ssh</h3>
 
 <p><code>ssh-keygen {-t rsa -b 4096 | -t ed25519} [-f ~/.ssh/filename] [-C comment@example.com]</code></p>
