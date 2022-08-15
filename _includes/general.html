@@ -13,4 +13,18 @@
 	<tr><td>Javascript</td><td>+                                        </td><td>/* */         </td><td>//            </td><td>!=<br/>!==    </td><td>'raw string'         </td><td>s[i]                   </td><td>[0]          </td><td>.slice(1)                                       </td><td>parseInt(s,10)                                </td><td>s.toUpperCase()</td></tr>
 	<tr><td>Clojure   </td><td>(str a b)                                </td><td class="empty"></td><td>;             </td><td class="empty"></td><td>various              </td><td>(nth i s)              </td><td>first        </td><td>rest<br/>next                                   </td><td>Integer/parseInt                              </td><td>(.toUpperCase s)</td></tr>
 </table>
+
+<h3>Latency numbers (crude orders of magnitude)</h3>
+<table>
+	<tr><td>0.1ns</td><td>Ideal-conditions fast instruction (e.g. independent MOVs in a superscalar processor)</td></tr>
+	<tr><td>1ns</td><td>L1 cache reference</td></tr>
+	<tr><td>10ns</td><td>L2 cache reference; branch misprediction; mutex operation</td></tr>
+	<tr><td>100ns</td><td>Main memory reference</td></tr>
+	<tr><td>1µs</td><td>"Compress 1KiB with Zippy"</td></tr>
+	<tr><td>10µs</td><td>Send 1KiB at 1 Gbps</td></tr>
+	<tr><td>100µs</td><td>SSD read; read 1MB from memory</td></tr>
+	<tr><td>1ms</td><td>Within-data-center round trip; read 1MB from SSD</td></tr>
+	<tr><td>10ms</td><td>Disk seek; read 1MB from disk</td></tr>
+	<tr><td>100ms</td><td>Send packet around the world</td></tr>
+</table>
 </div>
