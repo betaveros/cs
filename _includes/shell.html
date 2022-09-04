@@ -95,6 +95,7 @@ sudo ufw allow mosh
 <h3>misc</h3>
 
 <pre>ffmpeg -i input-video.avi -vn -acodec copy output-audio.aac # -vn is no video. -acodec copy says use the same audio stream
+ffmpeg ... -filter:v crop=w:h:x:y,scale=w:h
 </pre>
 
 <p><code>sudo dpkg -i foo.deb</code>; <code>sudo apt install -f</code></p>
