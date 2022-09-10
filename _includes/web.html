@@ -392,8 +392,9 @@ for (v of s) {...}
 	<tr><th>element.</th></tr>
 	<tr><td>parentElement</td><td>or null</td></tr>
 	<tr><td>children</td><td>(Elements) HTMLCollection (can use <code>.length</code>, <code>[0]</code>, <code>["key"]</code>. cannot forEach etc.; <code>Array.from</code> it?</td></tr>
-	<tr><td>classList</td><td>DOMTokenList (can use <code>.length</code>, <code>.contains("token")</code>, <code>.add("token")</code>...</td></tr>
+    <tr><td>classList</td><td>DOMTokenList (can use <code>.length</code>, <code>.contains("token")</code>, <code>.add("token")</code>, <code>.toggle("token")</code>...</td></tr>
 	<tr><td>className</td><td>assignable</td></tr>
+    <tr><td>tagName</td></tr>
 	<tr><td>id</td></tr>
 	<tr><td>innerHTML</td><td>assignable</td></tr>
 	<tr><td>outerHTML</td><td>"experimental"</td></tr>
@@ -408,11 +409,22 @@ for (v of s) {...}
 	<tr><td>getElementsByTagName(tagName: string)</td></tr>
 	<tr><td>querySelector(selector: string)</td><td>first element matching CSS selector, e.g. <code>.myclass</code>, <code>#foo td</code></td></tr>
 	<tr><td>querySelectorAll(selector: string)</td><td>all elements matching CSS selector</td></tr>
+	<tr><td>closest(selector: string)</td><td>nearest ancestor (inc self) matching CSS selector</td></tr>
 	<tr><td>clientHeight, clientWidth</td><td>padding + content, excluding scrollbars; rounded to integer!</td></tr>
 	<tr><td>scrollHeight, scrollWidth</td><td>padding + space for content to not scroll; rounded to integer!</td></tr>
-	<tr><td>offsetHeight, offsetWidth</td><td>(HTMLElement only?) border + padding + scrollbars if any + content; rounded to integer!</td></tr>
 	<tr><td>getBoundingClientRect()<br/>.height, .width, (.top, .left, ...)</td><td>border + padding + scrollbars if any + content; floating-point<br/>Coordinates are from viewport's scrolling position; add <code>window.scrollX</code>/<code>scrollY</code> for absolute</td></tr>
+	<tr><th>htmlElement.</th></tr>
+	<tr><td>offsetHeight, offsetWidth</td><td>border + padding + scrollbars if any + content; rounded to integer!</td></tr>
+	<tr><td>hidden</td><td>(!!)</td></tr>
+    <tr><td>style</td></tr>
+    <tr><td>blur() click() focus()</td></tr>
 </table>
+<h3><a href="https://developer.mozilla.org/en-US/docs/Web/API/Event">Event</a></h3>
+<code>event.target</code> (innermost element),
+<code>event.currentTarget</code> (element with the handler; ≈ <code>this</code>), etc;
+<code>event.preventDefault()</code>, <code>event.stopPropagation()</code>
+<p>
+Philip Walton: <a href="https://css-tricks.com/dangers-stopping-event-propagation/">don't use stopPropagation</a> (in case an outer listener wants to close an unrelated modal/menu/...). You can "mark an event as handled" with <code>preventDefault()</code> and <code>if (event.defaultPrevented) return;</code>
 <h3>MouseEvent</h3>
 <p>click, dblclick, mouseup, mousedown, mousemove; mouseover/mouseout (a single event that bubbles); mouseenter/mouseleave (doesn't bubble, one event per element; more like :hover)</p>
 <table>
@@ -574,3 +586,179 @@ Everything goes in the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG
 <p>
 Note: Manipulating these attributes requires <code>.getAttributeNS(null, key)</code> | <code>.setAttributeNS(null, key, value)</code>, because something <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Namespaces_Crash_Course#scripting_in_namespaced_xml">namespaces</a> something.
 </p>
+<h3>React</h3>
+<pre>const element = &lt;div id={expr}&gt;{text}&lt;/div&gt;;</pre>
+<code>&lt;React.Fragment&gt;</code> (possibly <code>&lt;&gt;</code>); <a href="https://reactjs.org/docs/dom-elements.html">special DOM names</a>: camel case e.g. <code>tabIndex</code> and <code>onClick</code>; <code>className</code>, <code>htmlFor</code>... (incidentally, I habitually depend on <a href="https://www.npmjs.com/package/classnames">classnames</a>)
+<pre>
+ReactDOM.createRoot(document.getElementById("root")).render(&lt;Game /&gt;);
+</pre>
+Note: children go in props.children.
+Whenever you make a list, pass the special attribute <code>key</code>: <code>&lt;Widget key={number.toString()}&gt;</code>. Unique among siblings. Simplest choice is an array index, but if items get inserted/deleted try to persist the key on the same or similar elements for optimal reconciliation.
+<h4>Functional component</h4>
+<pre>
+function Widget(props) {
+  return /* use props */;
+}
+</pre>
+<h4>Class component</h4>
+<pre>
+// perf: inherit from React.PureComponent to skip updates if prop, state are
+// shallowly equal to past values
+class Widget extends React.Component {
+  // only place where you assign to this.state, everywhere else call this.setState
+  constructor(props) {
+    super(props); this.state = {};
+
+    // refs for "imperative HTML things" or class components
+    this.widgetRef = React.createRef();
+    // later, if (this.widgetRef.current !== null) this.widgetRef.current.focus();
+  }
+
+  <em>render</em>() {
+    // common pattern
+    const { foo, bar } = this.props;
+    const { baz, quux } = this.state;
+    return &lt;input ref={this.widgetRef}&gt;...&lt;/input&gt;;
+  }
+
+  // note, arrow function instead of method so we bind `this`!! ("<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Public_class_fields#public_instance_fields">public instance field</a>", <a href="https://reactjs.org/docs/handling-events.html">via</a>)
+  // let us pass this.handleClick as prop to things
+  handleClick = <em>() =&gt; {</em>
+    // you should use this.state immutably! setState implicitly merges a la Object.assign
+    this.setState({ foo: bar });
+    // React may batch calls; if modification depends on previous state, do:
+    this.setState((state, props) =&gt; { foo: !state.foo });
+    // also can pass second arg, callback, which will read updated state
+  <em>}</em>
+
+  // <a href="https://reactjs.org/docs/react-component.html">lifecycle methods</a>
+  // setup/teardown, e.g. timers, websockets... generally put in members, not this.state
+  <em>componentDidMount</em>() {
+    this.timeout = window.setInterval(this.tick, 1000);
+  }
+  <em>componentWillUnmount</em>() {
+    window.clearInterval(this.timeout);
+  };
+}
+</pre>
+<h4>controlled components</h4>
+<pre>
+handleChange = (event) =&gt; {
+  this.setState({ value: event.target.value });
+}
+</pre>
+<pre>
+&lt;input type="text" value={this.state.value} onChange={this.handleChange} /&gt;
+</pre>
+React <code>textarea</code>s and <code>select</code>s also take a <code>value</code>, so work the same way. (Unlike HTML where <code>textarea</code>s take children and <code>select &gt; option</code>s might be <code>selected</code>)
+<pre>
+// React select
+&lt;select value={this.state.value} onChange={this.handleChange}&gt;
+  &lt;option value="foo"&gt;Foo&lt;/option&gt;
+&lt;/select&gt;
+</pre>
+Checkboxes: Same but use <code>checked</code>, <code>event.target.checked</code>.
+<pre>
+&lt;input
+  type="checkbox"
+  checked={selected}
+  onChange={this.handleChange}
+/&gt;
+</pre>
+Radio buttons:
+<pre>
+this.setState({ value: event.target.value });
+&lt;input
+  type="radio"
+  name="groupName"
+  value="foo"
+  checked={this.state.value === "foo"}
+  onChange={this.handleChange}
+/&gt;
+</pre>
+<h4>hooks?</h4>
+Contract: Always call the exact same hooks in the exact same order (never in conditionals or loops... though maybe fixed-size loops?)
+<pre>
+const ThemeContext = React.createContext({ foo: bar });
+&lt;ThemeContext.Provider value={{ foo: baz }}&gt; ... &lt;/ThemeContext.Provider&gt;
+
+function Example() {
+  // setCount does not merge. can still pass func that takes old state, for batching
+  const [count, setCount] = <em>useState</em>(0 /* initial state */);
+  // can pass a function as initialState for perf, since initialState would be
+  // eagerly evaluated every render
+
+  // after each render: combines componentDidMount, componentDidUpdate
+  <em>useEffect</em>(
+    () =&gt; {
+      document.title = `You clicked ${count} times`;
+
+      // optionally, componentWillUnmount-ish cleanup
+      // but note that by default we cleanup before each new effect call, by design!
+      return () =&gt; ...;
+    },
+    // optional list of dependencies, skip update if 1-deep equal
+    [count] // in particular, [] would mean only mount/unmount
+  );
+
+  // non-state-affecting memoization, dependencies as above
+  let result = <em>useMemo</em>(() =&gt; computeExpensiveValue(a, b), [a, b]);
+
+  // plumb data from far away
+  const theme = <em>useContext</em>(ThemeContext);
+  theme.foo;
+
+  // mini Redux
+  // earlier: function reducer(state, action) { return /* new state */; }
+  const [state, dispatch] = <em>useReducer</em>(reducer, initialState);
+
+  // ref or any imperative thing to grab
+  const inputEl = <em>useRef</em>(null);
+  inputEl.current;
+
+  return /* count */;
+}
+</pre>
+<h3>Svelte</h3>
+State is just variables. Handlers can Just Mutate (!!)
+<pre>
+let foo = 0;
+</pre>
+Prop, for a client to pass in:
+<pre>
+export let foo /* = "optional default value" */;
+</pre>
+Magic top-level line that recomputes when dependencies change. Compiler intelligently adds <code>let</code> if needed:
+<pre>
+$: bar = baz(foo, quux);
+</pre>
+UI:
+<pre>
+{expr}
+&lt;div foo={bar}&gt; or (to appease syntax highlighters) &lt;div foo="{bar}"&gt;
+{#if condition}
+HTML goes here
+{:else} (!)
+{/if}
+
+{#each expression as name}...{/each}
+{#each expression as name, index}...{/each} // as in Array.map
+{#each expression as name (key)}...{/each} // expr like React's key for reconciliation
+{#each expression as name, index (key)}...{/each}
+{#each expression as name}...{:else}...{/each} // empty
+
+&lt;button on:click={handle}&gt;
+&lt;div style:color={myColor}&gt;
+</pre>
+Binding:
+<pre>
+&lt;input type="text" bind:value={foo}&gt; (or "number", etc.)
+&lt;input type="checkbox" bind:checked={foo}&gt;
+&lt;input type="radio" bind:group={foo} value={"bar"}&gt;
+</pre>
+Composition: In Widget, use <code>&lt;slot&gt;fallback&lt;/slot&gt;</code>, and outside just use <code>&lt;Widget&gt;child&lt;/Widget&gt;</code>.
+Lifecycle:
+<pre>
+import { onMount } from 'svelte';
+onMount(/* some function that might set state */);
+</pre>
