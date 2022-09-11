@@ -37,6 +37,8 @@ document.getElementById("form-id").elements["foo"].value;
 </table>
 <table>
 	<tr><td>table {<br/>&nbsp;&nbsp;border-collapse:<br/>}</td><td>collapse;<br/>separate;</td></tr>
+	<tr><td>display:</td><td>block; inline; inline-block; none; [inline-]flex; [inline-]grid;<br/>table; table-row; table-cell; ...<br/>flow-root; (pure block formatting context/BFC, see below. 2022: 95% browser support)</td></tr>
+	<tr><td>visibility:</td><td>visible; hidden; (note: visible children of hidden parents are visible!)</td></tr>
 	<tr><td>position:<br/>(accompanied by top: and left:)</td><td><ul>
 				<li>static (default)</li>
 				<li>relative (shifts it relative to static)</li>
@@ -79,7 +81,7 @@ document.getElementById("form-id").elements["foo"].value;
 						<li>normal;</li>
 						<li>nowrap; /* normal, but don't wrap lines */</li>
 						<li>pre;</li>
-						<li><strong>pre-wrap; /* pre, but wrap lines */</strong></li>
+						<li><em>pre-wrap; /* pre, but wrap lines */</em></li>
 						<li>pre-line; /* normal but linebreaks break lines */</li>
 					</ul>
 				</li>
@@ -107,7 +109,7 @@ document.getElementById("form-id").elements["foo"].value;
 	<li>getting out of flow: floating, absolute/fixed positioning, <code>display: flow-root;</code> (the purest way to make a new BFC, mediocre browser support)</li>
 	<li>display: inline-block, table-cell, table-caption</li>
 	<li>flex and grid items</li>
-	<li>(<code>contain: layout|content|strict</code> (very poor browser support))</li>
+	<li>(<code>contain: layout|content|strict</code> (<a href="https://caniuse.com/css-containment">poor browser support</a>)</li>
 </ul>
 <p><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block">Containing blocks</a> for</p>
 <ul>
@@ -120,7 +122,7 @@ document.getElementById("form-id").elements["foo"].value;
 	<li>for inline or inline-block, set <code>text-align: center</code> on parent</li>
 	<li>for blocks: <code>margin: 0 auto;</code></li>
 	<li>vertical centering: Apparently <code>position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);</code></li>
-	<li>or just use flexbox, it's 2019.</li>
+	<li>or just use flexbox, it's <s>2019</s> 2022.</li>
 </ul>
 <p><code>z-index</code> requires set <code>position</code> and competes with other elements in the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context">stacking context</a>.</p>
 <h4>Flexbox</h4>
@@ -189,6 +191,7 @@ document.getElementById("form-id").elements["foo"].value;
 <p>Media query</p>
 <pre>@media (min-width: 400px) { ... }
 </pre>
+<p><a href="https://caniuse.com/css-has">are we :has yet?</a> (2022: no)</p>
 <h3>HTTP Responses</h3>
 <table>
 	<tr><th>Response</th><th>Name</th><th>Description</th></tr>
@@ -373,9 +376,10 @@ for (v of s) {...}
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/element">mdn @ element</a>
 <table>
 	<tr><th>eventTarget.</th></tr>
-	<tr><td>addEventListener(type: string, listener)</td><td>
+	<tr><td>addEventListener(type: string, listener[, options])</td><td>
 			type can be e.g. "click"/"dblclick", "keydown"/"keypress"/"keyup", "change", "focus"/"blur", "submit"<br/>
-			EventTarget is a superclass of Node
+			EventTarget is a superclass of Node<br/>
+			options = {capture: true, ...}: parent capturing listeners are called before child capturing listeners (and before all normal "bubbling" listeners)
 		</td></tr>
 	<tr><th>node.</th></tr>
 	<tr><td>parentNode</td><td>or null</td></tr>
@@ -415,7 +419,7 @@ for (v of s) {...}
 	<tr><td>getBoundingClientRect()<br/>.height, .width, (.top, .left, ...)</td><td>border + padding + scrollbars if any + content; floating-point<br/>Coordinates are from viewport's scrolling position; add <code>window.scrollX</code>/<code>scrollY</code> for absolute</td></tr>
 	<tr><th>htmlElement.</th></tr>
 	<tr><td>offsetHeight, offsetWidth</td><td>border + padding + scrollbars if any + content; rounded to integer!</td></tr>
-	<tr><td>hidden</td><td>(!!)</td></tr>
+	<tr><td>hidden</td><td><a href="https://meowni.ca/hidden.is.a.lie.html">pretty fake</a></td></tr>
     <tr><td>style</td></tr>
     <tr><td>blur() click() focus()</td></tr>
 </table>
@@ -424,7 +428,7 @@ for (v of s) {...}
 <code>event.currentTarget</code> (element with the handler; ≈ <code>this</code>), etc;
 <code>event.preventDefault()</code>, <code>event.stopPropagation()</code>
 <p>
-Philip Walton: <a href="https://css-tricks.com/dangers-stopping-event-propagation/">don't use stopPropagation</a> (in case an outer listener wants to close an unrelated modal/menu/...). You can "mark an event as handled" with <code>preventDefault()</code> and <code>if (event.defaultPrevented) return;</code>
+Philip Walton: <a href="https://css-tricks.com/dangers-stopping-event-propagation/">don't use stopPropagation</a> (in case an outer listener wants to close an unrelated modal/menu/...). You can "mark an event as handled" with <code>preventDefault()</code> and <code>if (event.defaultPrevented) return;</code> (though good luck convincing other devs to use this convention)
 <h3>MouseEvent</h3>
 <p>click, dblclick, mouseup, mousedown, mousemove; mouseover/mouseout (a single event that bubbles); mouseenter/mouseleave (doesn't bubble, one event per element; more like :hover)</p>
 <table>
@@ -587,6 +591,7 @@ Everything goes in the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG
 Note: Manipulating these attributes requires <code>.getAttributeNS(null, key)</code> | <code>.setAttributeNS(null, key, value)</code>, because something <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Namespaces_Crash_Course#scripting_in_namespaced_xml">namespaces</a> something.
 </p>
 <h3>React</h3>
+<pre>npx create-react-app my-app --template typescript</pre>
 <pre>const element = &lt;div id={expr}&gt;{text}&lt;/div&gt;;</pre>
 <code>&lt;React.Fragment&gt;</code> (possibly <code>&lt;&gt;</code>); <a href="https://reactjs.org/docs/dom-elements.html">special DOM names</a>: camel case e.g. <code>tabIndex</code> and <code>onClick</code>; <code>className</code>, <code>htmlFor</code>... (incidentally, I habitually depend on <a href="https://www.npmjs.com/package/classnames">classnames</a>)
 <pre>
