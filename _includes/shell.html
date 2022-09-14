@@ -74,11 +74,11 @@ sudo ufw allow ssh
 sudo ufw allow mosh
 </pre>
 
-<p>The opposite of <code>allow</code> is <code>deny</code>, but to undo typing one of the ablve you type <code>delete</code> and then the rule again, e.g. <code>ufw delete allow 8073</code></p>
+<p>The opposite of <code>allow</code> is <code>deny</code>, but to undo typing one of the above you type <code>delete</code> and then the rule again, e.g. <code>ufw delete allow 8073</code></p>
 
 <h3>ssh</h3>
 
-<p><code>ssh-keygen {-t rsa -b 4096 | -t ed25519} [-f ~/.ssh/filename] [-C comment@example.com]</code></p>
+<p><code>ssh-keygen <s>-t rsa -b 4096</s> -t ed25519 [-f ~/.ssh/filename] [-C comment@example.com]</code></p>
 <ul>
 <li>show fingerprint: <code>ssh-keygen -l [-f ~/.ssh/filename]</code></li>
 <li>regenerate public from private: <code>ssh-keygen -y [-f ~/.ssh/filename]</code></li>
@@ -180,7 +180,7 @@ scp foobar.txt your_username@remotehost.edu:/some/remote/directory</pre>
 Syntax: <code>grep pattern files...</code>
 
 <ul>
-	<li><code>grep</code>, <code>grep -G</code>: "basic regular expressions"</li>
+	<li><code>grep</code>, <code>grep -G</code>: "basic regular expressions": ?+{}|() are literal, magic if backslashed.</li>
 	<li><code>egrep</code>, <code>grep -E</code>: "extended regular expressions"</li>
 	<li><code>fgrep</code>, <code>grep -F</code>: fixed strings</li>
 </ul>
@@ -229,6 +229,28 @@ Syntax: <code>grep pattern files...</code>
 	<li><code>-S --smart-case</code></li>
 	<li><code>-U</code>: don't use VCS ignore files (.gitignore etc.) but  still use .agignore</li>
 </ul>
+<h4>rg</h4>
+<ul>
+	<li><code>-g '!PATTERN'</code>: don't search filenames whose names match</li>
+</ul>
+
+<h3>sed, awk...</h3>
+
+<pre>
+sed s/foo/bar/
+sed s/foo/bar/g
+sed 's/foo\(.\)/bar\1/g'
+sed -E 's/\d/\1\1/g'
+sed -n /foo/p # just grep
+sed -n s/foo/bar/p # only print subbed lines
+</pre>
+
+<p>Each awk command(?) is <code>pattern { action }</code>. pattern could be empty to do something every line, <code>BEGIN</code>, <code>END</code>, <code>/pattern/</code>, expression like <code>NF &gt; 2</code>. <code>$0</code> is the entire line (record), <code>$1</code> is the first (1-indexed) field (whitespace-separated; use <code>-F</code> to specify a separator, which maybe can be empty to have each character its own field), etc. Lots of C-like math ("1" + "2" == 3, but "10" &lt; "2", use unary +), but not bitwise operators; juxtaposition is concatenation; <code>x ~ /foo/</code>; <code>NF</code> number of fields (<code>$NF</code> for last field, <code>$(NF-1)</code>...), <code>NR</code> is number of records (lines) (so far). Variables can be used ex nihilio; they default to "", which converts to 0.</p>
+
+<pre>
+awk '{ x += $1 } END { print x }'
+awk -F ',' '/aaa/ { print $3 }' data.csv | gnuplot -p -e "plot '-'"
+</pre>
 
 <h3>identify and convert (ImageMagick)</h3>
 

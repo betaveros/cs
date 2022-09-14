@@ -20,6 +20,10 @@ document.getElementById("form-id").elements["foo"].value;
 
 &lt;div data-foo="bar"&gt;
 // div.dataset.foo === "bar"
+
+&lt;button <a href="https://lea.verou.me/2018/05/never-forget-typebutton-on-generated-buttons/">type="button"</a>&gt; (or it'll be a submit button in a form, even if you attach a listener)
+
+button.disabled = true;
 </pre>
 <h3>CSS</h3>
 <p><em>Specificity</em> = (ID selectors) &gg; (class selectors, attribute selectors, pseudo-classes) &gg; (type selectors, pseudo-elements)</p>
@@ -235,14 +239,15 @@ document.getElementById("form-id").elements["foo"].value;
 	<li>Start and end:
 		<ul>
 			<li>.pop(): T</li>
-			<li>.unshift(): T</li>
+			<li>.shift(): T</li>
 			<li>.push(e: T): number // new length</li>
-			<li>.shift(e: T): number // new length</li>
+			<li>.unshift(e: T): number // new length</li>
 			<li>To extend: Array.prototype.push.apply(a, b: T[])</li>
 		</ul>
 	</li>
 	<li>.join(separator: string): string</li>
-	<li>.slice(start: number, end: number): T[]</li>
+	<li>.at(index: number): T // pythonic negative indexes!</li>
+	<li>.slice(start: number, end: number): T[] // pythonic negative indexes!</li>
 	<li>.indexOf(item: T, fromIndex?: number): number // or -1</li>
 	<li>.lastIndexOf(item: T, fromIndex?: number): number // or -1</li>
 	<li>Iteration methods (all take callbacks f: (item: T, index: number, a: T[]) =&gt; any)
@@ -422,6 +427,20 @@ for (v of s) {...}
 	<tr><td>hidden</td><td><a href="https://meowni.ca/hidden.is.a.lie.html">pretty fake</a></td></tr>
     <tr><td>style</td></tr>
     <tr><td>blur() click() focus()</td></tr>
+	<tr><th>htmlInputElement. (and friends)</th></tr>
+	<tr><td>value</td></tr>
+	<tr><td>disabled</td></tr>
+	<tr><td>checked</td></tr>
+	<tr><td>indeterminate</td><td>
+			checkboxes:
+			neither <input type="checkbox">
+			nor <input type="checkbox" checked>:
+			<input type="checkbox" id="indet">
+			<script>document.getElementById('indet').indeterminate = true;</script>
+			(can't be set through HTML)
+		</td></tr>
+	<tr><td>select()</td><td>all text, in a text field</td></tr>
+	<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/setSelectionRange">setSelectionRange</a>(start, end)</td></tr>
 </table>
 <h3><a href="https://developer.mozilla.org/en-US/docs/Web/API/Event">Event</a></h3>
 <code>event.target</code> (innermost element),
@@ -733,26 +752,43 @@ Prop, for a client to pass in:
 <pre>
 export let foo /* = "optional default value" */;
 </pre>
-Magic top-level line that recomputes when dependencies change. Compiler intelligently adds <code>let</code> if needed:
+Magic top-level line that recomputes when dependencies change. Don't add <code>let</code>, the compiler will add it if needed:
 <pre>
 $: bar = baz(foo, quux);
 </pre>
+<code>$</code> can also precede a block or even e.g. an <code>if</code> statement.
+<p>
+Mutating state variables is more OK than in React because the compiler has a better understanding that they should cause recalculations; in particular <code>foo[bar] = baz</code> seems to be totally kosher. Calling mutating functions (e.g. <code>foo.push(1)</code> won't work, but you can just invalidate with <code>foo = foo;</code> after. (Or you can stick to <code>foo = [...foo, 1]</code>...)
+<blockquote>A simple rule of thumb: the updated variable must directly appear on the left hand side of the assignment.</blockquote>
 UI:
 <pre>
 {expr}
 &lt;div foo={bar}&gt; or (to appease syntax highlighters) &lt;div foo="{bar}"&gt;
+</pre>
+<pre>
 {#if condition}
 HTML goes here
+{:else if} (!)
 {:else} (!)
 {/if}
-
 {#each expression as name}...{/each}
 {#each expression as name, index}...{/each} // as in Array.map
 {#each expression as name (key)}...{/each} // expr like React's key for reconciliation
 {#each expression as name, index (key)}...{/each}
 {#each expression as name}...{:else}...{/each} // empty
-
+</pre>
+Events:
+<pre>
 &lt;button on:click={handle}&gt;
+</pre>
+Zero or more "modifiers" follow |:
+<pre>
+&lt;button on:click|preventDefault|stopPropagation|capture|once={handle}&gt;
+</pre>
+Dynamic style:
+<pre>
+&lt;div class:active={active}&gt; // that class if truthy
+&lt;div class:active&gt; // or even shorthand...
 &lt;div style:color={myColor}&gt;
 </pre>
 Binding:
@@ -760,10 +796,66 @@ Binding:
 &lt;input type="text" bind:value={foo}&gt; (or "number", etc.)
 &lt;input type="checkbox" bind:checked={foo}&gt;
 &lt;input type="radio" bind:group={foo} value={"bar"}&gt;
+&lt;canvas bind:this={canvas}/&gt; // for imperative stuff
 </pre>
 Composition: In Widget, use <code>&lt;slot&gt;fallback&lt;/slot&gt;</code>, and outside just use <code>&lt;Widget&gt;child&lt;/Widget&gt;</code>.
-Lifecycle:
+<p>
+<a href="https://svelte.dev/docs#run-time-svelte-onmount">Lifecycle</a> calls must be at the top level:
 <pre>
 import { onMount } from 'svelte';
-onMount(/* some function that might set state */);
+onMount(
+  // some function that might set state
+  // can also return a cleanup function
+);
+beforeUpdate(/* ... */);
+afterUpdate(/* ... */);
+onDestroy(/* ... */);
 </pre>
+Magic dynamism:
+<pre>
+&lt;svelte:self/&gt; // recursion!
+&lt;svelte:component this={thing} foo={bar}/&gt;
+// i.e. given RedThing.svelte, BlueThing.svelte,
+&lt;svelte:component this={foo ? RedThing : BlueThing}/&gt;
+
+&lt;svelte:element this={"div"}/&gt;hi&lt;/svelte:element&gt;
+</pre>
+Magic elements, top-level only. Convenient to unbind listeners when unmounted.
+<pre>
+&lt;svelte:window on:event={handler}/&gt;
+&lt;svelte:body on:event={handler}/&gt;
+&lt;svelte:head/&gt; /* head tags */ &lt;/svelte:head&gt;
+</pre>
+A <em>store</em> is basically a std::shared_ptr, for when top-down data flow doesn't work.
+<pre>
+// in some module:
+import { writable } from 'svelte';
+let v = writable(0);
+
+// components can import v from that module and use or assign to $v
+// which is roughly sugar for
+let localV;
+v.subscribe(v =&gt; { localV = v; });
+$v = newValue; // sugar for v.set(newValue);
+v.update(v &gt; newValue);
+
+&lt;div&gt;{localV}&lt;/div&gt;
+</pre>
+Contexts let you plumb data from far away. Also must be at top level, and are not reactive (stick a store in a context if you want that).
+<pre>
+import { setContext, getContext } from 'svelte';
+setContext('answer', 42);
+// ...
+getContext('answer'); // from closest parent component
+</pre>
+Transitions are customizable to a truly absurd degree. Basically they occur when the element enters or leaves the DOM.
+<pre>
+import { fade, ... } from 'svelte/transition';
+{#if visible}
+	&lt;div transition:fade&gt;fades in and out&lt;/div&gt;
+	&lt;div in:fade&gt;fades in&lt;/div&gt;
+	&lt;div out:fade&gt;fades out&lt;/div&gt;
+{/if}
+</pre>
+If you're a big transition fan, you can use a <code>{#key expr}</code> block, which destroys and recreates its contents when <code>expr</code> changes.
+<pre>{#key expr}...{/key}</pre>
