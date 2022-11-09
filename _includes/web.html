@@ -464,6 +464,19 @@ Philip Walton: <a href="https://css-tricks.com/dangers-stopping-event-propagatio
 	<tr><td>altKey, ctrlKey, metaKey, shiftKey</td><td>boolean</td></tr>
 	<tr><td>repeat</td><td>boolean: for keydown, whether this event from the key being held down and automatically repeating</td></tr>
 </table>
+<h3><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch">fetch</a></h3>
+<pre>
+fetch('http://example.com/movies.json', options).then((response) =&gt; ...)
+	options = { method: "POST", headers: { ... }, body: ... }
+
+response.staus // integer
+response.ok // boolean if 200 to 299
+// promises:
+response.json()
+response.text()
+// i.e. you might
+fetch(...).then(response =&gt; response.json()).then(...)
+</pre>
 <h3>jQuery</h3>
 $(selector), $(document.createElement(tagname: string))
 <table>
