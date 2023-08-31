@@ -420,6 +420,34 @@ Transformation: Lifts Group[S] &rarr; Group[T] mapper. New DataFrame, same index
 Filtration: Keep only items in groups satisfying the condition.
 <pre>df.filter(lambda group: group['colname'].sum() &gt; 300)</pre>
 
+<h3>pytorch</h3>
+This is happening, isn't it.
+
+<pre>
+torch.cat(Sequence[tensor], dim=0) → Sequence[tensor] # along that dimension
+torch.stack(Sequence[tensor], dim=0) → tensor # adds a dimension
+torch.view(*dims) # reshape sharing data, fails if noncontiguous
+torch.reshape(*dims) # reshape, copies if needed
+torch.unsqueeze(dim) # adds a dimension
+
+torch.randn(*dims)
+
+tensor.requires_grad_() # trailing _ means mutate
+tensor.zero_()
+
+# ops
++ - / % @ &amp; | ^ ...
+tensor.maximum(t1, t2), tensor.minimum(t1, t2)
+
+# folds
+tensor.max(), tensor.argmax(), tensor.mean(), tensor.any(), tensor.all()...
+tensor.item() # extract single scalar
+
+
+# manual backprop:
+tensor.data -= tensor.grad; tensor.grad.zero_()
+</pre>
+
 <h3>Django</h3>
 <pre>Program.objects.get(name='Splash 2016')</pre>
 <h4>Models (<a href="https://docs.djangoproject.com/en/1.10/topics/db/models/">1.10 docs</a>)</h4>
