@@ -96,7 +96,10 @@ sudo ufw allow mosh
 
 <pre>ffmpeg -i input-video.avi -vn -acodec copy output-audio.aac # -vn is no video. -acodec copy says use the same audio stream
 ffmpeg ... -filter:v crop=w:h:x:y,scale=w:h
+ffmpeg -i input.mkv -filter:v "setpts=0.125*PTS" -filter:a "atempo=2.0,atempo=2.0,atempo=2.0" output.mkv
 </pre>
+
+<p>choose what to auto open something with: <code>mimeopen somefile</code> weird type: inode/mount-point</p>
 
 <p><code>sudo dpkg -i foo.deb</code>; <code>sudo apt install -f</code></p>
 
