@@ -180,3 +180,14 @@
 	<li>✈✈✈ Galactic Trendsetters ✈✈✈</li>
 	<li>Ｔｈｅ ｑｕｉｃｋ ｂｒｏｗｎ ｆｏｘ ｊｕｍｐｓ ｏｖｅｒ ｔｈｅ ｌａｚｙ ｄｏｇ</li>
 </ul>
+<h4>UTF-8</h4>
+<p>Continuations are 0x80 to 0xbf.</p>
+<table>
+	<tr><th>codepoint</th><th>bit pattern</th><th>min</th><th>max</th></tr>
+	<tr><td> U+0000 to U+007F  </td><td>0xxxxxxx (0x0 to 0x7?)</td><td>00</td><td>7f</td></tr>
+	<tr><td> U+0080 to U+07FF  </td><td>110xxxxx (0xc?, 0xd?)</td><td>c2 80</td><td>df bf</td></tr>
+	<tr><td> U+0800 to U+FFFF  </td><td>1110xxxx (0xe?)</td><td>e0 a0 80</td><td>ef bf bf</td></tr>
+	<tr><td>U+10000 to U+10FFFF*</td><td>11110xxx (0xf0 to f7)</td><td>f0 90 80 80</td><td>f4 8f bf bf</td></tr>
+</table>
+<p>* Same pattern could theoretically encode up to U+1FFFFF but is limited by RFC 3629</p>
+<p>Bytes that should never appear: 0xc0, 0xc1 (overlong encodings); 0xf5+ (RFC) / 0xf8+ (past range)</p>
