@@ -430,8 +430,8 @@ for (v of s) {...}
 	<tr><td>querySelector(selector: string)</td><td>first element matching CSS selector, e.g. <code>.myclass</code>, <code>#foo td</code></td></tr>
 	<tr><td>querySelectorAll(selector: string)</td><td>all elements matching CSS selector</td></tr>
 	<tr><td>closest(selector: string)</td><td>nearest ancestor (inc self) matching CSS selector</td></tr>
-	<tr><td>clientHeight, clientWidth</td><td>padding + content, excluding scrollbars; rounded to integer!</td></tr>
-	<tr><td>scrollHeight, scrollWidth</td><td>padding + space for content to not scroll; rounded to integer!</td></tr>
+	<tr><td>clientHeight, clientWidth</td><td>padding + content, excluding scrollbars; rounded to integer!<br/>special case on &lt;html&gt;: gets viewport, excluding scrollbars</td></tr>
+	<tr><td>scrollHeight, scrollWidth</td><td>padding + content including content not visible due to overflow (i.e. if you set to this dimension then no overflow or scroll is needed); rounded to integer!</td></tr>
 	<tr><td>getBoundingClientRect()<br/>.height, .width, (.top, .left, ...)</td><td>border + padding + scrollbars if any + content; floating-point<br/>Coordinates are from viewport's scrolling position; add <code>window.scrollX</code>/<code>scrollY</code> for absolute</td></tr>
 	<tr><th>htmlElement.</th></tr>
 	<tr><td>offsetHeight, offsetWidth</td><td>border + padding + scrollbars if any + content; rounded to integer!</td></tr>
@@ -453,6 +453,9 @@ for (v of s) {...}
 	<tr><td>select()</td><td>all text, in a text field</td></tr>
 	<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/setSelectionRange">setSelectionRange</a>(start, end)</td></tr>
 </table>
+<h3>window</h3>
+<p>.innerHeight, .innerWidth: viewport, including scrollbars (to exclude scrollbars, see above: use (root html element).client{Height,Width})</p>
+<p>.outerHeight, .outerWidth: whole damn browser (unclear why you'd want this)</p>
 <h3><a href="https://developer.mozilla.org/en-US/docs/Web/API/Event">Event</a></h3>
 <code>event.target</code> (innermost element),
 <code>event.currentTarget</code> (element with the handler; ≈ <code>this</code>), etc;
