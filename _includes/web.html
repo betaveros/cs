@@ -380,7 +380,7 @@ for (v of s) {...}
 	<tr><td>body</td></tr>
 	<tr><td>title</td></tr>
 	<tr><td>createAttribute(String name)</td><td>Attr object</td></tr>
-	<tr><td>createElement(String name)</td></tr>
+	<tr><td>createElement(String name)</td><td>createElementNS('http://www.w3.org/2000/svg', 'circle')</td></tr>
 	<tr><td>createTextNode(String text)</td></tr>
 	<tr><td>getElementsByClassName(String className)</td></tr>
 	<tr><td>getElementsByTagName(String tagName)</td></tr>
@@ -422,9 +422,9 @@ for (v of s) {...}
 	<tr><td>lastElementChild</td><td>(Element) or null</td></tr>
 	<tr><td>nextElementSibling</td><td>(Element) or null</td></tr>
 	<tr><td>previousElementSibling</td><td>(Element) or null</td></tr>
-	<tr><td>getAttribute(name: string)</td><td>string; may be null or "" on no attribute</td></tr>
-	<tr><td>hasAttribute(name: string)</td></tr>
-	<tr><td>setAttribute(name: string, value)</td></tr>
+	<tr><td>getAttribute(name: string)</td><td>string; may be null or "" on no attribute<br/>SVGs: .getAttributeNS(null, name)</td></tr>
+	<tr><td>hasAttribute(name: string)</td><td>SVGs: .hasAttributeNS(null, name)</td></tr>
+	<tr><td>setAttribute(name: string, value)</td><td>SVGs: .setAttributeNS(null, name, value)</td></tr>
 	<tr><td>getElementsByClassName(className: string)</td></tr>
 	<tr><td>getElementsByTagName(tagName: string)</td></tr>
 	<tr><td>querySelector(selector: string)</td><td>first element matching CSS selector, e.g. <code>.myclass</code>, <code>#foo td</code></td></tr>
@@ -471,7 +471,7 @@ Philip Walton: <a href="https://css-tricks.com/dangers-stopping-event-propagatio
 	<tr><td>offsetX, offsetY</td><td>coordinates from padding edge (experimental and not in e.g. React's synthetic version)</td></tr>
 </table>
 <h3>KeyEvent</h3>
-<p>keydown, keyup (keypress is deprecated, just use keydown or beforeinput)</p>
+<p>keydown, keyup (keypress is deprecated, just use keydown or beforeinput) (I think the "input" event is what you want now for updating something in response to every change in a text box)</p>
 <table>
 	<tr><td>key</td><td>"q"</td></tr>
 	<tr><td>code</td><td>"KeyQ" (physical key, e.g. that's also the Dvorak <kbd>'</kbd> key)</td></tr>
