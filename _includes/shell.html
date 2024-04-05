@@ -489,3 +489,38 @@ this doesn't belong here but idk
 <code>.schema table_name</code>
 <code>.headers ON</code>
 <code>.mode column</code>
+
+<h3>mongosh</h3>
+
+wow what
+
+<ul>
+<li>"collection" ≈ "table"</li>
+<li>"document" ≈ "row"</li>
+</ul>
+
+the field <code>_id</code> is the primary key.
+
+<pre>
+show dbs
+use my_db_name
+show collections
+</pre>
+
+but really it's just javascript
+
+<pre>
+db.getCollectionNames()
+// all args optional:
+db.my_collection_name.find(query, projection, options)
+query examples:
+{ "_id": "foo" }
+{ "qty": { "$gt": 4 }}
+{ "qty": { "$exists": true }}
+
+thing1 = {"foo": "bar", ...}
+db.my_collection_name.insertOne(thing1)
+db.my_collection_name.insertMany([thing1, ...])
+db.my_collection_name.deleteMany(query)
+// query = {}: DELETE EVERYTHING
+</pre>
