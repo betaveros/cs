@@ -622,7 +622,12 @@ if (thing instanceof Thing) { ... }</pre>
   &lt;line x1="20" y1="20" x2="40" y2="40"/&gt;
   &lt;path d="M10 10" stroke-linecap="bevel|miter|round" stroke-linecap="butt|round|square"/&gt;
   (undersupported stroke-linecap values: arcs; miter-clip)
+
+  &lt;text x="20" y="20" text-anchor="middle" dominant-baseline="middle"&gt;
+    css is &lt;tspan class="..."&gt;awesome&lt;/tspan&gt;
+  &lt;/text&gt;
 &lt;/svg&gt;</pre>
+dominant-baseline="central" also exists but doesn't seem better. Also last time I tried to really center something I manually added 2 pixels to y from "middle".
 <h3>SVG path</h3>
 Everything goes in the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d">d attribute</a>.
 <ul>
