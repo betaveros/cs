@@ -894,3 +894,13 @@ import { fade, ... } from 'svelte/transition';
 </pre>
 If you're a big transition fan, you can use a <code>{#key expr}</code> block, which destroys and recreates its contents when <code>expr</code> changes.
 <pre>{#key expr}...{/key}</pre>
+<h3>d3.format</h3>
+<p>it's curried! <code>d3.format(".2f")(1234)</code>. it also uses the correct minus sign!</p>
+<pre>
++ plus or minus sign
+.2f 2 digits after .; fixed point
+.2e 2 sigfigs; exponent
+.2g 2 sigfigs; decimal or exponent
+.2r 2 sigfigs; decimal
+.2s 2 sigfigs; decimal with SI prefix (..., µ, m, (none), k, M, ...)
+</pre>
